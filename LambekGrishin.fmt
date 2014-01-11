@@ -1,0 +1,19 @@
+% directives for lambek-grishin calculus
+
+%format  *   = "\otimes"
+%format _*_  = "\_\!\otimes\!\_"
+%format  ~>  = "\,\mathsmaller{\backslash}\,"
+%format _~>_ = "\_\,\mathsmaller{\backslash}\,\_"
+%format  <~  = "\,\mathsmaller{\slash}\,"
+%format _<~_ = "\_\,\mathsmaller{\slash}\,\_"
+%format  +   = "\oplus"
+%format _+_  = "\_\!\oplus\!\_"
+%format  =>  = "\obslash"
+%format _=>_ = "\_\!\obslash\!\_"
+%format  <=  = "\oslash"
+%format _<=_ = "\_\!\oslash\!\_"
+%format  -o  = "\multimap"
+%format _-o_ = "\_\!\multimap\!\_"
+
+%format StructI = "Struct^{\bullet}"
+%format StructO = "Struct^{\circ}"

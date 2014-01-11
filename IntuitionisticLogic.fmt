@@ -1,0 +1,4 @@
+%format  ~>  = "\rightarrow"
+%format _~>_ = "\_\!\rightarrow\!\_"
+%format  *   = "\otimes"
+%format _*_  = "\_\!\otimes\!\_"
