@@ -67,7 +67,7 @@ module ClassicalLogic (U : Set) (R : U) where
            A , B , C , Γ ⊢ D ∣ Δ  → A , C , B , Γ ⊢ D ∣ Δ
   exchˡ₁ = exchˡ (suc zero)
 
-  weakˡ : ∀ {A B} {m} {Γ : Ctxt (suc m)} {n} {Δ : Ctxt n} →
+  weakˡ : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
           Γ ⊢ B ∣ Δ → A , Γ ⊢ B ∣ Δ
   weakˡ (var x)       = var (suc x)
   weakˡ (lam-abs t)   = lam-abs (exchˡ₀ (weakˡ t))
@@ -79,6 +79,42 @@ module ClassicalLogic (U : Set) (R : U) where
   weakˡ (snd t)       = snd (weakˡ t)
   weakˡ (nu-abs t)    = nu-abs (weakˡ t)
   weakˡ (nu-app α t)  = nu-app α (weakˡ t)
+
+  exchʳ : ∀ {A} {m} {Γ : Ctxt m} {n} {Δ : Ctxt (suc n)} (i : Fin n) →
+          Γ ⊢ A ∣ Δ → Γ ⊢ A ∣ Ctxt.exch i Δ
+  exchʳ i (var x)       = var x
+  exchʳ i (lam-abs t)   = lam-abs (exchʳ i t)
+  exchʳ i (lam-app s t) = lam-app (exchʳ i s) (exchʳ i t)
+  exchʳ i (mu-abs t)    = mu-abs (exchʳ (suc i) t)
+  exchʳ {Δ = Δ} i (mu-app α t) with Ctxt.exch-var Δ i α
+  ... | β , p rewrite p = mu-app β (exchʳ i t)
+  exchʳ i (pair s t)    = pair (exchʳ i s) (exchʳ i t)
+  exchʳ i (fst t)       = fst (exchʳ i t)
+  exchʳ i (snd t)       = snd (exchʳ i t)
+  exchʳ i (nu-abs t)    = nu-abs (exchʳ (suc i) t)
+  exchʳ {Δ = Δ} i (nu-app α t) with Ctxt.exch-var Δ i α
+  ... | β , p rewrite p = nu-app β (exchʳ i t)
+
+  exchʳ₀ : ∀ {A B C} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
+           Γ ⊢ A ∣ B , C , Δ → Γ ⊢ A ∣ C , B , Δ
+  exchʳ₀ = exchʳ zero
+
+  exchʳ₁ : ∀ {A B C D} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
+           Γ ⊢ A ∣ B , C , D , Δ → Γ ⊢ A ∣ B , D , C , Δ
+  exchʳ₁ = exchʳ (suc zero)
+
+  weakʳ : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
+          Γ ⊢ B ∣ Δ → Γ ⊢ B ∣ A , Δ
+  weakʳ (var x)       = var x
+  weakʳ (lam-abs t)   = lam-abs (weakʳ t)
+  weakʳ (lam-app s t) = lam-app (weakʳ s) (weakʳ t)
+  weakʳ (mu-abs t)    = mu-abs (exchʳ₀ (weakʳ t))
+  weakʳ (mu-app α t)  = mu-app (suc α) (weakʳ t)
+  weakʳ (pair s t)    = pair (weakʳ s) (weakʳ t)
+  weakʳ (fst t)       = fst (weakʳ t)
+  weakʳ (snd t)       = snd (weakʳ t)
+  weakʳ (nu-abs t)    = nu-abs (exchʳ₀ (weakʳ t))
+  weakʳ (nu-app α t)  = nu-app (suc α) (weakʳ t)
 
 
 
@@ -163,8 +199,11 @@ module ClassicalLogic (U : Set) (R : U) where
 
 
 
-  -- defines some rules taken from classical natural deduction that
-  -- I found particularily useful
+  -- defines some rules taken from classical natural deduction and
+  -- classical sequent calculus (LK) that I found particularily useful
+
+  ⇒-intro : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → Γ ⊢ A ⇒ B ∣ Δ → A , Γ ⊢ B ∣ Δ
+  ⇒-intro t = lam-app (weakˡ t) (var zero)
 
   ∧-intro : ∀ {A B C} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → Γ ⊢ A ∧ B ∣ Δ → A , B , Γ ⊢ C ∣ Δ → Γ ⊢ C ∣ Δ
   ∧-intro s t = lam-app (lam-app (lam-abs (lam-abs t)) (snd s)) (fst s)
@@ -177,6 +216,15 @@ module ClassicalLogic (U : Set) (R : U) where
 
   ∧-elim-left : ∀ {A B C} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A , B , Γ ⊢ C ∣ Δ → A ∧ B , Γ ⊢ C ∣ Δ
   ∧-elim-left t = ∧-intro (var zero) (exchˡ₁ (exchˡ₀ (weakˡ t)))
+
+  ¬¬-elim : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A , Γ ⊢ B ∣ Δ → ¬ ¬ A , Γ ⊢ B ∣ Δ
+  ¬¬-elim t = mu-abs (lam-app (var zero) (lam-abs (mu-app zero (exchˡ₀ (weakˡ (weakʳ t))))))
+
+  ¬-right : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A , Γ ⊢ B ∣ Δ → Γ ⊢ B ∣ ¬ A , Δ
+  ¬-right t = mu-abs (mu-app (suc zero) (lam-abs (mu-app zero (weakʳ (weakʳ t)))))
+
+  ¬-left : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → Γ ⊢ B ∣ A , Δ → ¬ A , Γ ⊢ B ∣ Δ
+  ¬-left t = mu-abs (lam-app (var zero) (mu-abs (mu-app (suc zero) (weakˡ (exchʳ₀ (weakʳ t))))))
 
 
 
@@ -213,6 +261,9 @@ module ClassicalLogic (U : Set) (R : U) where
       from' : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A , Γ ⊢ A ∧ A ∨ B ∣ Δ
       from' = pair (var zero) (nu-abs (mu-abs (mu-app (suc zero) (var zero))))
 
+  ∧-identity : ∀ {A} → A ∧ ⊤ ⊣⊢ A
+  ∧-identity = {!!}
+
   ∨-comm : ∀ {A B} → A ∨ B ⊣⊢ B ∨ A
   ∨-comm = record { to = iso ; from = iso }
     where
@@ -226,3 +277,14 @@ module ClassicalLogic (U : Set) (R : U) where
       to'   = nu-abs (mu-abs (mu-app (suc zero) (nu-abs (mu-abs (mu-app (suc (suc zero)) (nu-app zero (nu-app (suc zero) (var zero))))))))
       from' : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → (A ∨ B) ∨ C , Γ ⊢ A ∨ (B ∨ C) ∣ Δ
       from' = nu-abs (nu-abs (mu-abs (mu-app (suc zero) (nu-app (suc (suc zero)) (mu-abs (mu-app (suc zero) (nu-app zero (var zero))))))))
+
+  ∨-absorb : ∀ {A B} → A ∨ (A ∧ B) ⊣⊢ A
+  ∨-absorb {A} {B} = record { to = to' ; from = from' }
+    where
+      to'   : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A ∨ (A ∧ B) , Γ ⊢ A ∣ Δ
+      to'   = {!!}
+      from' : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A , Γ ⊢ A ∨ (A ∧ B) ∣ Δ
+      from' = nu-abs (mu-abs (mu-app (suc zero) (var zero)))
+
+  ∨-identity : ∀ {A} → A ∨ ⊥ ⊣⊢ A
+  ∨-identity = {!!}
