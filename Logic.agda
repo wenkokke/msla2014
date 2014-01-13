@@ -1,4 +1,4 @@
-open import Function using (id; const; _$_; _∘_)
+open import Function using (id; _$_; _∘_)
 open import Category.Applicative.Indexed
 open import Category.Monad
 open import Data.String renaming (_++_ to _⊕_)
@@ -296,78 +296,38 @@ module IL where
     bring-to-front₁ : ∀ {m} (Γ : Ctxt m) {n} {Δ : Ctxt n} A {B C} → A , Γ ++ (B , Δ) ⊢ C → A , B , Γ ++ Δ ⊢ C
     bring-to-front₁ Γ A t = exch zero (bring-to-front (A , Γ) t)
 
---fromℕ : ∀ m n → Fin (m +ℕ suc n)
---fromℕ  zero   n = zero
---fromℕ (suc m) n = suc (fromℕ m n)
---
---lookup-cong : ∀ {m} {Γ : Ctxt m} {A} B {i} → Ctxt.lookup i Γ ≡ A → Ctxt.lookup (suc i) (B , Γ) ≡ A
---lookup-cong B p = p
---
---lookup-fromℕ : ∀ m (Γ : Ctxt m) n (Δ : Ctxt n) A → Ctxt.lookup (fromℕ m n) (Γ ++ (A , Δ)) ≡ A
---lookup-fromℕ 0 ∅ n Δ A = refl
---lookup-fromℕ (suc m) (B , Γ) n Δ A = lookup-fromℕ m Γ n Δ A
---
---lookup-mtm : ∀ {m} (Γ : Ctxt m) {n} (Δ : Ctxt n) A i → ∃ λ j → Ctxt.lookup i (A , Γ ++ Δ) ≡ Ctxt.lookup j (Γ ++ (A , Δ))
---lookup-mtm {m} Γ {n} Δ A  zero   = fromℕ m n , prf
---  where
---    prf : A ≡ Context.lookup (fromℕ m n) (Γ ++ A , Δ)
---    prf rewrite lookup-fromℕ m Γ n Δ A = refl
---lookup-mtm {zero} ∅ {n} Δ A (suc i) = suc i , refl
---lookup-mtm {suc m} (B , Γ) {n} Δ A (suc zero) = zero , refl
---lookup-mtm {suc m} (B , Γ) {n} Δ A (suc (suc i)) with lookup-mtm Γ {n} Δ A (suc i)
---lookup-mtm {suc m} (B , Γ) {n} Δ A (suc (suc i)) | j , p = suc j , p
 
-  {-# NO_TERMINATION_CHECK #-}
---mutual
---  move-to-middle : ∀ {m} (Γ : Ctxt m) {n} {Δ : Ctxt n} {A B} → A , Γ ++ Δ ⊢ B → Γ ++ (A , Δ) ⊢ B
---  move-to-middle Γ {_} {Δ} {A} {.(Context.lookup i (A , Γ ++ Δ))} (var i) with lookup-mtm Γ Δ A i
---  ... | j , p rewrite p = var j
---  move-to-middle Γ {_} {Δ} {C} {.(A ⇒ B)} (lam {.(C , Γ ++ Δ)} {A} {B} t) = lam (move-to-middle₁ Γ t)
---  move-to-middle Γ {_} {_} {A} {B} (app s t) = app (move-to-middle Γ s) (move-to-middle Γ t)
---  move-to-middle Γ {_} {Δ} {C} {.(A ∧ B)} (pair {.(C , Γ ++ Δ)} {A} {B} s t)
---    = pair (move-to-middle Γ s) (move-to-middle Γ t)
---  move-to-middle Γ {_} {_} {A} {B} (fst t) = fst (move-to-middle Γ t)
---  move-to-middle Γ {_} {_} {A} {B} (snd t) = snd (move-to-middle Γ t)
---  move-to-middle Γ {_} {Δ} {C} {.(A ∨ B)} (inl {.(C , Γ ++ Δ)} {A} {B} t) = inl (move-to-middle Γ t)
---  move-to-middle Γ {_} {Δ} {C} {.(A ∨ B)} (inr {.(C , Γ ++ Δ)} {A} {B} t) = inr (move-to-middle Γ t)
---  move-to-middle Γ {_} {_} {A} {B} (case s t u)
---    = case (move-to-middle Γ s) (move-to-middle₁ Γ t) (move-to-middle₁ Γ u)
---  move-to-middle Γ {_} {_} {A} {.⊤} unit = unit
---  move-to-middle Γ {_} {_} {A} {B} (empty t) = empty (move-to-middle Γ t)
---
---  move-to-middle₁ : ∀ {m} (Γ : Ctxt m) {n} {Δ : Ctxt n} {A B C} → A , B , Γ ++ Δ ⊢ C → A , Γ ++ B , Δ ⊢ C
---  move-to-middle₁ Γ t = move-to-middle {suc _} (_ , Γ) (exch zero t)
+
+  open module Env = Environment Type ⟦_⟧ hiding (exch)
+
+  reify : ∀ {n} {Γ : Ctxt n} {A} → Env Γ → Γ ⊢ A → ⟦ A ⟧
+  reify ∅ (var ())
+  reify (x , Γ) (var zero) = x
+  reify (x , Γ) (var (suc i)) = reify Γ (var i)
+  reify Γ (lam p) = λ x → reify (x , Γ) p
+  reify Γ (app p q) = (reify Γ p) (reify Γ q)
+  reify Γ (pair p q) = (reify Γ p , reify Γ q)
+  reify Γ (fst p) = proj₁ (reify Γ p)
+  reify Γ (snd p) = proj₂ (reify Γ p)
+  reify Γ (inl p) = inl (reify Γ p)
+  reify Γ (inr p) = inr (reify Γ p)
+  reify Γ (case p q r) = elim (reify Γ p) (λ x → reify (x , Γ) q) (λ y → reify (y , Γ) r)
+    where
+      elim : {A B C : Set} → A + B → (A → C) → (B → C) → C
+      elim (inl x) f g = f x
+      elim (inr y) f g = g y
+  reify Γ unit = tt
+  reify Γ (empty p) = elim (reify Γ p)
+    where
+      elim : ∀ {A : Set} → 0' → A
+      elim ()
 
   [_] : ∀ {A} → ∅ ⊢ A → ⟦ A ⟧
   [_] = reify ∅
-    where
-      open module Env = Environment Type ⟦_⟧ hiding (exch)
-
-      reify : ∀ {n} {Γ : Ctxt n} {A} → Env Γ → Γ ⊢ A → ⟦ A ⟧
-      reify ∅ (var ())
-      reify (x , Γ) (var zero) = x
-      reify (x , Γ) (var (suc i)) = reify Γ (var i)
-      reify Γ (lam p) = λ x → reify (x , Γ) p
-      reify Γ (app p q) = (reify Γ p) (reify Γ q)
-      reify Γ (pair p q) = (reify Γ p , reify Γ q)
-      reify Γ (fst p) = proj₁ (reify Γ p)
-      reify Γ (snd p) = proj₂ (reify Γ p)
-      reify Γ (inl p) = inl (reify Γ p)
-      reify Γ (inr p) = inr (reify Γ p)
-      reify Γ (case p q r) = elim (reify Γ p) (λ x → reify (x , Γ) q) (λ y → reify (y , Γ) r)
-        where
-          elim : {A B C : Set} → A + B → (A → C) → (B → C) → C
-          elim (inl x) f g = f x
-          elim (inr y) f g = g y
-      reify Γ unit = tt
-      reify Γ (empty p) = elim (reify Γ p)
-        where
-          elim : ∀ {A : Set} → 0' → A
-          elim ()
 
   show : ∀ {A} {n} {Γ : Ctxt n} → Γ ⊢ A → String
   show (var i)      = showℕ (Fin.toℕ i)
-  show (lam t)      = "λ" ⊕ (show t)
+  show (lam t)      = "λ " ⊕ (show t)
   show (app s t)    = "(" ⊕ show s ⊕ ") (" ⊕ show t ⊕")"
   show (pair s t)   = "⟨" ⊕ show s ⊕ " , " ⊕ show t ⊕ "⟩"
   show (fst t)      = "proj₁ (" ⊕ show t ⊕")"
@@ -379,13 +339,21 @@ module IL where
   show (empty t)    = "exfalso (" ⊕ show t ⊕ ")"
 
 
+  -- some examples
+
+  identity : ∀ {A} → ∅ ⊢ A ⇒ A
+  identity = lam (var zero)
+
+  const : ∀ {A B} → ∅ ⊢ A ⇒ B ⇒ A
+  const = lam (lam (weak (var zero)))
 
 
 module CL (R : U) where
 
   private
     open module Ctxt = Context Type using (Ctxt; _,_; ∅; _++_)
-    open IL hiding ([_])
+    open IL using (_⊢_; var; lam; app; pair; fst; snd; inl; inr; case; unit; empty;
+                        exch; weak; cont; pair-intro-left; impl-elim; unit-elim; bring-to-front)
 
   infix 3 _⊢_↝_
 
@@ -464,19 +432,10 @@ module CL (R : U) where
       prf : Ctxt.map C Γ ++ Ctxt.map K Δ ⊢ K (Ctxt.lookup α Δ) ∧ K B ⇒ el R
       prf = lam (pair-intro-left (weak (impl-elim (reify t))))
 
-  Term : Type → Set
-  Term A = ∅ ⊢ ∅ ↝ A
 
-  [_] : ∀ {A} → Term A → ⟦ C A ⟧
+
+  [_] : ∀ {A} → ∅ ⊢ ∅ ↝ A → ⟦ C A ⟧
   [_] t = IL.[ reify t ]
-
-
-
-  identity : ∀ {A} → Term (el A ⇒ el A)
-  identity = lam-abs (var zero)
-
-  pair-swap : ∀ {A} {B} → Term (A ∧ B ⇒ B ∧ A)
-  pair-swap = lam-abs (pair (snd (var zero)) (fst (var zero)))
 
 
 
@@ -538,3 +497,28 @@ module CL (R : U) where
     weakr (snd t)        = snd (weakr t)
     weakr (nu-abs t)     = nu-abs (exchr zero (weakr t))
     weakr (nu-app α t)   = nu-app (suc α) (weakr t)
+
+
+
+  show : ∀ {A} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → Γ ⊢ Δ ↝ A → String
+  show (var x)        = showℕ (Fin.toℕ x)
+  show (lam-abs t)    = "λ " ⊕ show t
+  show (lam-app s t)  = "(" ⊕ show s ⊕ ") (" ⊕ show t ⊕  ")"
+  show (mu-abs t)     = "μ " ⊕ show t
+  show (mu-app α t)   = "[" ⊕ showℕ (Fin.toℕ α) ⊕ "]" ⊕ show t
+  show (pair s t)     = "⟨" ⊕ show s ⊕ " , " ⊕ show t ⊕ "⟩"
+  show (fst t)        = "proj₁ (" ⊕ show t ⊕ ")"
+  show (snd t)        = "proj₂ (" ⊕ show t ⊕ ")"
+  show (nu-abs t)     = "ν " ⊕ show t
+  show (nu-app α t)   = "⟨" ⊕ showℕ (Fin.toℕ α) ⊕ "⟩" ⊕ show t
+
+
+
+  -- some examples
+
+
+  identity : ∀ {A} → ∅ ⊢ ∅ ↝ (el A ⇒ el A)
+  identity = lam-abs (var zero)
+
+  swap : ∀ {A} {B} → ∅ ⊢ ∅ ↝ (A ∧ B ⇒ B ∧ A)
+  swap = lam-abs (pair (snd (var zero)) (fst (var zero)))
