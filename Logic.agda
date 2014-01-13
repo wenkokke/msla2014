@@ -1,8 +1,10 @@
 open import Function using (id; const; _$_; _∘_)
 open import Category.Applicative.Indexed
 open import Category.Monad
+open import Data.String renaming (_++_ to _⊕_)
 open import Data.Nat as Nat using (ℕ; suc; zero; pred; _≤_; z≤n; s≤s) renaming (_+_ to _+ℕ_)
 open import Data.Nat.Properties as NatProps using ()
+open import Data.Nat.Show using () renaming (show to showℕ)
 open import Data.Fin as Fin using (Fin; suc; zero; #_)
 open import Data.Fin.Props as FinProps using () renaming (_≟_ to _≟-Fin_)
 open import Data.Unit using (tt) renaming (⊤ to 1')
@@ -12,34 +14,15 @@ open import Data.Product using (∃; _×_; _,_; map; proj₁; proj₂)
 open import Data.Sum using ([_,_]) renaming (_⊎_ to _+_; inj₁ to inl; inj₂ to inr)
 open import Relation.Nullary using (Dec; yes; no)
 open import Relation.Nullary.Decidable using (True; False; toWitness)
-open import Relation.Binary.PropositionalEquality as PropEq using (_≡_; _≢_; refl; sym; cong)
+open import Relation.Binary.PropositionalEquality as PropEq using (_≡_; _≢_; refl; sym; trans; cong)
 
 
 
-module Logic (U : Set) (⟦_⟧ᵁ : U → Set) (_≟-U_ : (x y : U) → Dec (x ≡ y)) where
+module Logic (U : Set) (⟦_⟧ᵁ : U → Set) (_≟-U_ : (x y : U) → Dec (x ≡ y)) (showU : U → String) where
 
 private
   open RawMonad {{...}}
   MaybeMonad = Maybe.monad
-
-thin : {n : ℕ} → Fin (suc n) → Fin n → Fin (suc n)
-thin  zero    y      = suc y
-thin (suc x)  zero   = zero
-thin (suc x) (suc y) = suc (thin x y)
-
-thick : {n : ℕ} → (x y : Fin (suc n)) → Maybe (Fin n)
-thick          zero    zero   = nothing
-thick          zero   (suc y) = just y
-thick {zero}  (suc ()) _
-thick {suc n} (suc x)  zero   = just zero
-thick {suc n} (suc x) (suc y) = suc <$> thick x y
-
-thick′ : {n : ℕ} (x y : Fin (suc n)) → x ≢ y → Fin n
-thick′          zero    zero   p = exfalso (p refl)
-thick′          zero   (suc y) _ = y
-thick′ {zero}  (suc ()) _      _
-thick′ {suc _} (suc _)  zero   _ = zero
-thick′ {suc _} (suc x) (suc y) p = suc (thick′ x y (p ∘ cong suc))
 
 infixr 20 _⇒_
 infixr 30 _∧_ _∨_
@@ -141,12 +124,10 @@ _ ∨ _ ≟ᵀ ⊥ = no (λ ())
 module Context (Type : Set) where
 
   private
+    open import Data.Vec using (Vec; _∷_; [])
     open import Data.Vec as Vec public renaming (_∷_ to _,_; [] to ∅)
     open import Data.Vec.Properties public
     open import Relation.Binary.PropositionalEquality using (_≡_; refl; cong)
-    import Data.Vec.Equality
-    open module VecEq = Data.Vec.Equality.Equality (PropEq.setoid Type)
-      using (_≈_; []-cong; _∷-cong_)
 
   Ctxt = Vec.Vec Type
 
@@ -162,6 +143,10 @@ module Context (Type : Set) where
   delete (_ , Γ) zero = Γ
   delete (A , ∅) (suc ())
   delete (A , B , Γ) (suc i) = A , delete (B , Γ) i
+
+  lookup-++-raise : ∀ {a} {A : Set a} {m n} (xs : Vec A m) (ys : Vec A n) i → lookup i ys ≡ lookup (Fin.raise m i) (xs ++ ys)
+  lookup-++-raise {m = zero}  []       ys i = refl
+  lookup-++-raise {m = suc m} (x ∷ xs) ys i = lookup-++-raise {m = m} xs ys i
 
 
 
@@ -276,11 +261,14 @@ module IL where
     cont₁ : ∀ {n} {Γ : Ctxt n} {A B C} → A , B , B , Γ ⊢ C → A , B , Γ ⊢ C
     cont₁ t = exch zero (cont (exch (suc zero) (exch zero t)))
 
-  lam-elim : ∀ {n} {Γ : Ctxt n} {A B} → Γ ⊢ A ⇒ B → A , Γ ⊢ B
-  lam-elim t = app (weak t) (var zero)
+  impl-elim : ∀ {n} {Γ : Ctxt n} {A B} → Γ ⊢ A ⇒ B → A , Γ ⊢ B
+  impl-elim t = app (weak t) (var zero)
 
   pair-elim : ∀ {n} {Γ : Ctxt n} {A B C} → Γ ⊢ A ∧ B → Γ ⊢ A ⇒ B ⇒ C → Γ ⊢ C
   pair-elim s t = app (app t (fst s)) (snd s)
+
+  pair-elim-left : ∀ {n} {Γ : Ctxt n} {A B C} → A ∧ B , Γ ⊢ C → A , B , Γ ⊢ C
+  pair-elim-left t = app (weak (weak (lam t))) (pair (var zero) (var (suc zero)))
 
   pair-intro-left : ∀ {n} {Γ : Ctxt n} {A B C} → A , B , Γ ⊢ C → A ∧ B , Γ ⊢ C
   pair-intro-left t = pair-elim (pair (fst (var zero)) (snd (var zero))) (weak (lam (lam (exch zero t))))
@@ -308,43 +296,47 @@ module IL where
     bring-to-front₁ : ∀ {m} (Γ : Ctxt m) {n} {Δ : Ctxt n} A {B C} → A , Γ ++ (B , Δ) ⊢ C → A , B , Γ ++ Δ ⊢ C
     bring-to-front₁ Γ A t = exch zero (bring-to-front (A , Γ) t)
 
-  fromℕ : ∀ m n → Fin (m +ℕ suc n)
-  fromℕ  zero   n = zero
-  fromℕ (suc m) n = suc (fromℕ m n)
-
-  lookup-cong : ∀ {m} {Γ : Ctxt m} {A} B {i} → Ctxt.lookup i Γ ≡ A → Ctxt.lookup (suc i) (B , Γ) ≡ A
-  lookup-cong B p = p
-
-  lookup-fromℕ : ∀ m (Γ : Ctxt m) n (Δ : Ctxt n) A → Ctxt.lookup (fromℕ m n) (Γ ++ (A , Δ)) ≡ A
-  lookup-fromℕ 0 ∅ n Δ A = refl
-  lookup-fromℕ (suc m) (B , Γ) n Δ A = lookup-fromℕ m Γ n Δ A
+--fromℕ : ∀ m n → Fin (m +ℕ suc n)
+--fromℕ  zero   n = zero
+--fromℕ (suc m) n = suc (fromℕ m n)
+--
+--lookup-cong : ∀ {m} {Γ : Ctxt m} {A} B {i} → Ctxt.lookup i Γ ≡ A → Ctxt.lookup (suc i) (B , Γ) ≡ A
+--lookup-cong B p = p
+--
+--lookup-fromℕ : ∀ m (Γ : Ctxt m) n (Δ : Ctxt n) A → Ctxt.lookup (fromℕ m n) (Γ ++ (A , Δ)) ≡ A
+--lookup-fromℕ 0 ∅ n Δ A = refl
+--lookup-fromℕ (suc m) (B , Γ) n Δ A = lookup-fromℕ m Γ n Δ A
+--
+--lookup-mtm : ∀ {m} (Γ : Ctxt m) {n} (Δ : Ctxt n) A i → ∃ λ j → Ctxt.lookup i (A , Γ ++ Δ) ≡ Ctxt.lookup j (Γ ++ (A , Δ))
+--lookup-mtm {m} Γ {n} Δ A  zero   = fromℕ m n , prf
+--  where
+--    prf : A ≡ Context.lookup (fromℕ m n) (Γ ++ A , Δ)
+--    prf rewrite lookup-fromℕ m Γ n Δ A = refl
+--lookup-mtm {zero} ∅ {n} Δ A (suc i) = suc i , refl
+--lookup-mtm {suc m} (B , Γ) {n} Δ A (suc zero) = zero , refl
+--lookup-mtm {suc m} (B , Γ) {n} Δ A (suc (suc i)) with lookup-mtm Γ {n} Δ A (suc i)
+--lookup-mtm {suc m} (B , Γ) {n} Δ A (suc (suc i)) | j , p = suc j , p
 
   {-# NO_TERMINATION_CHECK #-}
-  mutual
-    move-to-middle : ∀ m (Γ : Ctxt m) n (Δ : Ctxt n) A B → A , Γ ++ Δ ⊢ B → Γ ++ (A , Δ) ⊢ B
-    move-to-middle .0 ∅ n Δ A .(Ctxt.lookup i (A , Δ)) (var i) = var i
-    move-to-middle .(suc m) (_,_ {m} B Γ) n Δ A .A (var zero) = weak prf₂
-      where
-        prf₁ : Γ ++ A , Δ ⊢ Ctxt.lookup (fromℕ m n) (Γ ++ (A , Δ))
-        prf₁ = var (fromℕ m n)
-        lem₁ : A ≡ Ctxt.lookup (fromℕ m n) (Γ ++ (A , Δ))
-        lem₁ = sym (lookup-fromℕ m Γ n Δ A)
-        lem₂ : (Γ ++ A , Δ ⊢ Ctxt.lookup (fromℕ m n) (Γ ++ (A , Δ))) ≡ (Γ ++ A , Δ ⊢ A)
-        lem₂ rewrite sym lem₁ = refl
-        prf₂ : Γ ++ A , Δ ⊢ A
-        prf₂ rewrite sym lem₂ = prf₁
-    move-to-middle .(suc n) (_,_ {n} B Γ) n₁ Δ A .B (var (suc zero)) = var zero
-    move-to-middle .(suc n) (_,_ {n} B Γ) n₁ Δ A .(Context.lookup i (Γ ++ Δ)) (var (suc (suc i))) = weak {!!}
-    move-to-middle m Γ n Δ A .(B ⇒ C) (lam {.(A , Γ ++ Δ)} {B} {C} t) = lam {!!}
-  move-to-middle m Γ n Δ A B (app s t) = {!!}
-    move-to-middle m Γ n Δ A .(B ∧ C) (pair {.(A , Γ ++ Δ)} {B} {C} s t) = {!!}
-    move-to-middle m Γ n Δ A B (fst t) = {!!}
-    move-to-middle m Γ n Δ A B (snd t) = {!!}
-    move-to-middle m Γ n Δ A .(B ∨ C) (inl {.(A , Γ ++ Δ)} {B} {C} t) = {!!}
-    move-to-middle m Γ n Δ A .(B ∨ C) (inr {.(A , Γ ++ Δ)} {B} {C} t) = {!!}
-    move-to-middle m Γ n Δ A B (case s t u) = {!!}
-    move-to-middle m Γ n Δ A .⊤ unit = {!!}
-    move-to-middle m Γ n Δ A B (empty t) = {!!}
+--mutual
+--  move-to-middle : ∀ {m} (Γ : Ctxt m) {n} {Δ : Ctxt n} {A B} → A , Γ ++ Δ ⊢ B → Γ ++ (A , Δ) ⊢ B
+--  move-to-middle Γ {_} {Δ} {A} {.(Context.lookup i (A , Γ ++ Δ))} (var i) with lookup-mtm Γ Δ A i
+--  ... | j , p rewrite p = var j
+--  move-to-middle Γ {_} {Δ} {C} {.(A ⇒ B)} (lam {.(C , Γ ++ Δ)} {A} {B} t) = lam (move-to-middle₁ Γ t)
+--  move-to-middle Γ {_} {_} {A} {B} (app s t) = app (move-to-middle Γ s) (move-to-middle Γ t)
+--  move-to-middle Γ {_} {Δ} {C} {.(A ∧ B)} (pair {.(C , Γ ++ Δ)} {A} {B} s t)
+--    = pair (move-to-middle Γ s) (move-to-middle Γ t)
+--  move-to-middle Γ {_} {_} {A} {B} (fst t) = fst (move-to-middle Γ t)
+--  move-to-middle Γ {_} {_} {A} {B} (snd t) = snd (move-to-middle Γ t)
+--  move-to-middle Γ {_} {Δ} {C} {.(A ∨ B)} (inl {.(C , Γ ++ Δ)} {A} {B} t) = inl (move-to-middle Γ t)
+--  move-to-middle Γ {_} {Δ} {C} {.(A ∨ B)} (inr {.(C , Γ ++ Δ)} {A} {B} t) = inr (move-to-middle Γ t)
+--  move-to-middle Γ {_} {_} {A} {B} (case s t u)
+--    = case (move-to-middle Γ s) (move-to-middle₁ Γ t) (move-to-middle₁ Γ u)
+--  move-to-middle Γ {_} {_} {A} {.⊤} unit = unit
+--  move-to-middle Γ {_} {_} {A} {B} (empty t) = empty (move-to-middle Γ t)
+--
+--  move-to-middle₁ : ∀ {m} (Γ : Ctxt m) {n} {Δ : Ctxt n} {A B C} → A , B , Γ ++ Δ ⊢ C → A , Γ ++ B , Δ ⊢ C
+--  move-to-middle₁ Γ t = move-to-middle {suc _} (_ , Γ) (exch zero t)
 
   [_] : ∀ {A} → ∅ ⊢ A → ⟦ A ⟧
   [_] = reify ∅
@@ -373,14 +365,29 @@ module IL where
           elim : ∀ {A : Set} → 0' → A
           elim ()
 
+  show : ∀ {A} {n} {Γ : Ctxt n} → Γ ⊢ A → String
+  show (var i)      = showℕ (Fin.toℕ i)
+  show (lam t)      = "λ" ⊕ (show t)
+  show (app s t)    = "(" ⊕ show s ⊕ ") (" ⊕ show t ⊕")"
+  show (pair s t)   = "⟨" ⊕ show s ⊕ " , " ⊕ show t ⊕ "⟩"
+  show (fst t)      = "proj₁ (" ⊕ show t ⊕")"
+  show (snd t)      = "proj₂ (" ⊕ show t ⊕")"
+  show (inl t)      = "inj₁ (" ⊕ show t ⊕ ")"
+  show (inr t)      = "inj₂ (" ⊕ show t ⊕ ")"
+  show (case s t u) = "case " ⊕ show s ⊕ " of {" ⊕ show t ⊕ " ; " ⊕ show u ⊕ "}"
+  show unit         = "*"
+  show (empty t)    = "exfalso (" ⊕ show t ⊕ ")"
+
+
+
 
 module CL (R : U) where
 
   private
     open module Ctxt = Context Type using (Ctxt; _,_; ∅; _++_)
-    open IL
+    open IL hiding ([_])
 
-  infix 3 _⊢_↝_ _⊢_↝′_
+  infix 3 _⊢_↝_
 
   mutual
     data _⊢_↝_ : ∀ {m} (Γ : Ctxt m) {n} (Δ : Ctxt n)  (A : Type) → Set where
@@ -396,13 +403,20 @@ module CL (R : U) where
 
       mu-abs  : ∀ {A} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
                 Γ ⊢ A , Δ ↝ ⊥ → Γ ⊢ Δ ↝ A
-      mu-app  : ∀ {A} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
-                Γ ⊢ Δ ↝′ A → Γ ⊢ Δ ↝ A → Γ ⊢ A , Δ ↝ ⊥
+      mu-app  : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
+                (α : Fin n) → Γ ⊢ Δ ↝ Ctxt.lookup α Δ → Γ ⊢ Δ ↝ ⊥
 
-    data _⊢_↝′_ : ∀ {m} (Γ : Ctxt m) {n} (Δ : Ctxt n) (A : Type) → Set where
+      pair    : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
+                Γ ⊢ Δ ↝ A → Γ ⊢ Δ ↝ B → Γ ⊢ Δ ↝ A ∧ B
+      fst     : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
+                Γ ⊢ Δ ↝ A ∧ B → Γ ⊢ Δ ↝ A
+      snd     : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
+                Γ ⊢ Δ ↝ A ∧ B → Γ ⊢ Δ ↝ B
 
-      covar   : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
-                (α : Fin n) → Γ ⊢ Δ ↝′ Ctxt.lookup α Δ
+      nu-abs  : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
+                Γ ⊢ A , Δ ↝ B → Γ ⊢ Δ ↝ A ∨ B
+      nu-app  : ∀ {B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
+                (α : Fin n) → Γ ⊢ Δ ↝ B → Γ ⊢ Δ ↝ Ctxt.lookup α Δ ∨ B
 
   mutual
     K : Type → Type
@@ -416,37 +430,111 @@ module CL (R : U) where
     C : Type → Type
     C A = K A ⇒ el R
 
-  reify : ∀ A m (Γ : Ctxt m) n (Δ : Ctxt n) → Γ ⊢ Δ ↝ A → Ctxt.map C Γ ++ Ctxt.map K Δ ⊢ C A
-  reify .(Context.lookup x Γ) m Γ n Δ (var x) = prf₂
+  reify : ∀ {A} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → Γ ⊢ Δ ↝ A → Ctxt.map C Γ ++ Ctxt.map K Δ ⊢ C A
+  reify {.(Ctxt.lookup x Γ)} {m} {Γ} {n} {Δ} (var x) = prf
     where
       open Morphism (Ctxt.lookup-morphism x) renaming (op-<$> to lookup-map)
-      lem₁ : C (Ctxt.lookup x Γ) ≡ Ctxt.lookup x (Ctxt.map C Γ)
-      lem₁ rewrite lookup-map C Γ = refl
-      lem₂ : Ctxt.lookup x (Ctxt.map C Γ) ≡ Ctxt.lookup (Fin.inject+ n x) (Ctxt.map C Γ ++ Ctxt.map K Δ)
-      lem₂ = sym (Ctxt.lookup-++-inject+ (Ctxt.map C Γ) (Ctxt.map K Δ) x)
-      prf₁ : Ctxt.map C Γ ++ Ctxt.map K Δ ⊢ Ctxt.lookup (Fin.inject+ n x) (Ctxt.map C Γ ++ Ctxt.map K Δ)
-      prf₁ = var (Fin.inject+ n x)
-      prf₂ : Ctxt.map C Γ ++ Ctxt.map K Δ ⊢ C (Ctxt.lookup x Γ)
-      prf₂ rewrite lem₁ | lem₂ = prf₁
-  reify .(A ⇒ B) m Γ n Δ (lam-abs {A} {B} t) = prf₂
+      lem : C (Ctxt.lookup x Γ) ≡ Ctxt.lookup (Fin.inject+ n x) (Ctxt.map C Γ ++ Ctxt.map K Δ)
+      lem = trans (sym (lookup-map C Γ)) (sym (Ctxt.lookup-++-inject+ (Ctxt.map C Γ) (Ctxt.map K Δ) x))
+      prf : Ctxt.map C Γ ++ Ctxt.map K Δ ⊢ C (Ctxt.lookup x Γ)
+      prf rewrite lem = var (Fin.inject+ n x)
+  reify (lam-abs t) = lam (pair-intro-left (app (exch zero (weak (reify t))) (var (suc zero))))
+  reify (lam-app s t) = lam (app (weak (reify s)) (pair (weak (reify t)) (var zero)))
+  reify {Γ = Γ} (mu-abs t) = lam (unit-elim (impl-elim (bring-to-front (Ctxt.map C Γ) (reify t))))
+  reify {.⊥} {m} {Γ} {n} {Δ} (mu-app α t) = prf
     where
-      prf₁ : C A , K B , Ctxt.map C Γ ++ Ctxt.map K Δ ⊢ C B
-      prf₁ = exch zero (weak (reify _ _ _ _ _ t))
-      prf₂ : (Ctxt.map C Γ ++ Ctxt.map K Δ) ⊢ C A ∧ K B ⇒ el R
-      prf₂ = lam (pair-intro-left (app prf₁ (var (suc zero))))
-  reify B m Γ n Δ (lam-app s t) = prf
+      open Morphism (Ctxt.lookup-morphism α) renaming (op-<$> to lookup-map)
+      lem : K (Ctxt.lookup α Δ) ≡ Ctxt.lookup (Fin.raise m α) (Ctxt.map C Γ ++ Ctxt.map K Δ)
+      lem = trans (sym (lookup-map K Δ)) (Ctxt.lookup-++-raise (Ctxt.map C Γ) (Ctxt.map K Δ) α)
+      lkp : Ctxt.map C Γ ++ Ctxt.map K Δ ⊢ K (Ctxt.lookup α Δ)
+      lkp rewrite lem = var (Fin.raise m α)
+      prf : Ctxt.map C Γ ++ Ctxt.map K Δ ⊢ ⊤ ⇒ el R
+      prf = lam (weak (app (reify t) lkp))
+  reify (pair s t) = lam (case (var zero) (app (weak (weak (reify s))) (var zero)) (app (weak (weak (reify t))) (var zero)))
+  reify (fst t) = lam (app (weak (reify t)) (inl (var zero)))
+  reify (snd t) = lam (app (weak (reify t)) (inr (var zero)))
+  reify {Γ = Γ} (nu-abs {A} {B} t) = lam (pair-intro-left (exch zero (impl-elim (bring-to-front (Ctxt.map C Γ) (reify t)))))
+  reify {._} {m} {Γ} {n} {Δ} (nu-app {B} α t) = prf
     where
-      prf : Ctxt.map C Γ ++ Ctxt.map K Δ ⊢ C B
-      prf = lam (app (weak (reify _ _ _ _ _ s)) (pair (weak (reify _ _ _ _ _ t)) (var zero)))
-  reify A m Γ n Δ (mu-abs t) = lam prf₂
-    where
-      prf₁ : K A , Ctxt.map C Γ ++ Ctxt.map K Δ ⊢ ⊤ ⇒ el R
-      prf₁ = bring-to-front (Ctxt.map C Γ) (reify _ _ _ _ _ t)
-      prf₂ : K A , Ctxt.map C Γ ++ Ctxt.map K Δ ⊢ el R
-      prf₂ = unit-elim (lam-elim prf₁)
-  reify .⊥ m Γ .(suc n) .(Ctxt.lookup α Δ , Δ) (mu-app {.(Ctxt.lookup α Δ)} {.m} {.Γ} {n} {Δ} (covar α) t) = prf₂
-    where
-      prf₁ : Ctxt.map C Γ ++  Ctxt.map K Δ ⊢ K (Context.lookup α Δ) ⇒ el R
-      prf₁ = reify _ _ _ _ _ t
-      prf₂ : Ctxt.map C Γ ++ K (Ctxt.lookup α Δ) , Ctxt.map K Δ ⊢ ⊤ ⇒ el R
-      prf₂ = {!!} -- lam (weak (move-to-middle (Ctxt.map C Γ) (lam-elim prf₁)))
+      open Morphism (Ctxt.lookup-morphism α) renaming (op-<$> to lookup-map)
+      lem : K (Ctxt.lookup α Δ) ≡ Ctxt.lookup (Fin.raise m α) (Ctxt.map C Γ ++ Ctxt.map K Δ)
+      lem = trans (sym (lookup-map K Δ)) (Ctxt.lookup-++-raise (Ctxt.map C Γ) (Ctxt.map K Δ) α)
+      lkp : Ctxt.map C Γ ++ Ctxt.map K Δ ⊢ K (Ctxt.lookup α Δ)
+      lkp rewrite lem = var (Fin.raise m α)
+      prf : Ctxt.map C Γ ++ Ctxt.map K Δ ⊢ K (Ctxt.lookup α Δ) ∧ K B ⇒ el R
+      prf = lam (pair-intro-left (weak (impl-elim (reify t))))
+
+  Term : Type → Set
+  Term A = ∅ ⊢ ∅ ↝ A
+
+  [_] : ∀ {A} → Term A → ⟦ C A ⟧
+  [_] t = IL.[ reify t ]
+
+
+
+  identity : ∀ {A} → Term (el A ⇒ el A)
+  identity = lam-abs (var zero)
+
+  pair-swap : ∀ {A} {B} → Term (A ∧ B ⇒ B ∧ A)
+  pair-swap = lam-abs (pair (snd (var zero)) (fst (var zero)))
+
+
+
+  {-# NO_TERMINATION_CHECK #-}
+  mutual
+    exchl : ∀ {A} {m} {Γ : Ctxt (suc m)} {n} {Δ : Ctxt n} (i : Fin m) →
+            Γ ⊢ Δ ↝ A → Ctxt.exch i Γ ⊢ Δ ↝ A
+    exchl {Γ = A , B , Γ} zero (var zero) = var (suc zero)
+    exchl {Γ = A , B , Γ} zero (var (suc zero)) = var zero
+    exchl {Γ = A , B , Γ} zero (var (suc (suc x))) = var (suc (suc x))
+    exchl {Γ = A , Γ} (suc i) (var zero) = var zero
+    exchl {Γ = A , Γ} (suc i) (var (suc x)) = weakl (exchl i (var x))
+    exchl i (lam-abs t)   = lam-abs (exchl (suc i) t)
+    exchl i (lam-app s t) = lam-app (exchl i s) (exchl i t)
+    exchl i (mu-abs t)    = mu-abs (exchl i t)
+    exchl i (mu-app α t)  = mu-app α (exchl i t)
+    exchl i (pair s t)    = pair (exchl i s) (exchl i t)
+    exchl i (fst t)       = fst (exchl i t)
+    exchl i (snd t)       = snd (exchl i t)
+    exchl i (nu-abs t)    = nu-abs (exchl i t)
+    exchl i (nu-app α t)  = nu-app α (exchl i t)
+
+    weakl : ∀ {A B} {m} {Γ : Ctxt (suc m)} {n} {Δ : Ctxt n} →
+            Γ ⊢ Δ ↝ B → A , Γ ⊢ Δ ↝ B
+    weakl (var x)       = var (suc x)
+    weakl (lam-abs t)   = lam-abs (exchl zero (weakl t))
+    weakl (lam-app s t) = lam-app (weakl s) (weakl t)
+    weakl (mu-abs t)    = mu-abs (weakl t)
+    weakl (mu-app α t)  = mu-app α (weakl t)
+    weakl (pair s t)    = pair (weakl s) (weakl t)
+    weakl (fst t)       = fst (weakl t)
+    weakl (snd t)       = snd (weakl t)
+    weakl (nu-abs t)    = nu-abs (weakl t)
+    weakl (nu-app α t)  = nu-app α (weakl t)
+
+  mutual
+    exchr : ∀ {A} {m} {Γ : Ctxt m} {n} {Δ : Ctxt (suc n)} (i : Fin n) →
+            Γ ⊢ Δ ↝ A → Γ ⊢ Ctxt.exch i Δ ↝ A
+    exchr i (var x)       = var x
+    exchr i (lam-abs t)   = lam-abs (exchr i t)
+    exchr i (lam-app s t) = lam-app (exchr i s) (exchr i t)
+    exchr i (mu-abs t)    = mu-abs (exchr (suc i) t)
+    exchr i (mu-app α t)  = {!!}
+    exchr i (pair s t)    = pair (exchr i s) (exchr i t)
+    exchr i (fst t)       = fst (exchr i t)
+    exchr i (snd t)       = snd (exchr i t)
+    exchr i (nu-abs t)    = nu-abs (exchr (suc i) t)
+    exchr i (nu-app α t)  = {!!}
+
+    weakr : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt (suc n)} →
+            Γ ⊢ Δ ↝ B → Γ ⊢ A , Δ ↝ B
+    weakr (var x)        = var x
+    weakr (lam-abs t)    = lam-abs (weakr t)
+    weakr (lam-app s t)  = lam-app (weakr s) (weakr t)
+    weakr (mu-abs t)     = mu-abs (exchr zero (weakr t))
+    weakr (mu-app α t)   = mu-app (suc α) (weakr t)
+    weakr (pair s t)     = pair (weakr s) (weakr t)
+    weakr (fst t)        = fst (weakr t)
+    weakr (snd t)        = snd (weakr t)
+    weakr (nu-abs t)     = nu-abs (exchr zero (weakr t))
+    weakr (nu-app α t)   = nu-app (suc α) (weakr t)
