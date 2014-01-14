@@ -35,10 +35,14 @@ module ClassicalLogic (U : Set) (R : U) where
                  Γ ⊢ A ∧ B ∣ Δ → Γ ⊢ A ∣ Δ
       snd      : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
                  Γ ⊢ A ∧ B ∣ Δ → Γ ⊢ B ∣ Δ
-      nu-abs  : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
-                 Γ ⊢ B ∣ A , Δ → Γ ⊢ A ∨ B ∣ Δ
-      nu-app   : ∀ {B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
-                 (α : Fin n) → Γ ⊢ Ctxt.lookup α Δ ∨ B ∣ Δ → Γ ⊢ B ∣ Δ
+      nu-abs   : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
+                 Γ ⊢ A ∣ B , Δ → Γ ⊢ A ∨ B ∣ Δ
+      nu-app   : ∀ {A} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
+                 (β : Fin n) → Γ ⊢ A ∨ Ctxt.lookup β Δ ∣ Δ → Γ ⊢ A ∣ Δ
+      unit     : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
+                 Γ ⊢ ⊤ ∣ Δ
+      empty    : ∀ {A} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
+                 Γ ⊢ ⊥ ∣ Δ → Γ ⊢ A ∣ Δ
 
 
 
@@ -58,6 +62,8 @@ module ClassicalLogic (U : Set) (R : U) where
   exchˡ i (snd t)       = snd (exchˡ i t)
   exchˡ i (nu-abs t)    = nu-abs (exchˡ i t)
   exchˡ i (nu-app α t)  = nu-app α (exchˡ i t)
+  exchˡ i (unit)        = unit
+  exchˡ i (empty t)     = empty (exchˡ i t)
 
   exchˡ₀ : ∀ {A B C} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
            A , B , Γ ⊢ C ∣ Δ  → B , A , Γ ⊢ C ∣ Δ
@@ -79,6 +85,8 @@ module ClassicalLogic (U : Set) (R : U) where
   weakˡ (snd t)       = snd (weakˡ t)
   weakˡ (nu-abs t)    = nu-abs (weakˡ t)
   weakˡ (nu-app α t)  = nu-app α (weakˡ t)
+  weakˡ (unit)        = unit
+  weakˡ (empty t)     = empty (weakˡ t)
 
   exchʳ : ∀ {A} {m} {Γ : Ctxt m} {n} {Δ : Ctxt (suc n)} (i : Fin n) →
           Γ ⊢ A ∣ Δ → Γ ⊢ A ∣ Ctxt.exch i Δ
@@ -94,6 +102,8 @@ module ClassicalLogic (U : Set) (R : U) where
   exchʳ i (nu-abs t)    = nu-abs (exchʳ (suc i) t)
   exchʳ {Δ = Δ} i (nu-app α t) with Ctxt.exch-var Δ i α
   ... | β , p rewrite p = nu-app β (exchʳ i t)
+  exchʳ i (unit)        = unit
+  exchʳ i (empty t)     = empty (exchʳ i t)
 
   exchʳ₀ : ∀ {A B C} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} →
            Γ ⊢ A ∣ B , C , Δ → Γ ⊢ A ∣ C , B , Δ
@@ -115,6 +125,8 @@ module ClassicalLogic (U : Set) (R : U) where
   weakʳ (snd t)       = snd (weakʳ t)
   weakʳ (nu-abs t)    = nu-abs (exchʳ₀ (weakʳ t))
   weakʳ (nu-app α t)  = nu-app (suc α) (weakʳ t)
+  weakʳ (unit)        = unit
+  weakʳ (empty t)     = empty (weakʳ t)
 
 
 
@@ -156,16 +168,18 @@ module ClassicalLogic (U : Set) (R : U) where
   cps (pair s t) = abs (case (var zero) (app (weak (weak (cps s))) (var zero)) (app (weak (weak (cps t))) (var zero)))
   cps (fst t) = abs (app (weak (cps t)) (inl (var zero)))
   cps (snd t) = abs (app (weak (cps t)) (inr (var zero)))
-  cps {Γ = Γ} (nu-abs {A} {B} t) = abs (IL.∧-elim-left (exch₀ (IL.⇒-intro (IL.move-left (Ctxt.map C Γ) (cps t)))))
-  cps {._} {m} {Γ} {n} {Δ} (nu-app {B} α t) = prf
+  cps {Γ = Γ} (nu-abs {A} {B} t) = abs (IL.∧-elim-left (IL.⇒-intro (IL.move-left (Ctxt.map C Γ) (cps t))))
+  cps {._} {m} {Γ} {n} {Δ} (nu-app {A} β t) = prf
     where
-      open App.Morphism (Ctxt.lookup-morphism α) renaming (op-<$> to lookup-map)
-      lem : K (Ctxt.lookup α Δ) ≡ Ctxt.lookup (Fin.raise m α) (Ctxt.map C Γ ++ Ctxt.map K Δ)
-      lem = trans (sym (lookup-map K Δ)) (Ctxt.lookup-++-raise (Ctxt.map C Γ) (Ctxt.map K Δ) α)
-      lkp : Ctxt.map C Γ ++ Ctxt.map K Δ ⊢ K (Ctxt.lookup α Δ)
-      lkp rewrite lem = var (Fin.raise m α)
-      prf : Ctxt.map C Γ ++ Ctxt.map K Δ ⊢ C B
-      prf = abs (app (weak (cps t)) (pair (weak lkp) (var zero)))
+      open App.Morphism (Ctxt.lookup-morphism β) renaming (op-<$> to lookup-map)
+      lem : K (Ctxt.lookup β Δ) ≡ Ctxt.lookup (Fin.raise m β) (Ctxt.map C Γ ++ Ctxt.map K Δ)
+      lem = trans (sym (lookup-map K Δ)) (Ctxt.lookup-++-raise (Ctxt.map C Γ) (Ctxt.map K Δ) β)
+      lkp : Ctxt.map C Γ ++ Ctxt.map K Δ ⊢ K (Ctxt.lookup β Δ)
+      lkp rewrite lem = var (Fin.raise m β)
+      prf : Ctxt.map C Γ ++ Ctxt.map K Δ ⊢ C A
+      prf = abs (app (weak (cps t)) (pair (var zero) (weak lkp)))
+  cps (unit) = abs (empty (var zero))
+  cps (empty t) = abs (weak (app (cps t) unit))
 
 
   -- defines a reification of classical logic into agda in two ways: through the
@@ -196,8 +210,18 @@ module ClassicalLogic (U : Set) (R : U) where
   show (snd t)        = "proj₂ (" ⊕ show t ⊕ ")"
   show (nu-abs t)     = "ν " ⊕ show t
   show (nu-app α t)   = "⟨" ⊕ showℕ (Fin.toℕ α) ⊕ "⟩(" ⊕ show t ⊕ ")"
+  show (unit)         = "*"
+  show (empty t)      = "exfalso (" ⊕ show t ⊕ ")"
 
 
+  -- defines the notion of mutual derivability (i.e. double-line inference rules)
+
+  record _⊣⊢_ (A : Type) (B : Type) : Set where
+    field
+      to   : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A , Γ ⊢ B ∣ Δ
+      from : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → B , Γ ⊢ A ∣ Δ
+
+  open _⊣⊢_ using (to; from)
 
   -- defines some rules taken from classical natural deduction and
   -- classical sequent calculus (LK) that I found particularily useful
@@ -217,27 +241,40 @@ module ClassicalLogic (U : Set) (R : U) where
   ∧-elim-left : ∀ {A B C} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A , B , Γ ⊢ C ∣ Δ → A ∧ B , Γ ⊢ C ∣ Δ
   ∧-elim-left t = ∧-intro (var zero) (exchˡ₁ (exchˡ₀ (weakˡ t)))
 
-  ¬¬-elim : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A , Γ ⊢ B ∣ Δ → ¬ ¬ A , Γ ⊢ B ∣ Δ
-  ¬¬-elim t = mu-abs (lam-app (var zero) (lam-abs (mu-app zero (exchˡ₀ (weakˡ (weakʳ t))))))
+  -- ∨-elim : ∀ {A B C} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A , Γ ⊢ C ∣ Δ → B , Γ ⊢ C ∣ Δ → A ∨ B , Γ ⊢ C ∣ Δ
+  -- ∨-elim s t = ⇒-intro {!!}
 
-  ¬-right : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A , Γ ⊢ B ∣ Δ → Γ ⊢ B ∣ ¬ A , Δ
-  ¬-right t = mu-abs (mu-app (suc zero) (lam-abs (mu-app zero (weakʳ (weakʳ t)))))
+  ¬-elim-right : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A , Γ ⊢ B ∣ Δ → Γ ⊢ B ∣ ¬ A , Δ
+  ¬-elim-right t = mu-abs (mu-app (suc zero) (lam-abs (mu-app zero (weakʳ (weakʳ t)))))
 
-  ¬-left : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → Γ ⊢ B ∣ A , Δ → ¬ A , Γ ⊢ B ∣ Δ
-  ¬-left t = mu-abs (lam-app (var zero) (mu-abs (mu-app (suc zero) (weakˡ (exchʳ₀ (weakʳ t))))))
+  ¬-elim-left : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → Γ ⊢ B ∣ A , Δ → ¬ A , Γ ⊢ B ∣ Δ
+  ¬-elim-left t = mu-abs (lam-app (var zero) (mu-abs (mu-app (suc zero) (weakˡ (exchʳ₀ (weakʳ t))))))
 
+  ¬¬-elim-left : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A , Γ ⊢ B ∣ Δ → ¬ ¬ A , Γ ⊢ B ∣ Δ
+  ¬¬-elim-left t = ¬-elim-left (¬-elim-right t)
 
+  ¬¬-elim-right : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → Γ ⊢ B ∣ A , Δ → Γ ⊢ B ∣ ¬ ¬ A , Δ
+  ¬¬-elim-right t = ¬-elim-right (¬-elim-left t)
 
-  -- defines the notion of mutual derivability (i.e. double-line inference rules)
-  -- and shows that using the rules defined above for classical logic the operators
+  -- demorgan₁ : ∀ {A B} → ¬ (A ∧ B) ⊣⊢ ¬ A ∨ ¬ B
+  -- demorgan₁ {A} {B} = record { to = to' ; from = from' }
+  --   where
+  --     to'   : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → ¬ (A ∧ B) , Γ ⊢ ¬ A ∨ ¬ B ∣ Δ
+  --     to'   = nu-abs (mu-abs (lam-app (var zero) (weakˡ (¬-elim-right (¬-elim-right (exchˡ₀ (∧-intro-left (var zero))))))))
+  --     from' : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → ¬ A ∨ ¬ B , Γ ⊢ ¬ (A ∧ B) ∣ Δ
+  --     from' = mu-abs {!!}
+
+  -- demorgan₂ : ∀ {A B} → ¬ (A ∨ B) ⊣⊢ ¬ A ∧ ¬ B
+  -- demorgan₂ {A} {B} = record { to = to' ; from = from' }
+  --   where
+  --     to'   : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → ¬ (A ∨ B) , Γ ⊢ ¬ A ∧ ¬ B ∣ Δ
+  --     to'   = {!!}
+  --     from' : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → ¬ A ∧ ¬ B , Γ ⊢ ¬ (A ∨ B) ∣ Δ
+  --     from' = ∧-elim-left (mu-abs (lam-app (var zero) (weakˡ (mu-abs (lam-app (var zero)
+  --                         (weakˡ (mu-abs (mu-app (suc zero) (nu-app zero (weakʳ (weakʳ (¬-elim-right (var zero)))))))))))))
+
+  -- shows that using the rules defined above for classical logic the operators
   -- ∧, ∨, ⊤, ⊥ and ¬ form a boolean algebra
-
-  record _⊣⊢_ (A : Type) (B : Type) : Set where
-    field
-      to   : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A , Γ ⊢ B ∣ Δ
-      from : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → B , Γ ⊢ A ∣ Δ
-
-  open _⊣⊢_ using (to; from)
 
   ∧-comm : ∀ {A B} → A ∧ B ⊣⊢ B ∧ A
   ∧-comm = record { to = iso ; from = iso }
@@ -259,10 +296,15 @@ module ClassicalLogic (U : Set) (R : U) where
       to'   : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A ∧ A ∨ B , Γ ⊢ A ∣ Δ
       to'   = ∧-elim-left (var zero)
       from' : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A , Γ ⊢ A ∧ A ∨ B ∣ Δ
-      from' = pair (var zero) (nu-abs (mu-abs (mu-app (suc zero) (var zero))))
+      from' = pair (var zero) (nu-abs (var zero))
 
   ∧-identity : ∀ {A} → A ∧ ⊤ ⊣⊢ A
-  ∧-identity = {!!}
+  ∧-identity {A} = record { to = to' ; from = from' }
+    where
+      to'   : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A ∧ ⊤ , Γ ⊢ A ∣ Δ
+      to'   = ∧-elim-left (var zero)
+      from' : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A , Γ ⊢ A ∧ ⊤ ∣ Δ
+      from' = pair (var zero) unit
 
   ∨-comm : ∀ {A B} → A ∨ B ⊣⊢ B ∨ A
   ∨-comm = record { to = iso ; from = iso }
@@ -274,17 +316,22 @@ module ClassicalLogic (U : Set) (R : U) where
   ∨-assoc {A} {B} {C} = record { to = to' ; from = from' }
     where
       to'   : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A ∨ (B ∨ C) , Γ ⊢ (A ∨ B) ∨ C ∣ Δ
-      to'   = nu-abs (mu-abs (mu-app (suc zero) (nu-abs (mu-abs (mu-app (suc (suc zero)) (nu-app zero (nu-app (suc zero) (var zero))))))))
+      to'   = nu-abs (nu-abs (mu-abs (mu-app (suc zero) (nu-app (suc (suc zero)) (mu-abs (mu-app (suc zero) (nu-app zero (var zero))))))))
       from' : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → (A ∨ B) ∨ C , Γ ⊢ A ∨ (B ∨ C) ∣ Δ
-      from' = nu-abs (nu-abs (mu-abs (mu-app (suc zero) (nu-app (suc (suc zero)) (mu-abs (mu-app (suc zero) (nu-app zero (var zero))))))))
+      from' = nu-abs (mu-abs (mu-app (suc zero) (nu-abs (mu-abs (mu-app (suc (suc zero)) (nu-app zero (nu-app (suc zero) (var zero))))))))
 
-  ∨-absorb : ∀ {A B} → A ∨ (A ∧ B) ⊣⊢ A
-  ∨-absorb {A} {B} = record { to = to' ; from = from' }
-    where
-      to'   : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A ∨ (A ∧ B) , Γ ⊢ A ∣ Δ
-      to'   = {!!}
-      from' : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A , Γ ⊢ A ∨ (A ∧ B) ∣ Δ
-      from' = nu-abs (mu-abs (mu-app (suc zero) (var zero)))
+  -- ∨-absorb : ∀ {A B} → A ∨ (A ∧ B) ⊣⊢ A
+  -- ∨-absorb {A} {B} = record { to = to' ; from = from' }
+  --   where
+  --     to'   : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A ∨ (A ∧ B) , Γ ⊢ A ∣ Δ
+  --     to'   = {!!}
+  --     from' : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A , Γ ⊢ A ∨ (A ∧ B) ∣ Δ
+  --     from' = nu-abs (mu-abs (mu-app zero (var zero)))
 
   ∨-identity : ∀ {A} → A ∨ ⊥ ⊣⊢ A
-  ∨-identity = {!!}
+  ∨-identity {A} = record { to = to' ; from = from' }
+    where
+      to'   : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A ∨ ⊥ , Γ ⊢ A ∣ Δ
+      to'   = mu-abs (mu-abs (mu-app (suc zero) (nu-app zero (var zero))))
+      from' : ∀ {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A , Γ ⊢ A ∨ ⊥ ∣ Δ
+      from' = nu-abs (var zero)

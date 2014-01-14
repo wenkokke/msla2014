@@ -11,6 +11,7 @@ module Connectives (U : Set) where
 
   infixr 20 _⇒_
   infixr 30 _∧_ _∨_
+  infixr 40 ¬_
 
   data Type : Set where
     el   : (A : U) → Type
