@@ -1,9 +1,9 @@
 open import Data.Fin as Fin using (Fin; suc; zero)
-open import Data.Nat as Nat using (ℕ; suc; zero)
+open import Data.Nat as Nat using (ℕ; suc; zero; _+_)
 open import Data.Vec as Vec using (Vec; _∷_; [])
 open import Data.Vec.Properties as VecProps using ()
 open import Data.Product using (∃; _,_)
-open import Relation.Binary.PropositionalEquality using (_≡_; refl; cong)
+open import Relation.Binary.PropositionalEquality using (_≡_; refl; cong; sym)
 
 module Context (Type : Set) where
 
@@ -11,6 +11,16 @@ module Context (Type : Set) where
   open VecProps public
 
   Ctxt = Vec.Vec Type
+
+  n+1≡1+n : ∀ n → n + 1 ≡ 1 + n
+  n+1≡1+n  zero   = refl
+  n+1≡1+n (suc n) = cong suc (n+1≡1+n n)
+
+  _,′_ : ∀ {a} {A : Set a} {n} → Vec A n → A → Vec A (n + 1)
+  xs ,′ x = xs ++ (x ∷ [])
+
+  first : ∀ {n} (Γ : Ctxt (suc n)) → Type
+  first = head
 
   exch : ∀ {n} (i : Fin n) → Ctxt (suc n) → Ctxt (suc n)
   exch  zero    (A , B , Γ)  = B , (A , Γ)

@@ -189,9 +189,11 @@ module ClassicalLogic (U : Set) (R : U) where
   module Reify (⟦_⟧ᵁ : U → Set) where
 
     private
-      open IL.Reify ⟦_⟧ᵁ using (⟦_⟧) renaming ([_] to IL[_])
+      -- open Conn.Reify ⟦_⟧ᵁ public using (⟦_⟧)
+      -- open import Environment Type ⟦_⟧ as Env hiding (exch)
+      open IL.Reify ⟦_⟧ᵁ using () renaming ([_] to IL[_])
 
-    [_] : ∀ {A} → ∅ ⊢ A ∣ ∅ → ⟦ C A ⟧
+    [_] : ∀ {A} → ∅ ⊢ A ∣ ∅ → IL⟦ C A ⟧
     [_] t = IL[ cps t ]
 
 
@@ -242,7 +244,7 @@ module ClassicalLogic (U : Set) (R : U) where
   ∧-elim-left t = ∧-intro (var zero) (exchˡ₁ (exchˡ₀ (weakˡ t)))
 
   -- ∨-elim : ∀ {A B C} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A , Γ ⊢ C ∣ Δ → B , Γ ⊢ C ∣ Δ → A ∨ B , Γ ⊢ C ∣ Δ
-  -- ∨-elim s t = ⇒-intro {!!}
+  -- ∨-elim s t = {!!}
 
   ¬-elim-right : ∀ {A B} {m} {Γ : Ctxt m} {n} {Δ : Ctxt n} → A , Γ ⊢ B ∣ Δ → Γ ⊢ B ∣ ¬ A , Δ
   ¬-elim-right t = mu-abs (mu-app (suc zero) (lam-abs (mu-app zero (weakʳ (weakʳ t)))))

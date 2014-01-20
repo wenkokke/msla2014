@@ -12,18 +12,13 @@
 
 \usepackage{ucs}
 \usepackage[utf8x]{inputenc}
-\DeclareUnicodeCharacter{8345}{$_n$}
-\DeclareUnicodeCharacter{7522}{$_i$}
-\DeclareUnicodeCharacter{7480}{$^L$}
-\DeclareUnicodeCharacter{7481}{$^M$}
-\DeclareUnicodeCharacter{7487}{$^R$}
+\DeclareUnicodeCharacter{7468}{$^A$}
+\DeclareUnicodeCharacter{7486}{$^p$}
 \DeclareUnicodeCharacter{7488}{$^T$}
-
+\DeclareUnicodeCharacter{7489}{$^u$}
 
 %include agda.fmt
-%format _>>=_ = "\_\!\!\bind\!\!\_"
-%format  >>=  = "\!\bind\!"
-%format Vec.lookup = lookup
+%include main.fmt
 
 % verbose:
 %  set to true if *all* code should be rendered, including
@@ -40,20 +35,14 @@
 
 \ifverbose
 \begin{code}
-open import Level using (Level; _⊔_) renaming (suc to lsuc; zero to lzero)
-open import Category.Monad
-open import Category.Monad.Indexed
-open import Data.Bool using (Bool; true; false)
-open import Data.List using (foldr)
-open import Data.Empty using (⊥)
-open import Data.Unit using (⊤; tt)
-open import Data.Fin as Fin using (Fin; suc; zero)
-open import Data.Nat as Nat using (ℕ; suc; zero) renaming (_+_ to _+ℕ_)
-open import Data.Product using (∃; ∃₂; _×_; _,_; _,′_; uncurry; map)
-open import Function using (const; id; flip; _$_; _∘_; case_of_)
+open import Function using (case_of_; flip)
+open import Data.Nat using (ℕ; suc; zero) renaming (_+_ to _+ℕ_)
+open import Data.Fin using (Fin; suc; zero)
+open import Data.Product using (∃; _×_; _,_; <_,_>)
+open import Data.Sum using (_⊎_; inj₁; inj₂)
 open import Relation.Nullary using (Dec; yes; no)
-import Relation.Binary.PropositionalEquality as PropEq
-open PropEq using (_≡_; refl; cong; sym)
+open import Relation.Nullary.Decidable using (True; False)
+open import Relation.Binary.PropositionalEquality as PropEq using (_≡_; refl; sym; cong)
 \end{code}
 \fi
 
@@ -63,537 +52,484 @@ module Main where
 \end{code}
 \fi
 
-\section{Delimited Continuation Monad}
 
-\begin{spec}
-  return  : A → M A
-  _>>=_   : M A → (A → M B) → M B
-  join    : M (M A) → M A
-\end{spec}
+
+\section{Linear Logic (LP)}
 
 \ifverbose
 \begin{code}
-module ContRemoveThis where
-\end{code}
-\fi
-
-\begin{code}
-  Cont      : Set → Set → Set
-  Cont r a  = (a → r) → r
-
-  return    : ∀ {r a} → a → Cont r a
-  return x  = λ k → k x
-
-  _>>=_     : ∀ {r a b} → Cont r a → (a → Cont r b) → Cont r b
-  c >>= f   = λ k → c (λ x → f x k)
-
-  join      : ∀ {r a} → Cont r (Cont r a) → Cont r a
-  join c    = c >>= id
-\end{code}
-
-\begin{spec}
-  return  : A → M i i A
-  _>>=_   : M i j A → (A → M j k B) → M i k B
-  join    : M i j (M j k A) → M i k A
-\end{spec}
-
-\ifverbose
-\begin{code}
-module DContRemoveThis where
-\end{code}
-\fi
-
-\begin{code}
-  DCont        : Set → Set → Set → Set
-  DCont r i a  = (a → i) → r
-
-  return       : ∀ {r a} → a → DCont r r a
-  return x     = λ k → k x
-
-  _>>=_        : ∀ {r i j a b} → DCont r i a → (a → DCont i j b) → DCont r j b
-  c >>= f      = λ k → c (λ x → f x k)
-
-  join         : ∀ {r i j a} → DCont r i (DCont i j a) → DCont r j a
-  join c       = c >>= id
-
-  shift        : ∀ {r o i j a} → ((a → DCont i i o) → DCont r j j) → DCont r o a
-  shift f      = λ k → f (λ x → λ k′ → k′ (k x)) id
-
-  reset        : ∀ {r i a} → DCont a i i → DCont r r a
-  reset a      = λ k → k (a id)
-
-  liftM2 : ∀ {r i j a b c} → (a → b → c) → DCont r i a → DCont i j b → DCont r j c
-  liftM2 f c₁ c₂ = c₁ >>= λ x → c₂ >>= λ y → return (f x y)
-
-  example : ∀ {r} → DCont r r ℕ
-  example = (return 6) +′ reset ((return 4) +′ (shift (λ k → k 2 *′ k 7)))
-    where
-      _+′_ : ∀ {r i j} → DCont r i ℕ → DCont i j ℕ → DCont r j ℕ
-      _+′_ = liftM2 Nat._+_
-      _*′_ : ∀ {r i j} → DCont r i ℕ → DCont i j ℕ → DCont r j ℕ
-      _*′_ = liftM2 Nat._*_
-
-\end{code}
-
-
-
-\section{Abstract Categorial Grammars}
-
-\ifcomplete
-\begin{code}
-record Translation {ℓ₁ ℓ₂ : Level} {Type₁ : Set ℓ₁} {Type₂ : Set ℓ₂}
-                   {Term₁ : Type₁ → Set} {Term₂  : Type₂ → Set} : Set (ℓ₁ ⊔ ℓ₂) where
-  field
-    ⟦_⟧  : Type₁ → Type₂
-    [_]  : ∀ {τ} → Term₁ τ → Term₂ ⟦ τ ⟧
-\end{code}
-\fi
-
-
-\def\SubsectionEvaluationContexts{
-\subsection{Evaluation Contexts}
-
-\ifverbose
-\begin{code}
-module Context {ℓ : Level} (Type : Set ℓ) where
+module LinearLogic (U : Set) (R : U) (⟦_⟧ᵁ : U → Set) where
 \end{code}
 \fi
 
 \ifverbose
 \begin{code}
-  open import Data.Vec as Vec public
-    using (_++_; toList)
-    renaming (_∷_ to _,_; [] to ∅)
+  infixr 40 ¬_
+  infix  30 _⊗_
+  infixr 20 _⊸_
+  infix  5  _⊢_
 \end{code}
 \fi
 
 \begin{code}
-  Context = Vec.Vec Type
+  data Type : Set where
+    el   : (A : U) → Type
+    ⊥    : Type
+    _⊗_  : Type → Type → Type
+    _⊸_  : Type → Type → Type
 \end{code}
 
 \begin{code}
-  exch : ∀ {γ} (i : Fin γ) → Context (suc γ) → Context (suc γ)
-  exch zero     (A , B , Γ)  = B , (A , Γ)
-  exch (suc i)  (A , Γ)      = A , (exch i Γ)
-
-  exch-inv : ∀ {γ} Γ (i : Fin γ) → exch i (exch i Γ) ≡ Γ
-  exch-inv {._} (x , y , Γ)  (zero {γ})    = refl
-  exch-inv {._} (x , Γ)      (suc  {γ} i)  = cong (λ Γ → x , Γ) (exch-inv Γ i)
+  ¬_ : Type → Type
+  ¬ A = A ⊸ ⊥
 \end{code}
 
 \ifverbose
 \begin{code}
-module Environment {ℓ₁ ℓ₂ : Level} {Type₁ : Set ℓ₁} {Type₂ : Set ℓ₂}
-                   (Term₁ : Type₁ → Set) (Term₂  : Type₂ → Set)
-                   (⟦_⟧ : Type₁ → Type₂) where
-\end{code}
-\fi
-
-\ifverbose
-\begin{code}
-  private
-    open module Ct = Context Type₁ hiding (exch)
-\end{code}
-\fi
-
-\ifverbose
-\begin{code}
-  infixr 5 _∷_
+  open import Context Type as Ctxt using (Ctxt; _,_; ∅; _++_)
+  open Ctxt public using (Ctxt; _,_; ∅; _++_; _,′_)
 \end{code}
 \fi
 
 \begin{code}
-  data Env : ∀ {γ} (Γ : Context γ) → Set₁ where
-    []   : Env ∅
-    _∷_  : ∀ {A} {γ} {Γ} → Term₂ ⟦ A ⟧ → Env {γ} Γ → Env (A , Γ)
+  data _⊢_ : ∀ {m} (Γ : Ctxt m) (A : Type) → Set where
+    ax    : ∀ {A} → A , ∅ ⊢ A
+    exch  : ∀ {A} {m} {Γ : Ctxt (suc m)} i → Ctxt.exch i Γ ⊢ A → Γ ⊢ A
+    pair  : ∀ {A B} {m n} {Γ : Ctxt m} {Δ : Ctxt n} → Γ ⊢ A → Δ ⊢ B → Γ ++ Δ ⊢ A ⊗ B
+    case  : ∀ {A B C} {m n} {Γ : Ctxt m} {Δ : Ctxt n} → Γ ⊢ A ⊗ B → A , B , Δ ⊢ C → Γ ++ Δ ⊢ C
+    abs   : ∀ {A B} {m} {Γ : Ctxt m} → A , Γ ⊢ B → Γ ⊢ A ⊸ B
+    app   : ∀ {A B} {m n} {Γ : Ctxt m} {Δ : Ctxt n} → Γ ⊢ A ⊸ B → Δ ⊢ A → Γ ++ Δ ⊢ B
 \end{code}
 
 \begin{code}
-  head : ∀ {A} {γ} {Γ : Context γ} → Env (A , Γ) → Term₂ ⟦ A ⟧
-  head (x ∷ _) = x
-
-  split : ∀ {γ} {Γ : Context γ} {δ} {Δ : Context δ} → Env (Γ ++ Δ) → Env Γ × Env Δ
-  split {zero}  {∅}         env  = [] , env
-  split {suc γ} {A , Γ} (x ∷ env) = map (_∷_ x) id (split env)
-
-  exch : ∀ {γ} {Γ} (i : Fin γ) → Env (Ct.exch i Γ) → Env Γ
-  exch {γ} {Γ} i env = doRewrite (exch′ i env)
-    where
-      exch′ : ∀ {γ} {Γ} (i : Fin γ) → Env Γ → Env (Ct.exch i Γ)
-      exch′  zero   (x ∷ y ∷ Γ) = y ∷ x ∷ Γ
-      exch′ (suc i) (x ∷ Γ)     = x ∷ exch′ i Γ
-      doRewrite : Env (Ct.exch i (Ct.exch i Γ)) → Env Γ
-      doRewrite env rewrite exch-inv Γ i = env
-\end{code}
-}
-
-\section{Multiplicative Intuitionistic Linear Logic}
-%{
-%include MILL.fmt
-
-\ifverbose
-\begin{code}
-module Direct (Entity : Set) where
-\end{code}
-\fi
-
-\begin{prooftree}
-\AXC{}
-\RightLabel{\scriptsize Axiom}
-\UIC{$A \fCenter A$}
-\end{prooftree}
-
-\begin{prooftree}
-\AXC{$\Gamma, A \fCenter B$}
-\RightLabel{\scriptsize $\limpl$-intro}
-\UIC{$\Gamma \fCenter A \limpl B$}
-\end{prooftree}
-
-\begin{prooftree}
-\AXC{$\Gamma \fCenter A \limpl B$}
-\AXC{$\Gamma \fCenter A$}
-\RightLabel{\scriptsize $\limpl$-elim}
-\BIC{$\Gamma \fCenter B$}
-\end{prooftree}
-
-\begin{prooftree}
-\AXC{$\Gamma \fCenter A$}
-\AXC{$\Gamma \fCenter B$}
-\RightLabel{\scriptsize $\otimes$-intro}
-\BIC{$\Gamma \fCenter A \otimes B$}
-\end{prooftree}
-
-\begin{prooftree}
-\AXC{$\Gamma \fCenter A \otimes B$}
-\AXC{$\Gamma, A, B \fCenter C$}
-\RightLabel{\scriptsize $\otimes$-elim}
-\BIC{$\Gamma \fCenter C$}
-\end{prooftree}
-
-\begin{prooftree}
-\AXC{$\Gamma , A , B , \Delta \fCenter C$}
-\RightLabel{\scriptsize Exchange}
-\UIC{$\Gamma , B , A , \Delta \fCenter C$}
-\end{prooftree}
-
-\ifverbose
-\begin{code}
-  infix  3 _⊢_
-  infixr 6 _~o_
-  infix  7 _*_
-\end{code}
-\fi
-
-\begin{code}
-  data Type :  Set where
-    E       :  Type
-    T       :  Type
-    _*_     :  Type → Type → Type
-    _~o_    :  Type → Type → Type
-\end{code}
-
-\ifverbose
-\begin{code}
-  private
-    open module Ct = Context Type public hiding (exch)
-\end{code}
-\fi
-
-\begin{code}
-  data _⊢_ : {γ : ℕ} (Γ : Context γ) (A : Type) → Set where
-
-    var   :  ∀ {A} →
-             A , ∅ ⊢ A
-    lam   :  ∀ {A B} {γ} {Γ : Context γ} →
-             A , Γ ⊢ B → Γ ⊢ A ~o B
-    app   :  ∀ {A B} {γ} {Γ : Context γ} {δ} {Δ : Context δ} →
-             Γ ⊢ A → Δ ⊢ A ~o B → Γ ++ Δ ⊢ B
-    pair  :  ∀ {A B} {γ} {Γ : Context γ} {δ} {Δ : Context δ} →
-             Γ ⊢ A → Δ ⊢ B → Γ ++ Δ ⊢ A * B
-    case  :  ∀ {A B C} {γ} {Γ : Context γ} {δ} {Δ : Context δ} →
-             Γ ⊢ A * B → A , B , Δ ⊢ C → Γ ++ Δ ⊢ C
-    exch  :  ∀ {A} {γ} {Γ : Context (suc γ)}
-             i → Γ ⊢ A → Ct.exch i Γ ⊢ A
+  exch₀ : ∀ {A B C} {m} {Γ : Ctxt m} → A , B , Γ ⊢ C → B , A , Γ ⊢ C
+  exch₀ = exch zero
 \end{code}
 
 \begin{code}
-  Term : Type → Set
-  Term A = ∅ ⊢ A
+  to-front     : ∀ {A B} {x} (X : Ctxt x)
+               → A , X ⊢ B → X ,′ A ⊢ B
+  to-front     s = {!!}
+  to-back      : ∀ {A B} {x} (X : Ctxt x)
+               → X ,′ A ⊢ B → A , X ⊢ B
+  to-back      s = {!!}
+  lemma-⊕L     : ∀ {A} {x y} (X : Ctxt x) (Y : Ctxt y)
+               → Y ++ X ⊢ A → X ++ Y ⊢ A
+  lemma-⊕L X Y t = {!!}
+  lemma-⊗L     : ∀ {A B C} {x} (X : Ctxt x)
+               → A , B , X ⊢ C → A ⊗ B , X ⊢ C
+  lemma-⊗L     s = {!!}
+  lemma-⇛L    : ∀ {A B C} {x} (X : Ctxt x)
+               → B , A , X ⊢ C → B ⊗ A , X ⊢ C
+  lemma-⇛L    s = {!!}
+  lemma-⇚L    : ∀ {A B C} {x} (X : Ctxt x)
+               → A , B , X ⊢ C → A ⊗ B , X ⊢ C
+  lemma-⇚L    s = {!!}
+  lemma-⊕R     : ∀ {A B C} {x} (X : Ctxt x)
+               → X ++ (A , B , ∅) ⊢ C → X ++ (A ⊗ B , ∅) ⊢ C
+  lemma-⊕R     s = {!!}
+  lemma-⇒R    : ∀ {A B C} {x} (X : Ctxt x)
+               → X ++ (A , B , ∅) ⊢ C → X ++ (A ⊗ B , ∅) ⊢ C
+  lemma-⇒R    s = {!!}
+  lemma-⇐R    : ∀ {A B C} {x} (X : Ctxt x)
+               → X ++ (B , A , ∅) ⊢ C → X ++ (B ⊗ A , ∅) ⊢ C
+  lemma-⇐R    s = {!!}
+  lemma-res₁   : ∀ {A} {x y z} (X : Ctxt x) (Y : Ctxt y) (Z : Ctxt z)
+               → (Y ++ (X ++ Z)) ⊢ A → ((X ++ Y) ++ Z) ⊢ A
+  lemma-res₁   s = {!!}
+  lemma-res₂   : ∀ {A} {x y z} (X : Ctxt x) (Y : Ctxt y) (Z : Ctxt z)
+               → ((X ++ Y) ++ Z) ⊢ A → (Y ++ (X ++ Z)) ⊢ A
+  lemma-res₂   s = {!!}
+  lemma-res₃   : ∀ {A} {x y z} (X : Ctxt x) (Y : Ctxt y) (Z : Ctxt z)
+               → (X ++ (Z ++ Y)) ⊢ A → ((X ++ Y) ++ Z) ⊢ A
+  lemma-res₃   s = {!!}
+  lemma-res₄   : ∀ {A} {x y z} (X : Ctxt x) (Y : Ctxt y) (Z : Ctxt z)
+               → ((X ++ Y) ++ Z) ⊢ A → (X ++ (Z ++ Y)) ⊢ A
+  lemma-res₄   s = {!!}
+  lemma-dres₁  : ∀ {A} {x y z} (X : Ctxt x) (Y : Ctxt y) (Z : Ctxt z)
+               → ((Z ++ X) ++ Y) ⊢ A → (Z ++ (Y ++ X)) ⊢ A
+  lemma-dres₁  s = {!!}
+  lemma-dres₂  : ∀ {A} {x y z} (X : Ctxt x) (Y : Ctxt y) (Z : Ctxt z)
+               → (Z ++ (Y ++ X)) ⊢ A → ((Z ++ X) ++ Y) ⊢ A
+  lemma-dres₂  s = {!!}
+  lemma-dres₃  : ∀ {A} {x y z} (X : Ctxt x) (Y : Ctxt y) (Z : Ctxt z)
+               → ((Y ++ Z) ++ X) ⊢ A → (Z ++ (Y ++ X)) ⊢ A
+  lemma-dres₃  s = {!!}
+  lemma-dres₄  : ∀ {A} {x y z} (X : Ctxt x) (Y : Ctxt y) (Z : Ctxt z)
+               → (Z ++ (Y ++ X)) ⊢ A → ((Y ++ Z) ++ X) ⊢ A
+  lemma-dres₄  s = {!!}
+  lemma-dist₁  : ∀ {A} {x y z w} (X : Ctxt x) (Y : Ctxt y) (Z : Ctxt z) (W : Ctxt w)
+               → (X ++ Y) ++ (Z ++ W) ⊢ A → (X ++ W) ++ (Z ++ Y) ⊢ A
+  lemma-dist₁  s = {!!}
+  lemma-dist₂  : ∀ {A} {x y z w} (X : Ctxt x) (Y : Ctxt y) (Z : Ctxt z) (W : Ctxt w)
+               → (X ++ Y) ++ (Z ++ W) ⊢ A → (Y ++ W) ++ (X ++ Z) ⊢ A
+  lemma-dist₂  s = {!!}
+  lemma-dist₃  : ∀ {A} {x y z w} (X : Ctxt x) (Y : Ctxt y) (Z : Ctxt z) (W : Ctxt w)
+               → (X ++ Y) ++ (Z ++ W) ⊢ A → (Z ++ X) ++ (W ++ Y) ⊢ A
+  lemma-dist₃  s = {!!}
+  lemma-dist₄  : ∀ {A} {x y z w} (X : Ctxt x) (Y : Ctxt y) (Z : Ctxt z) (W : Ctxt w)
+               → (X ++ Y) ++ (Z ++ W) ⊢ A → (Z ++ Y) ++ (X ++ W) ⊢ A
+  lemma-dist₄  s = {!!}
 \end{code}
 
 \begin{code}
-  swap : ∀ {A B} → ∅ ⊢ A * B ~o B * A
-  swap = lam (case var (exch zero (pair var var)))
+  raise : ∀ {A B} {m} {Γ : Ctxt m} → Γ ⊢ A → Γ ⊢ (A ⊸ B) ⊸ B
+  raise t = abs (app ax t)
 \end{code}
 
-
-
-\subsection{Direct Interpretation}
+\begin{code}
+  swap : ∀ {A B} {m} {Γ : Ctxt m} → A ⊗ B , ∅ ⊢ B ⊗ A
+  swap {A} {B} = case ax (exch₀ (pair ax ax))
+\end{code}
 
 \begin{code}
   ⟦_⟧ : Type → Set
-  ⟦ E       ⟧ = Entity
-  ⟦ T       ⟧ = Bool
-  ⟦ x * y   ⟧ = ⟦ x ⟧ × ⟦ y ⟧
-  ⟦ x ~o y  ⟧ = ⟦ x ⟧ → ⟦ y ⟧
+  ⟦ el A   ⟧ = ⟦ A ⟧ᵁ
+  ⟦ ⊥      ⟧ = ⟦ R ⟧ᵁ
+  ⟦ A ⊗ B  ⟧ = ⟦ A ⟧ × ⟦ B ⟧
+  ⟦ A ⊸ B  ⟧ = ⟦ A ⟧ → ⟦ B ⟧
 \end{code}
 
 \ifverbose
 \begin{code}
-  private
-    open module Env = Environment {_} {_} {Type} {Set} Term id ⟦_⟧ public hiding (exch)
+  open import Environment Type ⟦_⟧ as Env using (Env; _,_; ∅)
 \end{code}
 \fi
 
 \begin{code}
-  reify : ∀ {A} {γ} {Γ : Context γ} → Env Γ → Γ ⊢ A → ⟦ A ⟧
-  reify { _} {._} {._} Γ (var) = head Γ
-  reify {._} {._} {._} Γ++Δ (app {_} {_} x f) with split Γ++Δ
-  ... | (Γ , Δ) = reify Δ f (reify Γ x)
-  reify {._} { _} { _} Γ (lam x) = λ y → reify (y ∷ Γ) x
-  reify {._} {._} {._} Γ++Δ (pair x y) with split Γ++Δ
-  ... | (Γ , Δ) = (reify Γ x , reify Δ y)
-  reify {._} {._} {._} Γ++Δ (case {_} {_} {_} xy z) with split Γ++Δ
-  ... | (Γ , Δ) = case (reify Γ xy) of λ { (x , y) → reify (x ∷ (y ∷ Δ)) z }
-  reify {._} {._} {._} Γ (exch {_} i x) = reify (Env.exch i Γ) x
+  reify : ∀ {A} {n} {Γ : Ctxt n} → Env Γ → Γ ⊢ A → ⟦ A ⟧
+  reify Γ (ax) = Env.first Γ
+  reify Γ (exch i t) = reify (Env.exch i Γ) t
+  reify Γ++Δ (pair s t) with Env.split Γ++Δ
+  ... | Γ , Δ = (reify Γ s , reify Δ t)
+  reify Γ++Δ (case s t) with Env.split Γ++Δ
+  ... | Γ , Δ = case (reify Γ s) of λ { (x , y) → reify (x , (y , Δ)) t }
+  reify Γ (abs t) = λ x → reify (x , Γ) t
+  reify Γ++Δ (app s t) with Env.split Γ++Δ
+  ... | Γ , Δ = (reify Γ s) (reify Δ t)
 \end{code}
 
 \begin{code}
-  [_] : ∀ {A} → Term A → ⟦ A ⟧
-  [_] = reify []
+  [_] : ∀ {A} → ∅ ⊢ A → ⟦ A ⟧
+  [_] = reify ∅
 \end{code}
+
+
+
+\section{Lambek-Grishin Calculus (fLG)}
 
 \ifverbose
 \begin{code}
-  direct : Translation {_} {_} {Type} {Set} {Term} {id}
-  direct = record { ⟦_⟧ = ⟦_⟧ ; [_] = [_] }
-\end{code}
-\fi
-
-\subsection{Monadic Interpretation}
-
-\ifverbose
-\begin{code}
-module Monadic (Entity : Set) (M : Set → Set) (monad : RawMonad M) where
+module LambekGrishinCalculus (U : Set) (R : U) (⟦_⟧ᵁ : U → Set) where
 \end{code}
 \fi
 
 \ifverbose
 \begin{code}
-  open Direct Entity
-  open RawMonad monad using (return; _⊛_)
+  infix  30 _⊗_ _⊕_
+  infixr 20 _⇒_ _⇛_
+  infixl 20 _⇐_ _⇚_
+  infix  5  _⊢_ [_]⊢_ _⊢[_]
 \end{code}
 \fi
 
 \begin{code}
-  ⟦_⟧ᴹ : Type → Set
-  ⟦ A ~o B  ⟧ᴹ = M ⟦ A ⟧ → ⟦ B ⟧ᴹ
-  ⟦ A       ⟧ᴹ = M ⟦ A ⟧
+  data Polarity : Set where
+    + : Polarity
+    - : Polarity
 \end{code}
 
 \begin{code}
-  liftᴹ : ∀ {A} → ⟦ A ⟧ → ⟦ A ⟧ᴹ
-  liftᴹ {A} x = lift A (return x)
+  _≟ᴾ_ : (p q : Polarity) → Dec (p ≡ q)
+  + ≟ᴾ + = yes refl
+  + ≟ᴾ - = no (λ ())
+  - ≟ᴾ + = no (λ ())
+  - ≟ᴾ - = yes refl
+\end{code}
+
+\begin{code}
+  data Type : Set where
+    el   : (A : U) → (p : Polarity) → Type
+    _⊗_  : Type → Type → Type
+    _⇒_  : Type → Type → Type
+    _⇐_  : Type → Type → Type
+    _⊕_  : Type → Type → Type
+    _⇚_  : Type → Type → Type
+    _⇛_  : Type → Type → Type
+\end{code}
+
+\begin{code}
+  mutual
+    data Struct+ : Set where
+      ·_·  : Type → Struct+
+      _⊗_  : Struct+ → Struct+ → Struct+
+      _⇚_  : Struct+ → Struct- → Struct+
+      _⇛_  : Struct- → Struct+ → Struct+
+
+    data Struct- : Set where
+      ·_·  : Type → Struct-
+      _⊕_  : Struct- → Struct- → Struct-
+      _⇒_  : Struct+ → Struct- → Struct-
+      _⇐_  : Struct- → Struct+ → Struct-
+\end{code}
+
+\begin{code}
+  mutual
+    data _⊢_ : Struct+ → Struct- → Set where
+      μ*     : ∀ {X A} → X ⊢[ A ] → X ⊢ · A ·
+      μ̃*     : ∀ {X A} → [ A ]⊢ X → · A · ⊢ X
+      ⊗L     : ∀ {X A B} → · A · ⊗ · B · ⊢ X → · A ⊗ B · ⊢ X
+      ⇚L    : ∀ {X A B} → · A · ⇚ · B · ⊢ X → · A ⇚ B · ⊢ X
+      ⇛L    : ∀ {X A B} → · B · ⇛ · A · ⊢ X → · B ⇛ A · ⊢ X
+      ⊕R     : ∀ {X A B} → X ⊢ · A · ⊕ · B · → X ⊢ · A ⊕ B ·
+      ⇒R    : ∀ {X A B} → X ⊢ · A · ⇒ · B · → X ⊢ · A ⇒ B ·
+      ⇐R    : ∀ {X A B} → X ⊢ · B · ⇐ · A · → X ⊢ · B ⇐ A ·
+      res₁   : ∀ {X Y Z} → Y ⊢ X ⇒ Z → X ⊗ Y ⊢ Z
+      res₂   : ∀ {X Y Z} → X ⊗ Y ⊢ Z → Y ⊢ X ⇒ Z
+      res₃   : ∀ {X Y Z} → X ⊢ Z ⇐ Y → X ⊗ Y ⊢ Z
+      res₄   : ∀ {X Y Z} → X ⊗ Y ⊢ Z → X ⊢ Z ⇐ Y
+      dres₁  : ∀ {X Y Z} → Z ⇚ X ⊢ Y → Z ⊢ Y ⊕ X
+      dres₂  : ∀ {X Y Z} → Z ⊢ Y ⊕ X → Z ⇚ X ⊢ Y
+      dres₃  : ∀ {X Y Z} → Y ⇛ Z ⊢ X → Z ⊢ Y ⊕ X
+      dres₄  : ∀ {X Y Z} → Z ⊢ Y ⊕ X → Y ⇛ Z ⊢ X
+      dist₁  : ∀ {X Y Z W} → X ⊗ Y ⊢ Z ⊕ W → X ⇚ W ⊢ Z ⇐ Y
+      dist₂  : ∀ {X Y Z W} → X ⊗ Y ⊢ Z ⊕ W → Y ⇚ W ⊢ X ⇒ Z
+      dist₃  : ∀ {X Y Z W} → X ⊗ Y ⊢ Z ⊕ W → Z ⇛ X ⊢ W ⇐ Y
+      dist₄  : ∀ {X Y Z W} → X ⊗ Y ⊢ Z ⊕ W → Z ⇛ Y ⊢ X ⇒ W
+
+    data [_]⊢_ : Type → Struct- → Set where
+      ax     : ∀ {A} → [ A ]⊢ · A ·
+      μ̃      : ∀ {X A} → · A · ⊢ X → [ A ]⊢ X
+      ⊕L     : ∀ {X Y A B} → [ B ]⊢ Y → [ A ]⊢ X → [ B ⊕ A ]⊢ X ⊕ Y
+      ⇒L    : ∀ {X Y A B} → X ⊢[ A ] → [ B ]⊢ Y → [ A ⇒ B ]⊢ X ⇒ Y
+      ⇐L    : ∀ {X Y A B} → [ B ]⊢ Y → X ⊢[ A ] → [ B ⇐ A ]⊢ Y ⇐ X
+
+    data _⊢[_] : Struct+ → Type → Set where
+      ax     : ∀ {A} → · A · ⊢[ A ]
+      μ      : ∀ {X A} → X ⊢ · A · → X ⊢[ A ]
+      ⊗R     : ∀ {X Y A B} → X ⊢[ A ] → Y ⊢[ B ] → X ⊗ Y ⊢[ A ⊗ B ]
+      ⇚R    : ∀ {X Y A B} → X ⊢[ A ] → [ B ]⊢ Y → X ⇚ Y ⊢[ A ⇚ B ]
+      ⇛R    : ∀ {X Y A B} → [ B ]⊢ Y → X ⊢[ A ] → Y ⇛ X ⊢[ B ⇛ A ]
+\end{code}
+
+\begin{code}
+  raise : ∀ {A B} → · A · ⊢ · (B ⇐ A) ⇒ B ·
+  raise = ⇒R (res₂ (res₃ (μ̃* (⇐L ax ax))))
+
+  lower : ∀ {A B} → · B ⇚ (A ⇛ B) · ⊢ · A ·
+  lower = ⇚L (dres₂ (dres₃ (μ* (⇛R ax ax))))
+\end{code}
+
+\ifverbose
+\begin{code}
+  module LP = LinearLogic U R ⟦_⟧ᵁ
+  open LP hiding (reify) renaming (Type to TypeLP; _⊢_ to _⊢LP_; ⟦_⟧ to ⟦_⟧ᵀ)
+\end{code}
+\fi
+
+\begin{code}
+  pol : Type → Polarity
+  pol (el A p)  = p
+  pol (A ⊗ B)   = +
+  pol (A ⇚ B)  = +
+  pol (A ⇛ B)  = +
+  pol (A ⊕ B)   = -
+  pol (A ⇒ B)  = -
+  pol (A ⇐ B)  = -
+\end{code}
+
+\begin{code}
+  mutual
+    cps+ : Type → TypeLP
+    cps+ (el A +)   = el A
+    cps+ (el A -)   = ¬ (¬ el A)
+    cps+ (A ⊗ B)   = cps+ A ⊗ cps+ B
+    cps+ (B ⇚ A)  = cps+ B ⊗ cps- A
+    cps+ (A ⇛ B)  = cps- A ⊗ cps+ B
+    cps+ (A ⊕ B)   = ¬ (cps- A ⊗ cps- B)
+    cps+ (A ⇒ B)  = ¬ (cps+ A ⊗ cps- B)
+    cps+ (B ⇐ A)  = ¬ (cps- B ⊗ cps+ A)
+
+    cps- : Type → TypeLP
+    cps- (el A +)  = ¬ el A
+    cps- (el A -)  = ¬ el A
+    cps- (A ⊗ B)   = ¬ (cps+ A ⊗ cps+ B)
+    cps- (B ⇚ A)  = ¬ (cps+ B ⊗ cps- A)
+    cps- (A ⇛ B)  = ¬ (cps- A ⊗ cps+ B)
+    cps- (A ⊕ B)   = cps- A ⊗ cps- B
+    cps- (A ⇒ B)  = cps+ A ⊗ cps- B
+    cps- (B ⇐ A)  = cps- B ⊗ cps+ A
+\end{code}
+
+\ifverbose
+\begin{code}
+  mutual
+    size+ : Struct+ → ℕ
+    size+ · A ·     = 1
+    size+ (A ⊗ B)   = size+ A +ℕ size+ B
+    size+ (B ⇚ A)  = size+ B +ℕ size- A
+    size+ (A ⇛ B)  = size- A +ℕ size+ B
+
+    size- : Struct- → ℕ
+    size- · A ·     = 1
+    size- (A ⊕ B)   = size- A +ℕ size- B
+    size- (A ⇒ B)  = size+ A +ℕ size- B
+    size- (B ⇐ A)  = size- B +ℕ size+ A
+\end{code}
+\fi
+
+\begin{code}
+  mutual
+    str+ : (s : Struct+) → Ctxt (size+ s)
+    str+ (· A ·)   = cps+ A , ∅
+    str+ (A ⊗ B)   = str+ A ++ str+ B
+    str+ (B ⇚ A)  = str+ B ++ str- A
+    str+ (A ⇛ B)  = str- A ++ str+ B
+
+    str- : (s : Struct-) → Ctxt (size- s)
+    str- (· A ·)   = cps- A , ∅
+    str- (A ⊕ B)   = str- A ++ str- B
+    str- (A ⇒ B)  = str+ A ++ str- B
+    str- (B ⇐ A)  = str- B ++ str+ A
+\end{code}
+
+\begin{code}
+  record CPS (A : Set) (B : A → Set) : Set where
+    constructor cps
+    field
+      ⟦_⟧ : (x : A) → B x
+  open CPS {{...}} public using (⟦_⟧)
+
+  Struct+CPS : CPS Struct+ (λ x → Ctxt (size+ x))
+  Struct+CPS = cps str+
+
+  Struct-CPS : CPS Struct- (λ x → Ctxt (size- x))
+  Struct-CPS = cps str-
+
+  Type+CPS : CPS Type (λ _ → TypeLP)
+  Type+CPS = cps cps+
+\end{code}
+
+\begin{code}
+  cps+A≡¬cps-A∨cps-A≡¬cps+A : (A : Type) → cps+ A ≡ cps- A ⊸ ⊥ ⊎ cps- A ≡ cps+ A ⊸ ⊥
+  cps+A≡¬cps-A∨cps-A≡¬cps+A (el A +)  = inj₂ refl
+  cps+A≡¬cps-A∨cps-A≡¬cps+A (el A -)  = inj₁ refl
+  cps+A≡¬cps-A∨cps-A≡¬cps+A (A ⊗ B)   = inj₂ refl
+  cps+A≡¬cps-A∨cps-A≡¬cps+A (B ⇚ A)  = inj₂ refl
+  cps+A≡¬cps-A∨cps-A≡¬cps+A (A ⇛ B)  = inj₂ refl
+  cps+A≡¬cps-A∨cps-A≡¬cps+A (A ⊕ B)   = inj₁ refl
+  cps+A≡¬cps-A∨cps-A≡¬cps+A (A ⇒ B)  = inj₁ refl
+  cps+A≡¬cps-A∨cps-A≡¬cps+A (B ⇐ A)  = inj₁ refl
+\end{code}
+
+\begin{code}
+  lemma-μ* : ∀ A {x} (X : Ctxt x) → X ⊢LP cps+ A → X ,′ cps- A ⊢LP ⊥
+  lemma-μ* A X t with cps+A≡¬cps-A∨cps-A≡¬cps+A A
+  lemma-μ* A X t | inj₂ p rewrite p = to-front X (app ax t)
+  lemma-μ* A X t | inj₁ p = app lem ax
     where
-      lift : ∀ A → M ⟦ A ⟧ → ⟦ A ⟧ᴹ
-      lift  E         x = x
-      lift  T         x = x
-      lift  (A * B)   x = x
-      lift  (A ~o B)  f = λ x → lift B (f ⊛ x)
+      lem : X ⊢LP cps- A ⊸ ⊥
+      lem rewrite sym p = t
 
-
-  [_]ᴹ : ∀ {A} → Term A → ⟦ A ⟧ᴹ
-  [_]ᴹ = reifyᴹ []
+  lemma-μ̃* : ∀ A {x} (X : Ctxt x) → X ⊢LP cps- A → cps+ A , X ⊢LP ⊥
+  lemma-μ̃* A X t with cps+A≡¬cps-A∨cps-A≡¬cps+A A
+  lemma-μ̃* A X t | inj₁ p rewrite p = app ax t
+  lemma-μ̃* A X t | inj₂ p = to-back X (app lem ax)
     where
-      reifyᴹ : ∀ {A} {γ} {Γ : Context γ} → Env Γ → Γ ⊢ A → ⟦ A ⟧ᴹ
-      reifyᴹ {A} {γ} {Γ} env p = liftᴹ {A} (reify {A} {γ} {Γ} env p)
-\end{code}
+      lem : X ⊢LP cps+ A ⊸ ⊥
+      lem rewrite sym p = t
 
+  -- These are the really worrying cases, as I don't know whether or
+  -- not "A ⊸ ⊥ , X ⊢ ⊥ → X ⊢ A" is even a derivable inference rule
+  -- in linear logic.
 
+  lemma-μ̃  : ∀ A {x} (X : Ctxt x) → (cps+ A , X) ⊢LP ⊥ → X ⊢LP cps- A
+  lemma-μ̃  A X t with cps+A≡¬cps-A∨cps-A≡¬cps+A A
+  lemma-μ̃  A X t | inj₂ p rewrite p = abs t
+  lemma-μ̃  A X t | inj₁ p = prf
+    where
+      lem : cps- A ⊸ ⊥ , X ⊢LP ⊥
+      lem rewrite sym p = t
+      prf : X ⊢LP cps- A
+      prf = {!!}
 
-\subsection{Continuation-Passing Style and Indexed Monads}
-
-\begin{prooftree}
-\AXC{}
-\RightLabel{\scriptsize Axiom}
-\UIC{$A \fCenter A$}
-\end{prooftree}
-
-\begin{prooftree}
-\AXC{$Γ, A \fCenter B , Δ$}
-\RightLabel{\scriptsize $\limpl$-intro}
-\UIC{$Γ \fCenter A \limpl B , Δ$}
-\end{prooftree}
-
-\begin{prooftree}
-\AXC{$\Gamma \fCenter A \limpl B$}
-\AXC{$\Gamma \fCenter A$}
-\RightLabel{\scriptsize $\limpl$-elim}
-\BIC{$\Gamma \fCenter B$}
-\end{prooftree}
-
-\begin{prooftree}
-\AXC{$\Gamma \fCenter A$}
-\AXC{$\Gamma \fCenter B$}
-\RightLabel{\scriptsize $\otimes$-intro}
-\BIC{$\Gamma \fCenter A \otimes B$}
-\end{prooftree}
-
-\begin{prooftree}
-\AXC{$\Gamma \fCenter A \otimes B$}
-\AXC{$\Gamma, A, B \fCenter C$}
-\RightLabel{\scriptsize $\otimes$-elim}
-\BIC{$\Gamma \fCenter C$}
-\end{prooftree}
-
-\begin{prooftree}
-\AXC{$\Gamma , A , B , \Delta \fCenter C$}
-\RightLabel{\scriptsize Exchange}
-\UIC{$\Gamma , B , A , \Delta \fCenter C$}
-\end{prooftree}
-
-\ifverbose
-\begin{code}
-module IndexedRemoveMe (Entity : Set) {M : Set → Set → Set → Set} (imonad : RawIMonad M) where
-\end{code}
-\fi
-
-\ifverbose
-\begin{code}
-  open Direct Entity public using (Type; E; T; _*_; _~o_; ⟦_⟧)
-  open module Ct = Context Type public hiding (exch)
-  open RawIMonad imonad
-\end{code}
-\fi
-
-\ifverbose
-\begin{code}
-  infix 3 _⊢_
-\end{code}
-\fi
-
-\begin{code}
-  data _⊢_ : ∀ {γ} (Γ : Context γ) {δ} (Δ : Context δ) → Set where
-
-    var    : ∀ {A} →
-             A , ∅ ⊢ A , ∅
-
-    lam    : ∀ {A B} {γ} {Γ : Context γ} →
-             A , Γ ⊢ B , ∅ → Γ ⊢ A ~o B , ∅
-
-    app    : ∀ {A B} {γ₁} {Γ₁ : Context γ₁} {γ₂} {Γ₂ : Context γ₂}
-                     {δ₁} {Δ₁ : Context δ₁} {δ₂} {Δ₂ : Context δ₂} →
-             Γ₁ ⊢ A , Δ₁ → Γ₂ ⊢ A ~o B , Δ₂ → Γ₁ ++ Γ₂ ⊢ B , Δ₁ ++ Δ₂
-
-    pair   : ∀ {A B} {γ₁} {Γ₁ : Context γ₁} {γ₂} {Γ₂ : Context γ₂}
-                     {δ₁} {Δ₁ : Context δ₁} {δ₂} {Δ₂ : Context δ₂} →
-             Γ₁ ⊢ A , Δ₁ → Γ₂ ⊢ B , Δ₂ → Γ₁ ++ Γ₂ ⊢ A * B , Δ₁ ++ Δ₂
-
-    case   : ∀ {A B C} {γ₁} {Γ₁ : Context γ₁} {γ₂} {Γ₂ : Context γ₂}
-                       {δ₁} {Δ₁ : Context δ₁} {δ₂} {Δ₂ : Context δ₂} →
-             Γ₁ ⊢ A * B , Δ₁ → A , B , Γ₂ ⊢ C , Δ₂ → Γ₁ ++ Γ₂ ⊢ C , Δ₁ ++ Δ₂
-
-    exchᴸ  : ∀ {γ} {Γ : Context (suc γ)} {δ} {Δ : Context δ}
-             i → Γ ⊢ Δ → Ct.exch i Γ ⊢ Δ
-
-    exchᴿ  : ∀ {γ} {Γ : Context γ} {δ} {Δ : Context (suc δ)}
-             i → Γ ⊢ Δ → Γ ⊢ Ct.exch i Δ
+  lemma-μ  : ∀ A {x} (X : Ctxt x) → X ,′ cps- A ⊢LP ⊥ → X ⊢LP cps+ A
+  lemma-μ  A X t with cps+A≡¬cps-A∨cps-A≡¬cps+A A
+  lemma-μ  A X t | inj₁ p rewrite p = abs (to-back X t)
+  lemma-μ  A X t | inj₂ p = prf
+    where
+      lem : cps+ A ⊸ ⊥ , X ⊢LP ⊥
+      lem rewrite sym p = to-back X t
+      prf : X ⊢LP cps+ A
+      prf = {!!}
 \end{code}
 
 \begin{code}
-  Term : ∀ {γ} → Context γ → Set
-  Term Γ = ∅ ⊢ Γ
+  mutual
+    reify  : ∀ {X Y} → X ⊢ Y → ⟦ X ⟧ ++ ⟦ Y ⟧ ⊢LP ⊥
+    reify (μ* {X} {A} s) = lemma-μ* A ⟦ X ⟧ (reifyʳ s)
+    reify (μ̃* {X} {A} s) = lemma-μ̃* A ⟦ X ⟧ (reifyˡ s)
+    reify (⊗L {X} s) = lemma-⊗L ⟦ X ⟧ (reify s)
+    reify (⇚L {X} s) = lemma-⇚L ⟦ X ⟧ (reify s)
+    reify (⇛L {X} s) = lemma-⇛L ⟦ X ⟧ (reify s)
+    reify (⊕R {X} s) = lemma-⊕R ⟦ X ⟧ (reify s)
+    reify (⇒R {X} s) = lemma-⇒R ⟦ X ⟧ (reify s)
+    reify (⇐R {X} s) = lemma-⇐R ⟦ X ⟧ (reify s)
+    reify (res₁ {X} {Y} {Z} s) = lemma-res₁ ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ (reify s)
+    reify (res₂ {X} {Y} {Z} s) = lemma-res₂ ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ (reify s)
+    reify (res₃ {X} {Y} {Z} s) = lemma-res₃ ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ (reify s)
+    reify (res₄ {X} {Y} {Z} s) = lemma-res₄ ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ (reify s)
+    reify (dres₁ {X} {Y} {Z} s) = lemma-dres₁ ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ (reify s)
+    reify (dres₂ {X} {Y} {Z} s) = lemma-dres₂ ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ (reify s)
+    reify (dres₃ {X} {Y} {Z} s) = lemma-dres₃ ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ (reify s)
+    reify (dres₄ {X} {Y} {Z} s) = lemma-dres₄ ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ (reify s)
+    reify (dist₁ {X} {Y} {Z} {W} s) = lemma-dist₁ ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ ⟦ W ⟧ (reify s)
+    reify (dist₂ {X} {Y} {Z} {W} s) = lemma-dist₂ ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ ⟦ W ⟧ (reify s)
+    reify (dist₃ {X} {Y} {Z} {W} s) = lemma-dist₃ ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ ⟦ W ⟧ (reify s)
+    reify (dist₄ {X} {Y} {Z} {W} s) = lemma-dist₄ ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ ⟦ W ⟧ (reify s)
+
+    reifyˡ : ∀ {A Y} → [ A ]⊢ Y → ⟦ Y ⟧ ⊢LP cps- A
+    reifyˡ ax = ax
+    reifyˡ (μ̃ {X} {A} s) = lemma-μ̃ A ⟦ X ⟧ (reify s)
+    reifyˡ (⊕L {X} {Y} s t) = lemma-⊕L ⟦ X ⟧ ⟦ Y ⟧ (pair (reifyˡ s) (reifyˡ t))
+    reifyˡ (⇒L {X} {Y} s t) = pair (reifyʳ s) (reifyˡ t)
+    reifyˡ (⇐L {X} {Y} s t) = pair (reifyˡ s) (reifyʳ t)
+
+    reifyʳ : ∀ {X A} → X ⊢[ A ] → ⟦ X ⟧ ⊢LP cps+ A
+    reifyʳ ax = ax
+    reifyʳ (μ {X} {A} s) = lemma-μ A ⟦ X ⟧ (reify s)
+    reifyʳ (⊗R s t) = pair (reifyʳ s) (reifyʳ t)
+    reifyʳ (⇚R s t) = pair (reifyʳ s) (reifyˡ t)
+    reifyʳ (⇛R s t) = pair (reifyˡ s) (reifyʳ t)
 \end{code}
 
 \begin{code}
-  swap : ∀ {A B} → ∅ ⊢ A * B ~o B * A , ∅
-  swap = lam (case var (exchᴸ zero (pair var var)))
+open import Data.Bool using (Bool)
+open import Data.Fin using (Fin)
+
+data Univ : Set where
+  S  : Univ
+  N  : Univ
+  NP : Univ
+
+Entity : Set
+Entity = Fin 2
+
+⟦_⟧ᵁ : Univ → Set
+⟦ S   ⟧ᵁ = Bool
+⟦ NP  ⟧ᵁ = Entity
+⟦ N   ⟧ᵁ = Entity → Bool
+
+module LP = LinearLogic Univ S ⟦_⟧ᵁ
+open LP renaming (Type to LP; ⟦_⟧ to ⟦_⟧LP)
+module LG = LambekGrishinCalculus Univ S ⟦_⟧ᵁ
+open LG renaming (Type to LG)
+
+testTV : ⟦ (el NP + ⇒ el S -) ⇐ el NP + ⟧ ≡ ((el NP ⊗ (el S ⊸ ⊥)) ⊗ el NP) ⊸ ⊥
+testTV = refl
+
+testGQ : ⟦ el NP + ⇐ el N + ⟧ ≡ ((el NP ⊸ ⊥) ⊗ el N) ⊸ ⊥
+testGQ = refl
 \end{code}
-
-\ifverbose
-\begin{code}
-  module CPS (R : Set) where
-\end{code}
-\fi
-
-\begin{code}
-    cps : ∀ {γ} → Context γ → Set
-    cps ∅ = R
-    cps (A , Γ) = (⟦ A ⟧ → R) → cps Γ
-\end{code}
-
-\begin{spec}
-    cps ⟦ T ⟧ (E , E , ∅) ↝β (Entity → Bool) → (Entity → Bool) → Bool
-\end{spec}
-
-\begin{code}
-    Term₁ : Type → Set
-    Term₁ A = ∅ ⊢ A , ∅
-
-    open module Env = Environment {_} {_} {Type} {Set} Term₁ id (⟦_⟧)
-
-    reify : ∀ γ (Γ : Context γ) δ (Δ : Context δ) → Env Γ → Γ ⊢ Δ → cps Δ
-    reify .1 .(A , ∅) .1 .(A , ∅) env (var {A})
-      = λ k → k (head env)
-    reify γ Γ .(suc _) .(A ~o B , ∅) env (lam {A} {B} {.γ} {.Γ} p)
-      = {!!}
-    reify .(γ₁ +ℕ γ₂) .(Γ₁ ++ Γ₂) .(suc (δ₁ +ℕ δ₂)) .(B , Δ₁ ++ Δ₂) env (app {A} {B} {γ₁} {Γ₁} {γ₂} {Γ₂} {δ₁} {Δ₁} {δ₂} {Δ₂} p p₁)
-      = {!!}
-    reify .(γ₁ +ℕ γ₂) .(Γ₁ ++ Γ₂) .(suc (δ₁ +ℕ δ₂)) .(A * B , Δ₁ ++ Δ₂) env (pair {A} {B} {γ₁} {Γ₁} {γ₂} {Γ₂} {δ₁} {Δ₁} {δ₂} {Δ₂} p p₁)
-      = {!!}
-    reify .(γ₁ +ℕ γ₂) .(Γ₁ ++ Γ₂) .(suc (δ₁ +ℕ δ₂)) .(C , Δ₁ ++ Δ₂) env (case {A} {B} {C} {γ₁} {Γ₁} {γ₂} {Γ₂} {δ₁} {Δ₁} {δ₂} {Δ₂} p p₁)
-      = {!!}
-    reify .(suc γ) .(Ct.exch i Γ) δ Δ env (exchᴸ {γ} {Γ} i p)
-      = reify _ _ _ _ (Env.exch i env) p
-    reify γ Γ .(suc δ) .(Ct.exch i Δ) env (exchᴿ {.γ} {.Γ} {δ} {Δ} i p)
-      = {!!}
-\end{code}
-
-\begin{code}
-  module IndexedX (R : Set) where
-
-    indexed : ∀ {γ} → Context γ → Set
-    indexed ∅ = R
-    indexed (A , Γ) = M (indexed Γ) R ⟦ A ⟧
-\end{code}
-
-\begin{spec}
-  indexed (E , E , ∅) ⟦ T ⟧ ↝β M (M Bool Bool Entity) Bool Entity
-\end{spec}
-
-\begin{code}
--- import Category.Monad.Continuation as Cont
---
--- RawIMonadDCont : (M : Set → Set → Set → Set) → Set₁
--- RawIMonadDCont M = Cont.RawIMonadDCont {_} {lzero} {Set} id M
---
--- DCont : Set → Set → Set → Set
--- DCont = Cont.DCont id
---
--- DContIMonadDCont : RawIMonadDCont DCont
--- DContIMonadDCont = Cont.DContIMonadDCont {f = lzero} id
---
--- DContIMonad : RawIMonad DCont
--- DContIMonad = Cont.RawIMonadDCont.monad DContIMonadDCont
---
--- data Entity : Set where
---   John : Entity
---   Mary : Entity
---
--- open Indexed Entity DContIMonad
--- open Indexed.Indexed Entity DContIMonad Bool
---
--- test : ( indexed (E , E , ∅) ) ≡ ( (Entity → Bool) → (Entity → Bool) → Bool )
--- test = refl
-\end{code}
-%}
-
-
-
-
-\SubsectionEvaluationContexts
-
-\bibliographystyle{plainnat}
-\bibliography{Main}
 
 \end{document}

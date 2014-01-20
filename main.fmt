@@ -1,0 +1,76 @@
+% directives for linear logic connectives
+
+%format  ⊸  = "\multimap"
+%format _⊸_ = "\_\!\multimap\!\_"
+
+% directives for linear logic inference rules
+
+%format ⊗I = "\!\otimes" - I
+%format ⊗E = "\!\otimes" - E
+%format ⊸I = "\mathsmaller{\multimap}" - I
+%format ⊸E = "\mathsmaller{\multimap}" - E
+
+% directives for lambek-grishin connectives
+
+%format  ⊗   = "\otimes"
+%format _⊗_  = "\_\!\!\otimes\!\!\_"
+%format  ~>  = "\ \mathsmaller{\backslash}\ "
+%format _~>_ = "\_\,\mathsmaller{\backslash}\,\_"
+%format  <~  = "\ \mathsmaller{\slash}\ "
+%format _<~_ = "\_\,\mathsmaller{\slash}\,\_"
+%format  ⊕   = "\oplus"
+%format _⊕_  = "\_\!\oplus\!\_"
+%format  =>  = "\obslash"
+%format _=>_ = "\_\!\obslash\!\_"
+%format  <=  = "\oslash"
+%format _<=_ = "\_\!\oslash\!\_"
+
+% directives for lambek-grishin inference rules
+
+%format Μ    = "\mu"
+%format Ν    = "\tilde{\mu}"
+%format Μ*   = "\mu^{*}"
+%format Ν*   = "\tilde{\mu}^{*}"
+
+%format ⊗R   = "\!\otimes" R
+%format ⊗L   = "\!\otimes" L
+%format ~>R  = "\ \mathsmaller{\backslash}\ " R
+%format ~>L  = "\ \mathsmaller{\backslash}\ " L
+%format <~R  = "\ \mathsmaller{\slash}\ " R
+%format <~L  = "\ \mathsmaller{\slash}\ " L
+%format ⊕R   = "\!\oplus" R
+%format ⊕L   = "\!\oplus" L
+%format =>R  = "\!\obslash" R
+%format =>L  = "\!\obslash" L
+%format <=R  = "\!\oslash" R
+%format <=L  = "\!\oslash" L
+
+%format lemma-⊗R   = lemma-"\!\otimes" R
+%format lemma-⊗L   = lemma-"\!\otimes" L
+%format lemma-~>R  = lemma-"\ \mathsmaller{\backslash}\ " R
+%format lemma-~>L  = lemma-"\ \mathsmaller{\backslash}\ " L
+%format lemma-<~R  = lemma-"\ \mathsmaller{\slash}\ " R
+%format lemma-<~L  = lemma-"\ \mathsmaller{\slash}\ " L
+%format lemma-⊕R   = lemma-"\!\oplus" R
+%format lemma-⊕L   = lemma-"\!\oplus" L
+%format lemma-=>R  = lemma-"\!\obslash" R
+%format lemma-=>L  = lemma-"\!\obslash" L
+%format lemma-<=R  = lemma-"\!\oslash" R
+%format lemma-<=L  = lemma-"\!\oslash" L
+
+%format Struct+ = "Struct^{+}"
+%format Struct- = "Struct^{-}"
+%format +       = "+"
+%format -       = "-"
+
+%format TypeLP = "Type^{LP}"
+%format ⊢LP = "⊢_{LP}"
+
+%format +ℕ = "+"
+%format size+ = "size^{+}"
+%format size- = "size^{-}"
+
+%format ⟦_⟧+ = "⟦\_⟧^{+}"
+%format ⟧+   = "⟧^{+}"
+%format ⟦_⟧- = "⟦\_⟧^{-}"
+%format ⟧-   = "⟧^{-}"
