@@ -1,0 +1,4 @@
+% directives for linear logic connectives
+
+%format  ⊸  = "\multimap"
+%format _⊸_ = "\_\!\multimap\!\_"

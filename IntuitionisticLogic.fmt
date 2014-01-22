@@ -1,4 +1,6 @@
+% directives for intuitionistic logic connectives
+
 %format  ~>  = "\rightarrow"
 %format _~>_ = "\_\!\rightarrow\!\_"
-%format  *   = "\otimes"
-%format _*_  = "\_\!\otimes\!\_"
+%format  ⊗   = "\times"
+%format _⊗_  = "\_\!\!\times\!\!\_"

@@ -1,67 +1,40 @@
 #encoding: utf-8
 require 'rake/clean'
 
-#set default configuration
-FileName       = "Main"
-StripImplicits = true
-StripUnicode   = true
-
 desc "Compile literate Agda into LaTeX (and optionally remove all implicit arguments)"
-task :lhs2tex, [ :filename, :strip_implicits?, :strip_unicode? ] =>
-  FileList['*.lagda'] + FileList['*.fmt'] do |t, args|
+rule '.tex' => [ '.lagda' , '.fmt' ] do |t|
 
-  args.with_defaults( :strip_implicits? => true )
-  args.with_defaults( :strip_unicode? => true )
+  f_lagda = t.name.ext('.lagda')
+  f_tex   = t.name.ext('.tex')
+  f_lhs   = t.name.ext('.lhs')
 
-  # Check: input file exists
-  unless File.exist? args.filename.ext('.lagda')
-    fail "No such file #{ args.filename.ext('.lagda') }"
-  end
+  src = IO.read( f_lagda , :encoding => 'utf-8' )
+  src = strip_unicode( src )
+  src = strip_implicits( src )
 
-  # Optionally: remove implicit types form the literate Agda.
-  if args.strip_implicits? or args.strip_unicode?
-    lhs = args.filename.ext('.lhs')
-    src = IO.read( args.filename.ext('.lagda') , :encoding => 'utf-8' )
-    src = strip_unicode( src )   if args.strip_unicode?
-    src = strip_implicits( src ) if args.strip_implicits?
-    IO.write( lhs , src , :encoding => 'utf-8' )
-  else
-    lhs = args.filename.ext('.lagda')
-  end
+  IO.write( f_lhs , src , :encoding => 'utf-8' )
 
   # Convert literate Agda to TeX (using lhs2TeX).
-  system "lhs2TeX --agda #{ lhs } -o #{ args.filename.ext('.tex') }"
+  system "lhs2TeX --agda #{ f_lhs } -o #{ f_tex }"
 
   fail "error in lhs2TeX" unless $?.success?
 end
 
 desc "Compile LaTeX into a Pdf using PdfLaTeX"
-task :pdflatex , [ :filename , :strip_implcits? , :strip_unicode? ] =>
-  FileList['*.bib'] do |t , args|
+file 'main.pdf' => [ 'main.tex' , 'main.bib' , 'IntuitionisticLogic.tex' ,
+                     'LinearLogic.tex' , 'LambekGrishinCalculus.tex' ] do
 
-  task(:lhs2tex).invoke(args.filename, args.strip_implicits?, args.strip_unicode?)
-
-  # Check: input file exists
-  unless File.exist? args.filename.ext('.tex')
-    fail "No such file #{ args.filename.ext('.tex') }"
-  end
-
-  system "pdflatex #{args.filename.ext('.tex')}"
+  system "pdflatex main.tex"
   if $?.success?
-    system "bibtex   #{args.filename}"
-    system "pdflatex #{args.filename.ext('.tex')}"
-    system "pdflatex #{args.filename.ext('.tex')}"
+    system "bibtex main"
+    system "pdflatex main.tex"
+    system "pdflatex main.tex"
   end
-
-  fail "error in pdfLaTeX" unless $?.success?
 end
 
-desc "Render the default literate Agda file (#{ FileName.ext('.lagda') }), and opens the result with a Pdf viewer"
-task :default do
 
-  task(:pdflatex).invoke(FileName)
-  system "open #{ FileName.ext('.pdf') }"
-
+task :default => 'main.pdf' do
+  system "open main.pdf"
 end
 
 
@@ -71,16 +44,17 @@ end
 CLEAN.include('*.lhs','*.log','*.ptb','*.blg','*.bbl','*.tex','*.aux','*.agdai')
 CLOBBER.include('*.pdf')
 
-# Implementation: strip_implicits
+# Regular expression that filters implicit arguments from Agda source.
+RE_IMPLICIT = /(?<!λ\s)(?<!record)(?<!λ)\s*(∀\s*)?\{([^\}]*?)\}(\s*→)?/
 
-RE_IMPLICIT = /(?<!λ\s)(?<!record\s)\s*(∀\s*)?\{([^\}]*?)\}(\s*→)?/
-
+# Function that strips implicits from literate Agda source.
 def strip_implicits(src)
   src.gsub(/\\begin\{code\}(.*?)\\end\{code\}/m) do |m|
     "\\begin{code}#{ $1.gsub(RE_IMPLICIT,'') }\\end{code}"
   end
 end
 
+# Function that replaces certain unicode tokens.
 def strip_unicode(src)
   src.
     gsub('μ̃*','Ν*').
