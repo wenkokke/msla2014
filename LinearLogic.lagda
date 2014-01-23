@@ -44,11 +44,11 @@ data Type : Set where
 \begin{code}
 data _⊢_ : ∀ (X : List Type) (A : Type) → Set where
   var   : ∀ {A} → A , ∅ ⊢ A
-  exch  : ∀ {A X Y Z W} → (X ++ Z) ++ (Y ++ W) ⊢ A → (X ++ Y) ++ (Z ++ W) ⊢ A
   abs   : ∀ {A B X} → A , X ⊢ B → X ⊢ A ⊸ B
   app   : ∀ {A B X Y} → X ⊢ A ⊸ B → Y ⊢ A → X ++ Y ⊢ B
   pair  : ∀ {A B X Y} → X ⊢ A → Y ⊢ B → X ++ Y ⊢ A ⊗ B
   case  : ∀ {A B C X Y} → X ⊢ A ⊗ B → A , B , Y ⊢ C → X ++ Y ⊢ C
+  exch  : ∀ {A X Y Z W} → (X ++ Z) ++ (Y ++ W) ⊢ A → (X ++ Y) ++ (Z ++ W) ⊢ A
 \end{code}
 
 \begin{code}
