@@ -16,7 +16,7 @@ open import Relation.Binary.PropositionalEquality as PropEq using (_≡_; refl; 
 
 \ifverbose
 \begin{code}
-module PolarizedLambekGrishin (U : Set) (R : U) (⟦_⟧ᵁ : U → Set) where
+module LambekGrishinCalculus (U : Set) (R : U) (⟦_⟧ᵁ : U → Set) where
 \end{code}
 \fi
 
@@ -225,40 +225,30 @@ Struct-CPS = record { ⟦_⟧ = str- }
 \fi
 
 \begin{code}
-lemma-cps : ∀ A → cps + A ≡ cps - A ⊸ ⊥ ⊎ cps - A ≡ cps + A ⊸ ⊥
-lemma-cps (el A +)  = inj₂ refl
-lemma-cps (el A -)  = inj₁ refl
-lemma-cps (A ⊗ B)   = inj₂ refl
-lemma-cps (B ⇚ A)  = inj₂ refl
-lemma-cps (A ⇛ B)  = inj₂ refl
-lemma-cps (A ⊕ B)   = inj₁ refl
-lemma-cps (A ⇒ B)  = inj₁ refl
-lemma-cps (B ⇐ A)  = inj₁ refl
+Neg-≡ : ∀ {A} → Neg A → cps + A ≡ cps - A ⊸ ⊥
+Neg-≡ {.(el A -)} (el A) = refl
+Neg-≡ {.(A ⊕ B)} (A ⊕ B) = refl
+Neg-≡ {.(A ⇒ B)} (A ⇒ B) = refl
+Neg-≡ {.(A ⇐ B)} (A ⇐ B) = refl
+
+Pos-≡ : ∀ {A} → Pos A → cps - A ≡ cps + A ⊸ ⊥
+Pos-≡ {.(el A +)} (el A) = refl
+Pos-≡ {.(A ⊗ B)} (A ⊗ B) = refl
+Pos-≡ {.(A ⇚ B)} (A ⇚ B) = refl
+Pos-≡ {.(A ⇛ B)} (A ⇛ B) = refl
 \end{code}
 
 \begin{code}
 mutual
   reify  : ∀ {X Y} → X ⊢ Y → ⟦ X ⟧ ++ ⟦ Y ⟧ ⊢LP ⊥
-  reify (μ* {X} {A} {p} t) = lem ⟦ X ⟧ A (toWitness p) (reifyʳ t)
-    where
-      lem : ∀ X A → Pos A → X ⊢LP cps + A → X ,′ cps - A ⊢LP ⊥
-      lem X .(el A +) (el A) t = to-front (app var t)
-      lem X .(A ⊗ B) (A ⊗ B) t = to-front (app var t)
-      lem X .(B ⇚ A) (B ⇚ A) t = to-front (app var t)
-      lem X .(A ⇛ B) (A ⇛ B) t = to-front (app var t)
-  reify (μ̃* {X} {A} {q} t) = lem ⟦ X ⟧ A (toWitness q) (reifyˡ t)
-    where
-      lem : ∀ X A → Neg A → X ⊢LP cps + A ⊸ ⊥ → cps + A , X ⊢LP ⊥
-      lem X .(el A -) (el A) t = to-back (app t var)
-      lem X .(A ⊕ B) (A ⊕ B) t = to-back (app t var)
-      lem X .(A ⇒ B) (A ⇒ B) t = to-back (app t var)
-      lem X .(B ⇐ A) (B ⇐ A) t = to-back (app t var)
+  reify (μ* {X} {A} {p} t) rewrite Pos-≡ (toWitness p) = to-front (app var (reifyʳ t))
+  reify (μ̃* {X} {A} {q} t) rewrite sym (Neg-≡ (toWitness q)) = to-back (app (reifyˡ t) var)
   reify (⊗L {X} {A} {B} t) = pair-left (reify t)
   reify (⇚L {X} {A} {B} t) = pair-left (reify t)
   reify (⇛L {X} {A} {B} t) = pair-left (reify t)
-  reify (⊕R {X} {A} {B} t) = pair-leftʳ′ {⟦ X ⟧} {cps - A} {cps - B} (reify t)
-  reify (⇒R {X} {A} {B} t) = pair-leftʳ′ {⟦ X ⟧} {cps + A} {cps - B} (reify t)
-  reify (⇐R {X} {A} {B} t) = pair-leftʳ′ {⟦ X ⟧} {cps - A} {cps + B} (reify t)
+  reify (⊕R {X} {A} {B} t) = pair-leftʳ {⟦ X ⟧} {cps - A} {cps - B} (reify t)
+  reify (⇒R {X} {A} {B} t) = pair-leftʳ {⟦ X ⟧} {cps + A} {cps - B} (reify t)
+  reify (⇐R {X} {A} {B} t) = pair-leftʳ {⟦ X ⟧} {cps - A} {cps + B} (reify t)
   reify (res₁ {X} {Y} {Z} t)  rewrite sym (++-assoc ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧) = Y[XZ]↝X[YZ] ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ (reify t)
   reify (res₂ {X} {Y} {Z} t)  rewrite      ++-assoc ⟦ Y ⟧ ⟦ X ⟧ ⟦ Z ⟧  = [YX]Z↝[XY]Z ⟦ Y ⟧ ⟦ X ⟧ ⟦ Z ⟧ (reify t)
   reify (res₃ {X} {Y} {Z} t)  rewrite sym (++-assoc ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧) = X[ZY]↝X[YZ] ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ (reify t)
@@ -267,34 +257,22 @@ mutual
   reify (dres₂ {X} {Y} {Z} t) rewrite sym (++-assoc ⟦ Z ⟧ ⟦ X ⟧ ⟦ Y ⟧) = X[ZY]↝X[YZ] ⟦ Z ⟧ ⟦ X ⟧ ⟦ Y ⟧ (reify t)
   reify (dres₃ {X} {Y} {Z} t) rewrite      ++-assoc ⟦ Z ⟧ ⟦ Y ⟧ ⟦ X ⟧  = [YX]Z↝[XY]Z ⟦ Z ⟧ ⟦ Y ⟧ ⟦ X ⟧ (reify t)
   reify (dres₄ {X} {Y} {Z} t) rewrite sym (++-assoc ⟦ Y ⟧ ⟦ Z ⟧ ⟦ X ⟧) = Y[XZ]↝X[YZ] ⟦ Y ⟧ ⟦ Z ⟧ ⟦ X ⟧ (reify t)
-  reify (dist₁ {X} {Y} {Z} {W} t) = {!(reify t)!} -- XYZW↝XWZY
-  reify (dist₂ {X} {Y} {Z} {W} t) = {!(reify t)!} -- XYZW↝YWXZ
-  reify (dist₃ {X} {Y} {Z} {W} t) = {!(reify t)!} -- XYZW↝ZXWY
-  reify (dist₄ {X} {Y} {Z} {W} t) = {!(reify t)!} -- XYZW↝ZYXW
+  reify (dist₁ {X} {Y} {Z} {W} t) = XYZW↝XWZY ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ ⟦ W ⟧ (reify t)
+  reify (dist₂ {X} {Y} {Z} {W} t) = XYZW↝YWXZ ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ ⟦ W ⟧ (reify t)
+  reify (dist₃ {X} {Y} {Z} {W} t) = XYZW↝ZXWY ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ ⟦ W ⟧ (reify t)
+  reify (dist₄ {X} {Y} {Z} {W} t) = XYZW↝ZYXW ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ ⟦ W ⟧ (reify t)
 
   reifyʳ : ∀ {X A} → X ⊢[ A ] → ⟦ X ⟧ ⊢LP ⟦ A ⟧
   reifyʳ var = var
-  reifyʳ (μ {X} {A} {q} t) = lem ⟦ X ⟧ A (toWitness q) (reify t)
-    where
-      lem : ∀ X A → Neg A → X ,′ cps - A ⊢LP ⊥ → X ⊢LP ⟦ A ⟧
-      lem X .(el A -) (el A) t = abs (to-back t)
-      lem X .(A ⊕ B) (A ⊕ B) t = abs (to-back t)
-      lem X .(A ⇒ B) (A ⇒ B) t = abs (to-back t)
-      lem X .(B ⇐ A) (B ⇐ A) t = abs (to-back t)
+  reifyʳ (μ {X} {A} {q} t) rewrite Neg-≡ (toWitness q) = abs (to-back (reify t))
   reifyʳ (⊗R {X} {Y} {A} {B} s t) = pair (reifyʳ s) (reifyʳ t)
-  reifyʳ (⇚R {X} {Y} {A} {B} s t) = pair (reifyʳ s) {!reifyˡ t!} -- B must be positive
-  reifyʳ (⇛R {X} {Y} {A} {B} s t) = pair {!reifyˡ s!} (reifyʳ t) -- A must be positive
+  reifyʳ (⇚R {X} {Y} {A} {B} s t) = {!!}
+  reifyʳ (⇛R {X} {Y} {A} {B} s t) = {!!}
 
-  reifyˡ : ∀ {A Y} → [ A ]⊢ Y → ⟦ Y ⟧ ⊢LP ⟦ A ⟧ ⊸ ⊥
-  reifyˡ (covar {{q}}) = lem _ (toWitness q)
-    where
-      lem : ∀ A → Neg A → cps - A , ∅ ⊢LP ⟦ A ⟧ ⊸ ⊥
-      lem .(el A -) (el A) = abs (app var var)
-      lem .(A ⊕ B) (A ⊕ B) = abs (app var var)
-      lem .(A ⇒ B) (A ⇒ B) = abs (app var var)
-      lem .(B ⇐ A) (B ⇐ A) = abs (app var var)
+  reifyˡ : ∀ {A Y} → [ A ]⊢ Y → ⟦ Y ⟧ ⊢LP ¬ ⟦ A ⟧
+  reifyˡ (covar {{q}}) rewrite Neg-≡ (toWitness q) = abs (app var var)
   reifyˡ (μ̃ {X} {A} {_} t) = abs (reify t)
-  reifyˡ (⊕L {X} {Y} {A} {B} s t) = {!pair ?!}
+  reifyˡ (⊕L {X} {Y} {A} {B} s t) = {!!}
   reifyˡ (⇒L {X} {Y} {A} {B} s t) = {!!}
   reifyˡ (⇐L {X} {Y} {A} {B} s t) = {!!}
 \end{code}

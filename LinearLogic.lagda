@@ -124,22 +124,63 @@ X[ZY]↝X[YZ] {A} X Y Z t = lem₃
 \end{code}
 
 \begin{code}
+XYZW↝XWZY : ∀ {A} X Y Z W → (X ++ Y) ++ (Z ++ W) ⊢ A → (X ++ W) ++ (Z ++ Y) ⊢ A
+XYZW↝XWZY {A} X Y Z W t = lem₃
+  where
+    lem₁ : (X ++ Y) ++ (W ++ Z) ⊢ A
+    lem₁ = X[ZY]↝X[YZ] (X ++ Y) W Z t
+    lem₂ : (X ++ W) ++ (Y ++ Z) ⊢ A
+    lem₂ = exch {A} {X} {W} {Y} {Z} lem₁
+    lem₃ : (X ++ W) ++ (Z ++ Y) ⊢ A
+    lem₃ = X[ZY]↝X[YZ] (X ++ W) Z Y lem₂
+
+XYZW↝YWXZ : ∀ {A} X Y Z W → (X ++ Y) ++ (Z ++ W) ⊢ A → (Y ++ W) ++ (X ++ Z) ⊢ A
+XYZW↝YWXZ {A} X Y Z W t = lem₃
+  where
+    lem₁ : (Y ++ X) ++ (Z ++ W) ⊢ A
+    lem₁ = [YX]Z↝[XY]Z Y X (Z ++ W) t
+    lem₂ : (Y ++ X) ++ (W ++ Z) ⊢ A
+    lem₂ = X[ZY]↝X[YZ] (Y ++ X) W Z lem₁
+    lem₃ : (Y ++ W) ++ (X ++ Z) ⊢ A
+    lem₃ = exch {A} {Y} {W} {X} {Z} lem₂
+
+XYZW↝ZXWY : ∀ {A} X Y Z W → (X ++ Y) ++ (Z ++ W) ⊢ A → (Z ++ X) ++ (W ++ Y) ⊢ A
+XYZW↝ZXWY {A} X Y Z W t = lem₃
+  where
+    lem₁ : (X ++ Z) ++ (Y ++ W) ⊢ A
+    lem₁ = exch {A} {X} {Z} {Y} {W} t
+    lem₂ : (Z ++ X) ++ (Y ++ W) ⊢ A
+    lem₂ = [YX]Z↝[XY]Z Z X (Y ++ W) lem₁
+    lem₃ : (Z ++ X) ++ (W ++ Y) ⊢ A
+    lem₃ = X[ZY]↝X[YZ] (Z ++ X) W Y lem₂
+
+XYZW↝ZYXW : ∀ {A} X Y Z W → (X ++ Y) ++ (Z ++ W) ⊢ A → (Z ++ Y) ++ (X ++ W) ⊢ A
+XYZW↝ZYXW {A} X Y Z W t = lem₃
+  where
+    lem₁ : (Y ++ X) ++ (Z ++ W) ⊢ A
+    lem₁ = [YX]Z↝[XY]Z Y X (Z ++ W) t
+    lem₂ : (Y ++ Z) ++ (X ++ W) ⊢ A
+    lem₂ = exch {A} {Y} {Z} {X} {W} lem₁
+    lem₃ : (Z ++ Y) ++ (X ++ W) ⊢ A
+    lem₃ = [YX]Z↝[XY]Z Z Y (X ++ W) lem₂
+\end{code}
+
+\begin{code}
 pair-left : ∀ {X A B C} → A , B , X ⊢ C → A ⊗ B , X ⊢ C
 pair-left t = case var t
 \end{code}
 
 \begin{code}
-pair-leftʳ : ∀ {X A B C} → X ,′ A ,′ B ⊢ C → X ,′ A ⊗ B ⊢ C
-pair-leftʳ {X} {A} {B} t = to-front (pair-left (to-back {B , X} {A} (to-back {X ,′ A} {B} t)))
-\end{code}
+private
+  lemma-∷ʳ : ∀ {a} {A : Set a} xs (y z : A) → xs ,′ y ,′ z  ≡ xs ++ (y , z , ∅)
+  lemma-∷ʳ ∅ y z = refl
+  lemma-∷ʳ (x , xs) y z = cong (_,_ x) (lemma-∷ʳ xs y z)
 
-\begin{code}
-lemma-∷ʳ : ∀ {a} {A : Set a} xs (y z : A) → xs ,′ y ,′ z  ≡ xs ++ (y , z , ∅)
-lemma-∷ʳ ∅ y z = refl
-lemma-∷ʳ (x , xs) y z = cong (_,_ x) (lemma-∷ʳ xs y z)
-
-pair-leftʳ′ : ∀ {X A B C} → X ++ (A , B , ∅) ⊢ C → X ,′ A ⊗ B ⊢ C
-pair-leftʳ′ {X} {A} {B} rewrite sym (lemma-∷ʳ X A B) = pair-leftʳ {X} {A} {B}
+pair-leftʳ : ∀ {X A B C} → X ++ (A , B , ∅) ⊢ C → X ,′ A ⊗ B ⊢ C
+pair-leftʳ {X} {A} {B} rewrite sym (lemma-∷ʳ X A B) = pair-left′ {X} {A} {B}
+  where
+    pair-left′ : ∀ {X A B C} → X ,′ A ,′ B ⊢ C → X ,′ A ⊗ B ⊢ C
+    pair-left′ {X} {A} {B} t = to-front (pair-left (to-back {B , X} {A} (to-back {X ,′ A} {B} t)))
 \end{code}
 
 \begin{code}

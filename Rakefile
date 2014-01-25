@@ -1,6 +1,25 @@
 #encoding: utf-8
 require 'rake/clean'
 
+task :slides => 'slides.pdf' do
+  system "open slides.pdf"
+end
+
+desc "Compile the slides"
+file 'slides.pdf' => [ 'slides.md' , 'slides/code.tex' , 'slides/preamble.tex' ] do
+  system "pandoc --data-dir=slides --template=custom -H slides/preamble.tex -t beamer slides.md -o slides.pdf"
+  fail unless $?.success?
+end
+
+file 'slides/code.tex' => 'slides/code.lagda' do
+  system "lhs2tex --agda slides/code.lagda -o slides/code.tex"
+  fail unless $?.success?
+end
+file 'slides/preamble.tex' => 'slides/preamble.lagda' do
+  system "lhs2tex --agda slides/preamble.lagda -o slides/preamble.tex"
+  fail unless $?.success?
+end
+
 desc "Compile literate Agda into LaTeX (and optionally remove all implicit arguments)"
 rule '.tex' => [ '.lagda' , '.fmt' ] do |t|
 
@@ -41,7 +60,9 @@ end
 
 # Cleanup directives.
 
-CLEAN.include('*.lhs','*.log','*.ptb','*.blg','*.bbl','*.tex','*.aux','*.agdai')
+CLEAN.include('*.lhs','*.log','*.ptb','*.blg','*.bbl','*.tex','*.aux','*.snm',
+              '*.toc','*.nav','*.out','*.agdai','auto','slides/*.agdai',
+              'slides/*.tex','slides/auto')
 CLOBBER.include('*.pdf')
 
 # Regular expression that filters implicit arguments from Agda source.
