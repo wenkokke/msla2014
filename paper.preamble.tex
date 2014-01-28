@@ -1,0 +1,47 @@
+% Bibliography
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{natbib}
+\usepackage{ifthen}
+
+\newboolean{marginNotes}
+\setboolean{marginNotes}{false}
+
+\newboolean{showNotes}
+\setboolean{showNotes}{true}
+
+\newboolean{showHidden}
+\setboolean{showHidden}{false}
+
+\newcommand{\hidden}[1]{
+  \ifthenelse{\boolean{showHidden}}
+             {#1}
+             {}}
+\newcommand{\marginNote}[1]{
+  \ifthenelse{\boolean{marginNotes}}
+             {\marginpar{#1}}
+             {#1}}
+\newcommand{\todo}[1]{
+  \ifthenelse{\boolean{showNotes}}
+             {\marginNote{\textcolor{red}{\textbf{TODO:~}#1}}}
+             {}}
+
+
+% Buss' Proofs
+\usepackage{bussproofs}
+\EnableBpAbbreviations%
+\def\fCenter{\ \vdash\ }
+\def\limpl{\multimap}
+
+% Symbols
+\usepackage{textgreek}
+\usepackage{stmaryrd}
+\usepackage{relsize}
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc}
+\DeclareUnicodeCharacter{7468}{$^A$}
+\DeclareUnicodeCharacter{7486}{$^p$}
+\DeclareUnicodeCharacter{7488}{$^T$}
+\DeclareUnicodeCharacter{7489}{$^u$}
+\DeclareUnicodeCharacter{739}{$^x$}
+\DeclareUnicodeCharacter{740}{$^y$}

@@ -92,6 +92,18 @@ to-back {X} {A} {B} t = lem2
 \end{code}
 
 \begin{code}
+YX↝XY : ∀ {A} X Y → Y ++ X ⊢ A → X ++ Y ⊢ A
+YX↝XY {A} X Y t = lem₃
+  where
+    lem₁ : Y ++ X ++ ∅ ⊢ A
+    lem₁ rewrite xs++[]=xs X = t
+    lem₂ : X ++ Y ++ ∅ ⊢ A
+    lem₂ = exch {A} {∅} {X} {Y} {∅} lem₁
+    lem₃ : X ++ Y ⊢ A
+    lem₃ = PropEq.subst (λ Y → X ++ Y ⊢ A) (xs++[]=xs Y) lem₂
+\end{code}
+
+\begin{code}
 Y[XZ]↝X[YZ] : ∀ {A} X Y Z → Y ++ (X ++ Z) ⊢ A → X ++ (Y ++ Z) ⊢ A
 Y[XZ]↝X[YZ] {A} X Y Z t = exch {A} {∅} {X} {Y} {Z} t
 
@@ -174,16 +186,16 @@ pair-left t = case var t
 \end{code}
 
 \begin{code}
-private
-  lemma-∷ʳ : ∀ {a} {A : Set a} xs (y z : A) → xs ,′ y ,′ z  ≡ xs ++ (y , z , ∅)
-  lemma-∷ʳ ∅ y z = refl
-  lemma-∷ʳ (x , xs) y z = cong (_,_ x) (lemma-∷ʳ xs y z)
-
-pair-leftʳ : ∀ {X A B C} → X ++ (A , B , ∅) ⊢ C → X ,′ A ⊗ B ⊢ C
-pair-leftʳ {X} {A} {B} rewrite sym (lemma-∷ʳ X A B) = pair-left′ {X} {A} {B}
+pair-left′ : ∀ {X A B C} → X ++ (A , B , ∅) ⊢ C → X ,′ A ⊗ B ⊢ C
+pair-left′ {X} {A} {B} {C} = lem₃
   where
-    pair-left′ : ∀ {X A B C} → X ,′ A ,′ B ⊢ C → X ,′ A ⊗ B ⊢ C
-    pair-left′ {X} {A} {B} t = to-front (pair-left (to-back {B , X} {A} (to-back {X ,′ A} {B} t)))
+    lem₁ : X ,′ A ,′ B ⊢ C → X ,′ A ⊗ B ⊢ C
+    lem₁ t = to-front (pair-left (to-back {B , X} {A} (to-back {X ,′ A} {B} t)))
+    lem₂ : ∀ {a} {A : Set a} xs (y z : A) → xs ,′ y ,′ z  ≡ xs ++ (y , z , ∅)
+    lem₂ ∅ y z = refl
+    lem₂ (x , xs) y z = cong (_,_ x) (lem₂ xs y z)
+    lem₃ : X ++ (A , B , ∅) ⊢ C → X ,′ A ⊗ B ⊢ C
+    lem₃ rewrite sym (lem₂ X A B) = lem₁
 \end{code}
 
 \begin{code}

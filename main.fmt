@@ -1,6 +1,0 @@
-%include agda.fmt
-
-%format +ℕ = "+"
-%format # n = n
-%format EXISTS = "\exists"
-%format FORALL = "\forall"
