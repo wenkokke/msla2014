@@ -106,3 +106,8 @@ for using Agda as a tool to model logical systems.
 \bibliography{main}
 
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
