@@ -1,32 +1,32 @@
 %include agda.fmt
 
-\ifverbose
+\hidden{
 \begin{code}
 open import Function using (case_of_)
 open import Data.List using (List; _++_) renaming (_∷_ to _,_; _∷ʳ_ to _,′_; [] to ∅)
 open import Data.Product using (_×_; _,_)
 open import Relation.Binary.PropositionalEquality as PropEq using (_≡_; refl; sym; cong)
 \end{code}
-\fi
+}
 
 \section{Linear Logic (LP)}
 %{
 %include LinearLogic.fmt
 
-\ifverbose
+\hidden{
 \begin{code}
 module LinearLogic (U : Set) (R : U) (⟦_⟧ᵁ : U → Set) where
 \end{code}
-\fi
+}
 
-\ifverbose
+\hidden{
 \begin{code}
 infixr 40 ¬_
 infix  30 _⊗_
 infixr 20 _⊸_
 infix  4  _⊢_
 \end{code}
-\fi
+}
 
 \begin{code}
 data Type : Set where
@@ -41,19 +41,22 @@ data Type : Set where
 ¬ A = A ⊸ ⊥
 \end{code}
 
+%<*ill>
 \begin{code}
-data _⊢_ : ∀ (X : List Type) (A : Type) → Set where
+data _⊢_ : ∀ (Γ : List Type) (A : Type) → Set where
   var   : ∀ {A} → A , ∅ ⊢ A
-  abs   : ∀ {A B X} → A , X ⊢ B → X ⊢ A ⊸ B
-  app   : ∀ {A B X Y} → X ⊢ A ⊸ B → Y ⊢ A → X ++ Y ⊢ B
-  pair  : ∀ {A B X Y} → X ⊢ A → Y ⊢ B → X ++ Y ⊢ A ⊗ B
-  case  : ∀ {A B C X Y} → X ⊢ A ⊗ B → A , B , Y ⊢ C → X ++ Y ⊢ C
-  exch  : ∀ {A X Y Z W} → (X ++ Z) ++ (Y ++ W) ⊢ A → (X ++ Y) ++ (Z ++ W) ⊢ A
+  abs   : ∀ {A B Γ} → A , Γ ⊢ B → Γ ⊢ A ⊸ B
+  app   : ∀ {A B Γ Δ} → Γ ⊢ A ⊸ B → Δ ⊢ A → Γ ++ Δ ⊢ B
+  pair  : ∀ {A B Γ Δ} → Γ ⊢ A → Δ ⊢ B → Γ ++ Δ ⊢ A ⊗ B
+  case  : ∀ {A B C Γ Δ} → Γ ⊢ A ⊗ B → A , B , Δ ⊢ C → Γ ++ Δ ⊢ C
+  exch  : ∀ {A Γ Δ Σ Π} →  (Γ ++ Σ) ++ (Δ ++ Π) ⊢ A
+        →  (Γ ++ Δ) ++ (Σ ++ Π) ⊢ A
 \end{code}
+%</ill>
 
 \begin{code}
 exch₀ : ∀ {A B C X} → A , B , X ⊢ C → B , A , X ⊢ C
-exch₀ {A} {B} {X = X} t = exch {X = ∅} {Y = B , ∅} {Z = A , ∅} {W = X} t
+exch₀ {A} {B} {X = X} t = exch {_} {∅} {B , ∅} {A , ∅} {X} t
 \end{code}
 
 \begin{code}
@@ -73,7 +76,7 @@ to-front : ∀ {X A B} → A , X ⊢ B → X ,′ A ⊢ B
 to-front {X} {A} {B} t = lem1 lem2
   where
     lem1 : A , (X ++ ∅) ⊢ B → X ,′ A ⊢ B
-    lem1 = exch {X = ∅} {Y = X} {Z = A , ∅} {W = ∅}
+    lem1 = exch {B} {∅} {X} {A , ∅} {∅}
     lem2 : A , (X ++ ∅) ⊢ B
     lem2 rewrite xs++[]=xs X = t
 \end{code}
@@ -83,14 +86,14 @@ to-back : ∀ {X A B} → X ,′ A ⊢ B → A , X ⊢ B
 to-back {X} {A} {B} t = lem2
   where
     lem1 : A , X ++ ∅ ⊢ B
-    lem1 = exch {X = ∅} {Y = A , ∅} {Z = X} {W = ∅} t
+    lem1 = exch {B} {∅} {A , ∅} {X} {∅} t
     lem2 : A , X ⊢ B
     lem2 rewrite sym (xs++[]=xs (A , X)) = lem1
 \end{code}
 
 \begin{code}
 Y[XZ]↝X[YZ] : ∀ {A} X Y Z → Y ++ (X ++ Z) ⊢ A → X ++ (Y ++ Z) ⊢ A
-Y[XZ]↝X[YZ] {A} X Y Z t = exch {X = ∅} {Y = X} {Z = Y} {W = Z} t
+Y[XZ]↝X[YZ] {A} X Y Z t = exch {A} {∅} {X} {Y} {Z} t
 
 [YX]Z↝[XY]Z : ∀ {A} X Y Z → (Y ++ X) ++ Z ⊢ A → (X ++ Y) ++ Z ⊢ A
 [YX]Z↝[XY]Z {A} X Y Z t = lem₃
@@ -108,7 +111,7 @@ Y[XZ]↝X[YZ] {A} X Y Z t = exch {X = ∅} {Y = X} {Z = Y} {W = Z} t
     lem₁ : (X ++ Z) ++ Y ++ ∅ ⊢ A
     lem₁ rewrite xs++[]=xs Y = t
     lem₂ : (X ++ Y) ++ Z ++ ∅ ⊢ A
-    lem₂ = exch {X = X} {Y = Y} {Z = Z} {W = ∅} lem₁
+    lem₂ = exch {A} {X} {Y} {Z} {∅} lem₁
     lem₃ : (X ++ Y) ++ Z ⊢ A
     lem₃ = PropEq.subst (λ Z → (X ++ Y) ++ Z ⊢ A) (xs++[]=xs Z) lem₂
 

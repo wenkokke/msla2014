@@ -1,6 +1,6 @@
 %include agda.fmt
 
-\ifverbose
+\hidden{
 \begin{code}
 open import Data.List using (List; _++_) renaming (_∷_ to _,_; _∷ʳ_ to _,′_; [] to ∅)
 open import Data.Sum using (_⊎_; inj₁; inj₂)
@@ -8,32 +8,34 @@ open import Relation.Nullary using (Dec; yes; no)
 open import Relation.Nullary.Decidable using (True; toWitness)
 open import Relation.Binary.PropositionalEquality as PropEq using (_≡_; refl; sym; cong)
 \end{code}
-\fi
+}
 
 \section{Lambek-Grishin Calculus (fLG)}
 %{
 %include LambekGrishinCalculus.fmt
 
-\ifverbose
+\hidden{
 \begin{code}
 module LambekGrishinCalculus (U : Set) (R : U) (⟦_⟧ᵁ : U → Set) where
 \end{code}
-\fi
+}
 
-\ifverbose
+\hidden{
 \begin{code}
 infix  30 _⊗_ _⊕_
 infixr 20 _⇒_ _⇛_
 infixl 20 _⇐_ _⇚_
 infix  5  _⊢_ [_]⊢_ _⊢[_]
 \end{code}
-\fi
+}
 
+%<*polarity>
 \begin{code}
 data Polarity : Set where
   + : Polarity
   - : Polarity
 \end{code}
+%</polarity>
 
 \begin{code}
 _≟ᴾ_ : (p q : Polarity) → Dec (p ≡ q)
@@ -43,6 +45,7 @@ _≟ᴾ_ : (p q : Polarity) → Dec (p ≡ q)
 - ≟ᴾ - = yes refl
 \end{code}
 
+%<*type>
 \begin{code}
 data Type : Set where
   el   : (A : U) → (p : Polarity) → Type
@@ -53,6 +56,7 @@ data Type : Set where
   _⇚_  : Type → Type → Type
   _⇛_  : Type → Type → Type
 \end{code}
+%</type>
 
 \begin{code}
 pol : Type → Polarity
@@ -65,13 +69,17 @@ pol (A ⇒ B)  = -
 pol (A ⇐ B)  = -
 \end{code}
 
+%<*pos>
 \begin{code}
 data Pos : Type → Set where
   el : ∀ A → Pos (el A +)
   _⊗_ : ∀ A B → Pos (A ⊗ B)
   _⇚_ : ∀ B A → Pos (B ⇚ A)
   _⇛_ : ∀ A B → Pos (A ⇛ B)
+\end{code}
+%</pos>
 
+\begin{code}
 Pos? : ∀ A → Dec (Pos A)
 Pos? (el A +) = yes (el A)
 Pos? (el A -) = no (λ ())
@@ -81,13 +89,19 @@ Pos? (A ⇐ B) = no (λ ())
 Pos? (A ⊕ B) = no (λ ())
 Pos? (A ⇚ B) = yes (A ⇚ B)
 Pos? (A ⇛ B) = yes (A ⇛ B)
+\end{code}
 
+%<*pos>
+\begin{code}
 data Neg : Type → Set where
   el : ∀ A → Neg (el A -)
   _⊕_ : ∀ A B → Neg (A ⊕ B)
   _⇒_ : ∀ A B → Neg (A ⇒ B)
   _⇐_ : ∀ B A → Neg (B ⇐ A)
+\end{code}
+%</pos>
 
+\begin{code}
 Neg? : ∀ A → Dec (Neg A)
 Neg? (el A +) = no (λ ())
 Neg? (el A -) = yes (el A)
@@ -99,6 +113,7 @@ Neg? (A ⇚ B) = no (λ ())
 Neg? (A ⇛ B) = no (λ ())
 \end{code}
 
+%<*struct>
 \begin{code}
 mutual
   data Struct+ : Set where
@@ -113,6 +128,7 @@ mutual
     _⇒_  : Struct+ → Struct- → Struct-
     _⇐_  : Struct- → Struct+ → Struct-
 \end{code}
+%</struct>
 
 \begin{code}
 mutual
@@ -161,11 +177,11 @@ lower : ∀ {A B} {p : True (Neg? A)} {q : True (Pos? B)} → · B ⇚ (A ⇛ B)
 lower = ⇚L (dres₂ (dres₃ (μ* (⇛R covar var))))
 \end{code}
 
-\ifverbose
+\hidden{
 \begin{code}
 open import LinearLogic U R ⟦_⟧ᵁ as LP hiding (reify) renaming (Type to TypeLP; _⊢_ to _⊢LP_; ⟦_⟧ to ⟦_⟧ᵀ)
 \end{code}
-\fi
+}
 
 \begin{code}
 cps : Polarity → Type → TypeLP
@@ -206,7 +222,7 @@ mutual
   str- (A ⇐ B)  = str- A ++ str+ B
 \end{code}
 
-\ifverbose
+\hidden{
 \begin{code}
 record CPS (A B : Set) : Set where
   field
@@ -222,7 +238,7 @@ Struct+CPS = record { ⟦_⟧ = str+ }
 Struct-CPS : CPS Struct- (List TypeLP)
 Struct-CPS = record { ⟦_⟧ = str- }
 \end{code}
-\fi
+}
 
 \begin{code}
 Neg-≡ : ∀ {A} → Neg A → cps + A ≡ cps - A ⊸ ⊥

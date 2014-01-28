@@ -6,26 +6,21 @@ task :slides => 'slides.pdf' do
 end
 
 desc "Compile the slides"
-file 'slides.pdf' => [ 'slides.md' , 'slides/code.tex' , 'slides/preamble.tex' ] do
-  system "pandoc --data-dir=slides --template=custom -H slides/preamble.tex -t beamer slides.md -o slides.pdf"
-  fail unless $?.success?
-end
-
-file 'slides/code.tex' => 'slides/code.lagda' do
-  system "lhs2tex --agda slides/code.lagda -o slides/code.tex"
-  fail unless $?.success?
-end
-file 'slides/preamble.tex' => 'slides/preamble.lagda' do
-  system "lhs2tex --agda slides/preamble.lagda -o slides/preamble.tex"
-  fail unless $?.success?
+file 'slides.pdf' => [ 'slides.tex' , 'code.tex' ,
+                       'IntuitionisticLogic.tex' , 'LinearLogic.tex' ,
+                       'LambekGrishinCalculus.tex' ] do
+  system "pdflatex slides.tex"
+  if $?.success?
+    system "pdflatex slides.tex"
+  end
 end
 
 desc "Compile literate Agda into LaTeX (and optionally remove all implicit arguments)"
 rule '.tex' => [ '.lagda' , '.fmt' ] do |t|
 
   f_lagda = t.name.ext('.lagda')
-  f_tex   = t.name.ext('.tex')
   f_lhs   = t.name.ext('.lhs')
+  f_tex   = t.name.ext('.tex')
 
   src = IO.read( f_lagda , :encoding => 'utf-8' )
   src = strip_unicode( src )
@@ -46,8 +41,10 @@ file 'main.pdf' => [ 'main.tex' , 'main.bib' , 'IntuitionisticLogic.tex' ,
   system "pdflatex main.tex"
   if $?.success?
     system "bibtex main"
-    system "pdflatex main.tex"
-    system "pdflatex main.tex"
+    if $?.success?
+      system "pdflatex main.tex"
+      system "pdflatex main.tex"
+    end
   end
 end
 
@@ -60,10 +57,9 @@ end
 
 # Cleanup directives.
 
-CLEAN.include('*.lhs','*.log','*.ptb','*.blg','*.bbl','*.tex','*.aux','*.snm',
-              '*.toc','*.nav','*.out','*.agdai','auto','slides/*.agdai',
-              'slides/*.tex','slides/auto')
-CLOBBER.include('*.pdf')
+CLEAN.include('*.lhs','*.log','*.ptb','*.blg','*.bbl','*.aux','*.snm',
+              '*.toc','*.nav','*.out','*.agdai','auto')
+CLOBBER.include('main.pdf','slides.pdf')
 
 # Regular expression that filters implicit arguments from Agda source.
 RE_IMPLICIT = /(?<!λ\s)(?<!record)(?<!λ)\s*(∀\s*)?\{([^\}]*?)\}(\s*→)?/

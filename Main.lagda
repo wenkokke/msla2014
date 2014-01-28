@@ -1,43 +1,48 @@
 \documentclass{article}
 
-\usepackage{textgreek}
-\usepackage{relsize}
-\usepackage{stmaryrd}
-\usepackage{natbib}
-
-\usepackage{bussproofs}
-\EnableBpAbbreviations
-\def\fCenter{\ \vdash \ }
-\def\limpl{\multimap}
-
-\usepackage{ucs}
-\usepackage[utf8x]{inputenc}
-\DeclareUnicodeCharacter{7468}{$^A$}
-\DeclareUnicodeCharacter{7486}{$^p$}
-\DeclareUnicodeCharacter{7488}{$^T$}
-\DeclareUnicodeCharacter{7489}{$^u$}
-\DeclareUnicodeCharacter{739}{$^x$}
-\DeclareUnicodeCharacter{740}{$^y$}
-
-%include agda.fmt
 %include main.fmt
-%format # n = n
-%include LambekGrishinCalculus.fmt
-
-% verbose:
-%  set to true if *all* code should be rendered, including
-%  import statements, module declarations, etc...
-\newif\ifverbose
-\verbosefalse
-
-% complete:
-%  set to true if the reader is familiar with Agda syntax
-\newif\ifcomplete
-\completetrue
+\include{preamble}
+\usepackage{natbib}
+\usepackage{ifthen}
+\newboolean{showHidden}
+\setboolean{showHidden}{false}
+\newcommand{\hidden}[1]{\ifthenelse{\boolean{showHidden}}{#1}{}}
 
 \begin{document}
 
-\ifverbose
+\title{Modeling the Lambek-Grishin calculus in Agda}
+\author{Pepijn Kokke}
+\date{\today}
+
+\maketitle
+
+\begin{abstract}
+In this paper, we present an implementation of the logical systems \textbf{LG}
+and \textbf{LP} in \emph{Martin-Löf Type Theory}, and use these implementations
+to give a proof of correctness of the \emph{CPS} translation from \textbf{LG}
+into \textbf{LP} as presented by in \citet{bastenhof2010} and \citet{moortgat2013}.
+\end{abstract}
+
+% \emph{Martin-Löf Type Theory} (\textbf{ITT}) is a type theory and a foundation
+% of mathematics which is well-suited to the analysis of simple logical systems.
+% \emph{Agda} is a programming language and proof assistant based on \textbf{ITT}.
+%
+% The \emph{Lambek-Grishin calculus} (\textbf{LG}) is a logical system engineered to
+% model the behaviour of natural language syntax, which, in the tradition of
+% categorial grammars, can be given a computational interpretation in a target logic.
+% In our case, this target logic is Multiplicative Intuitionistic Linear Logic
+% (MILL/\textbf{LP}) and the computational interpretation is given by means of
+% a \emph{CPS-translation}.
+%
+% In this paper we present a formalization of the systems \textbf{LG} and
+% \textbf{LP} in Agda, and give a constructive proof that the proofs in \textbf{LP}
+% given by the \textit{CPS}-translation are indeed valid proofs. In other words,
+% we present a translation of the rules of \textbf{LG} into \textbf{LP}.
+% In addition, we present a reification of the terms in our embedded logic
+% \textbf{LP} into terms of the host language, \textbf{ITT}.
+
+
+\hidden{
 \begin{code}
 open import Function using (const)
 open import Data.Bool using (Bool; true; false; not; _∧_; _∨_)
@@ -46,18 +51,16 @@ open import Data.Vec using (foldr; tabulate)
 open import Data.Product using (_×_; _,_)
 open import Relation.Binary.PropositionalEquality as PropEq using (_≡_; refl; sym; cong)
 \end{code}
-\fi
+}
 
-\ifverbose
+\hidden{
 \begin{code}
 module main where
 \end{code}
-\fi
+}
 
 \include{IntuitionisticLogic}
-
 \include{LinearLogic}
-
 \include{LambekGrishinCalculus}
 
 \begin{code}
@@ -86,11 +89,15 @@ EXISTS : (Entity → Bool) → Bool
 EXISTS p = foldr (const Bool) _∨_ false (tabulate p)
 \end{code}
 
+
+\hidden{
 \begin{code}
 open import LinearLogic U S ⟦_⟧ᵁ as LP renaming (Type to TypeLP; ⟦_⟧ to ⟦_⟧LP)
 open import LambekGrishinCalculus U S ⟦_⟧ᵁ as LG renaming (Type to TypeLG; ⟦_⟧ to ⟦_⟧LG)
-\end{code}
+\end{code}}
 
+%{
+%include LambekGrishinCalculus.fmt
 \begin{code}
 testTV : ⟦ (el NP + ⇒ el S -) ⇐ el NP + ⟧LG ≡ ((el NP ⊗ (el S ⊸ ⊥)) ⊗ el NP) ⊸ ⊥
 testTV = refl
@@ -113,5 +120,9 @@ EVERYONE = ( (λ{ (x , y) → FORALL λ z → y z ⊃ x z }) , PERSON )
 SOME : ⟦ ⟦ el NP + ⇐ el N + ⟧LG ⟧LP
 SOME = λ{ (x , y) → EXISTS λ z → y z ∧ x z }
 \end{code}
+%}
+
+\bibliographystyle{plain}
+\bibliography{main}
 
 \end{document}
