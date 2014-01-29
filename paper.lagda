@@ -25,7 +25,7 @@ non labore aliqua jowl tempor.
 
 \hidden{
 \begin{code}
-module main where
+module paper where
 \end{code}
 }
 
@@ -39,17 +39,20 @@ to  Agda}, and \citeauthor{erdi2013} goes as far as to call it the
 ``FizzBuzz of depently-typed programming''---the problem that any
 capable programmer in the field should be able to solve.
 
-Though each of these implementation has its own interesting
-contributions, they are all loosely based on the following model of
-the simply-typed lambda calculus.
+Though each of these implementation has its own merits, they are all
+loosely based on the following model of the simply-typed lambda
+calculus.\footnote{It should be noted that for the sake of readability
+in this paper implicit arguments are often left out. Any undefined
+variable that is encountered upon reading should be considered
+implicitly quantified over unless noted otherwise.}
 
 %{
 %include IntuitionisticLogic.fmt
 \begin{spec}
 data _⊢_ : {k : ℕ} (Γ : Vec Type k) (A : Type) → Set where
-  var   : ∀ {k Γ} → (x : Fin k) → Γ ⊢ Vec.lookup x Γ
-  abs   : ∀ {k Γ A B} → A , Γ ⊢ B → Γ ⊢ A ⇒ B
-  app   : ∀ {k Γ A B} → Γ ⊢ A ⇒ B → Γ ⊢ A → Γ ⊢ B
+  var   : (x : Fin k) → Γ ⊢ lookup x Γ
+  abs   : A , Γ ⊢ B → Γ ⊢ A ⇒ B
+  app   : Γ ⊢ A ⇒ B → Γ ⊢ A → Γ ⊢ B
 \end{spec}
 %}
 
@@ -83,7 +86,6 @@ for using Agda as a tool to model logical systems.
 
 \begin{itemize}
 \item \todo{forces you to make a logic concrete---no hand-waving is allowed;}
-% example: exchange laws
 \item \todo{allows you to use the Agda proof assistent to write proofs;}
 \item \todo{can catch errors in your logic;}
 \item \todo{gives you an implementation of your calculus in addition
@@ -96,14 +98,11 @@ for using Agda as a tool to model logical systems.
 \section{Linear Logic}
 \input{LinearLogic}
 
-\section{Lambek Calculus}
-\input{LambekCalculus}
-
 \section{Lambek-Grishin Calculus}
 \input{LambekGrishinCalculus}
 
 \bibliographystyle{apalike}
-\bibliography{main}
+\bibliography{paper}
 
 \end{document}
 

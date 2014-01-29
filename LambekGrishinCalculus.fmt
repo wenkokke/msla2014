@@ -58,9 +58,12 @@
 %format TypeLG = Type "^{LG}"
 %format ⟧LG = ⟧ "^{LG}"
 %format ⟧LP = ⟧ "^{LP}"
+%format ⟧+ = ⟧ "^{+}"
+%format ⟧- = ⟧ "^{-}"
+%format ⟦_⟧+ = ⟦_⟧ "^{+}"
+%format ⟦_⟧- = ⟦_⟧ "^{-}"
 
 %format cps+ = cps "^{+}"
 %format cps- = cps "^{-}"
 %format str+ = str "^{+}"
 %format str- = str "^{-}"
-%format cps+∨cps-=¬ = cps "^{+}" ∨ cps "^{-}" =¬

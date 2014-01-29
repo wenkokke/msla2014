@@ -1,4 +1,5 @@
-%include agda.fmt
+%include paper.fmt
+%include LambekGrishinCalculus.fmt
 
 \hidden{
 \begin{code}
@@ -9,10 +10,6 @@ open import Relation.Nullary.Decidable using (True; toWitness)
 open import Relation.Binary.PropositionalEquality as PropEq using (_≡_; refl; sym; cong)
 \end{code}
 }
-
-\section{Lambek-Grishin Calculus (fLG)}
-%{
-%include LambekGrishinCalculus.fmt
 
 \hidden{
 \begin{code}
@@ -37,6 +34,7 @@ data Polarity : Set where
 \end{code}
 %</polarity>
 
+\hidden{
 \begin{code}
 _≟ᴾ_ : (p q : Polarity) → Dec (p ≡ q)
 + ≟ᴾ + = yes refl
@@ -44,6 +42,7 @@ _≟ᴾ_ : (p q : Polarity) → Dec (p ≡ q)
 - ≟ᴾ + = no (λ ())
 - ≟ᴾ - = yes refl
 \end{code}
+}
 
 %<*type>
 \begin{code}
@@ -58,17 +57,6 @@ data Type : Set where
 \end{code}
 %</type>
 
-\begin{code}
-pol : Type → Polarity
-pol (el A p)  = p
-pol (A ⊗ B)   = +
-pol (A ⇚ B)  = +
-pol (A ⇛ B)  = +
-pol (A ⊕ B)   = -
-pol (A ⇒ B)  = -
-pol (A ⇐ B)  = -
-\end{code}
-
 %<*pos>
 \begin{code}
 data Pos : Type → Set where
@@ -79,6 +67,7 @@ data Pos : Type → Set where
 \end{code}
 %</pos>
 
+\hidden{
 \begin{code}
 Pos? : ∀ A → Dec (Pos A)
 Pos? (el A +) = yes (el A)
@@ -90,6 +79,7 @@ Pos? (A ⊕ B) = no (λ ())
 Pos? (A ⇚ B) = yes (A ⇚ B)
 Pos? (A ⇛ B) = yes (A ⇛ B)
 \end{code}
+}
 
 %<*pos>
 \begin{code}
@@ -101,6 +91,7 @@ data Neg : Type → Set where
 \end{code}
 %</pos>
 
+\hidden{
 \begin{code}
 Neg? : ∀ A → Dec (Neg A)
 Neg? (el A +) = no (λ ())
@@ -112,7 +103,9 @@ Neg? (A ⊕ B) = yes (A ⊕ B)
 Neg? (A ⇚ B) = no (λ ())
 Neg? (A ⇛ B) = no (λ ())
 \end{code}
+}
 
+\hidden{
 \begin{code}
 Pol? : ∀ A → Pos A ⊎ Neg A
 Pol? (el A +)  = inj₁ (el A)
@@ -124,6 +117,7 @@ Pol? (A ⊕ B)   = inj₂ (A ⊕ B)
 Pol? (A ⇒ B)  = inj₂ (A ⇒ B)
 Pol? (A ⇐ B)  = inj₂ (A ⇐ B)
 \end{code}
+}
 
 %<*struct>
 \begin{code}
@@ -167,14 +161,14 @@ mutual
     dist₄  : ∀ {X Y Z W} → X ⊗ Y ⊢ Z ⊕ W → Z ⇛ Y ⊢ X ⇒ W
 
   data _⊢[_] : Struct+ → Type → Set where
-    var    : ∀ {A} {{p : True (Pos? A)}} → · A · ⊢[ A ]
+    var    : ∀ {A} → · A · ⊢[ A ]
     μ      : ∀ {X A} {p : True (Neg? A)} → X ⊢ · A · → X ⊢[ A ]
     ⊗R     : ∀ {X Y A B} → X ⊢[ A ] → Y ⊢[ B ] → X ⊗ Y ⊢[ A ⊗ B ]
     ⇚R    : ∀ {X Y A B} → X ⊢[ A ] → [ B ]⊢ Y → X ⇚ Y ⊢[ A ⇚ B ]
     ⇛R    : ∀ {X Y A B} → [ A ]⊢ X → Y ⊢[ B ] → X ⇛ Y ⊢[ A ⇛ B ]
 
   data [_]⊢_ : Type → Struct- → Set where
-    covar  : ∀ {A} {{p : True (Neg? A)}} → [ A ]⊢ · A ·
+    covar  : ∀ {A} → [ A ]⊢ · A ·
     μ̃      : ∀ {X A} {p : True (Pos? A)} → · A · ⊢ X → [ A ]⊢ X
     ⊕L     : ∀ {X Y A B} → [ A ]⊢ Y → [ B ]⊢ X → [ A ⊕ B ]⊢ X ⊕ Y
     ⇒L    : ∀ {X Y A B} → X ⊢[ A ] → [ B ]⊢ Y → [ A ⇒ B ]⊢ X ⇒ Y
@@ -182,10 +176,10 @@ mutual
 \end{code}
 
 \begin{code}
-raise : ∀ {A B} {p : True (Pos? A)} {q : True (Neg? B)} → · A · ⊢ · (B ⇐ A) ⇒ B ·
+raise : ∀ {A B} → · A · ⊢ · (B ⇐ A) ⇒ B ·
 raise = ⇒R (res₂ (res₃ (μ̃* (⇐L covar var))))
 
-lower : ∀ {A B} {p : True (Neg? A)} {q : True (Pos? B)} → · B ⇚ (A ⇛ B) · ⊢ · A ·
+lower : ∀ {A B} → · B ⇚ (A ⇛ B) · ⊢ · A ·
 lower = ⇚L (dres₂ (dres₃ (μ* (⇛R covar var))))
 \end{code}
 
@@ -249,6 +243,7 @@ Struct-CPS = record { ⟦_⟧ = str- }
 \end{code}
 }
 
+\hidden{
 \begin{code}
 Neg-≡ : ∀ {A} → Neg A → ⟦ A ⟧+ ≡ ⟦ A ⟧- ⊸ ⊥
 Neg-≡ {.(el A -)} (el A) = refl
@@ -262,6 +257,7 @@ Pos-≡ {.(A ⊗ B)} (A ⊗ B) = refl
 Pos-≡ {.(A ⇚ B)} (A ⇚ B) = refl
 Pos-≡ {.(A ⇛ B)} (A ⇛ B) = refl
 \end{code}
+}
 
 \begin{code}
 mutual
@@ -288,17 +284,21 @@ mutual
   reify (dist₄ {X} {Y} {Z} {W} t) = XYZW↝ZYXW ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ ⟦ W ⟧ (reify t)
 
   reifyʳ : ∀ {X A} → X ⊢[ A ] → ⟦ X ⟧ ⊢LP ⟦ A ⟧+
-  reifyʳ (var {{p}}) = var
+  reifyʳ var = var
   reifyʳ (μ {X} {A} {q} t) rewrite Neg-≡ (toWitness q) = abs (to-back (reify t))
   reifyʳ (⊗R {X} {Y} {A} {B} s t) = pair (reifyʳ s) (reifyʳ t)
   reifyʳ (⇚R {X} {Y} {A} {B} s t) = pair (reifyʳ s) (reifyˡ t)
   reifyʳ (⇛R {X} {Y} {A} {B} s t) = pair (reifyˡ s) (reifyʳ t)
 
   reifyˡ : ∀ {A Y} → [ A ]⊢ Y → ⟦ Y ⟧ ⊢LP ⟦ A ⟧-
-  reifyˡ (covar {{q}}) = var
+  reifyˡ covar = var
   reifyˡ (μ̃ {X} {A} {p} t) rewrite Pos-≡ (toWitness p) = abs (reify t)
   reifyˡ (⊕L {X} {Y} {A} {B} s t) = YX↝XY ⟦ X ⟧ ⟦ Y ⟧ (pair (reifyˡ s) (reifyˡ t))
   reifyˡ (⇒L {X} {Y} {A} {B} s t) = pair (reifyʳ s) (reifyˡ t)
   reifyˡ (⇐L {X} {Y} {A} {B} s t) = pair (reifyˡ s) (reifyʳ t)
 \end{code}
-%}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

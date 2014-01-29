@@ -4,7 +4,6 @@ require 'rake/clean'
 SourceFiles = FileList[
   'IntuitionisticLogic.lagda'   ,
   'LinearLogic.lagda'           ,
-  'LambekCalculus.lagda'        ,
   'LambekGrishinCalculus.lagda' ]
 
 

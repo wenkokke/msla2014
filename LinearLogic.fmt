@@ -2,3 +2,8 @@
 
 %format  ⊸  = "\multimap"
 %format _⊸_ = "\_\!\multimap\!\_"
+
+%format Env-first  = first
+%format Env-insert = insert
+%format Env-exch   = exch
+%format Env-split  = split

@@ -4,3 +4,6 @@
 %format _~>_ = "\_\!\Rightarrow\!\_"
 %format  ⊗   = "\times"
 %format _⊗_  = "\_\!\!\times\!\!\_"
+
+%format Vec.lookup = lookup
+%format Vec-exch   = exch
