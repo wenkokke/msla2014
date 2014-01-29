@@ -212,6 +212,7 @@ mutual
   ⟦ A ⇐ B  ⟧- = ⟦ A ⟧- ⊗ ⟦ B ⟧+
 \end{code}
 
+\hidden{
 \begin{code}
 mutual
   str+ : Struct+ → List TypeLP
@@ -226,6 +227,7 @@ mutual
   str- (A ⇒ B)  = str+ A ++ str- B
   str- (A ⇐ B)  = str- A ++ str+ B
 \end{code}
+}
 
 \hidden{
 \begin{code}
@@ -259,6 +261,46 @@ Pos-≡ {.(A ⇛ B)} (A ⇛ B) = refl
 \end{code}
 }
 
+\begin{spec}
+mutual
+  reify : ∀ {X Y} → X ⊢ Y → ⟦ X ⟧ ++ ⟦ Y ⟧ ⊢LP ⊥
+  reify (μ* t)     = to-front (app var (reifyʳ t))
+  reify (μ̃* t)     = app var (reifyˡ t)
+  reify (⊗L t)     = pair-left (reify t)
+  reify (⇚L t)    = pair-left (reify t)
+  reify (⇛L t)    = pair-left (reify t)
+  reify (⊕R t)     = pair-left′ (reify t)
+  reify (⇒R t)    = pair-left′ (reify t)
+  reify (⇐R t)    = pair-left′ (reify t)
+  reify (res₁ t)   = Y[XZ]↝X[YZ] (reify t)
+  reify (res₂ t)   = [YX]Z↝[XY]Z (reify t)
+  reify (res₃ t)   = X[ZY]↝X[YZ] (reify t)
+  reify (res₄ t)   = [XZ]Y↝[XY]Z (reify t)
+  reify (dres₁ t)  = [XZ]Y↝[XY]Z (reify t)
+  reify (dres₂ t)  = X[ZY]↝X[YZ] (reify t)
+  reify (dres₃ t)  = [YX]Z↝[XY]Z (reify t)
+  reify (dres₄ t)  = Y[XZ]↝X[YZ] (reify t)
+  reify (dist₁ t)  = XYZW↝XWZY (reify t)
+  reify (dist₂ t)  = XYZW↝YWXZ (reify t)
+  reify (dist₃ t)  = XYZW↝ZXWY (reify t)
+  reify (dist₄ t)  = XYZW↝ZYXW (reify t)
+
+  reifyʳ : ∀ {X A} → X ⊢[ A ] → ⟦ X ⟧ ⊢LP ⟦ A ⟧+
+  reifyʳ var        = var
+  reifyʳ (μ t)      = abs (to-back (reify t))
+  reifyʳ (⊗R s t)   = pair (reifyʳ s) (reifyʳ t)
+  reifyʳ (⇚R s t)  = pair (reifyʳ s) (reifyˡ t)
+  reifyʳ (⇛R s t)  = pair (reifyˡ s) (reifyʳ t)
+
+  reifyˡ : ∀ {A Y} → [ A ]⊢ Y → ⟦ Y ⟧ ⊢LP ⟦ A ⟧-
+  reifyˡ covar      = var
+  reifyˡ (μ̃ t)      = abs (reify t)
+  reifyˡ (⊕L s t)   = YX↝XY (pair (reifyˡ s) (reifyˡ t))
+  reifyˡ (⇒L s t)  = pair (reifyʳ s) (reifyˡ t)
+  reifyˡ (⇐L s t)  = pair (reifyˡ s) (reifyʳ t)
+\end{spec}
+
+\hidden{
 \begin{code}
 mutual
   reify  : ∀ {X Y} → X ⊢ Y → ⟦ X ⟧ ++ ⟦ Y ⟧ ⊢LP ⊥
@@ -297,6 +339,7 @@ mutual
   reifyˡ (⇒L {X} {Y} {A} {B} s t) = pair (reifyʳ s) (reifyˡ t)
   reifyˡ (⇐L {X} {Y} {A} {B} s t) = pair (reifyˡ s) (reifyʳ t)
 \end{code}
+}
 
 %%% Local Variables:
 %%% mode: latex

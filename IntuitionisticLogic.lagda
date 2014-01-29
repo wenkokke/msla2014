@@ -28,6 +28,71 @@ infixr 20 _⇒_
 }
 
 \todo{mention module-level abstraction over atomic types}
+\todo{mention de Bruijn notation}
+\todo{mention the alternative syntax for Lists and Vectors (using $∅$ and $\_,\_$)}
+
+\begin{figure}[h]
+  \centering
+  \begin{tabular}{l l}
+     Named & de Bruijn
+  \\ \hline
+  \\ $\lambda x \to x$
+   & $\textcolor{red}{\lambda}\ \textcolor{red}{0}$
+  \\ $\lambda x \to \lambda y \to x$
+   & $\textcolor{red}{\lambda}\ \textcolor{blue}{\lambda}\ \textcolor{red}{1}$
+  \\ $\lambda x \to \lambda y \to \lambda z \to x \ z \ (y \ z)$
+   & $\textcolor{red}{\lambda}\ \textcolor{blue}{\lambda}\ \textcolor{green}{\lambda}\
+      \textcolor{red}{2}\ \textcolor{green}{0}\ (\textcolor{blue}{1}\ \textcolor{green}{0})$
+  \end{tabular}
+  \caption{Named notation versus de Bruijn notation \citep{mazzoli2013}.}
+  \label{fig:namedvsdebruijn}
+\end{figure}
+
+\begin{figure}[h]
+  \begin{mdframed}
+    \begin{scprooftree}{0.8}
+      \AXC{}
+      \RightLabel{\scriptsize Axiom}
+      \UIC{$\Gamma \fCenter (var \ i) : \Gamma_i$}
+    \end{scprooftree}
+
+    \begin{minipage}[c]{0.45\linewidth}
+      \begin{scprooftree}{0.8}
+        \AXC{$\Gamma, A \fCenter e : B$}
+        \RightLabel{\scriptsize $\to$-intro}
+        \UIC{$\Gamma \fCenter (lam \ e) : A \to B$}
+      \end{scprooftree}
+    \end{minipage}%
+    \begin{minipage}[c]{0.45\linewidth}
+      \begin{scprooftree}{0.8}
+        \AXC{$\Gamma \fCenter e_1 : A \to B$}
+        \AXC{$\Gamma \fCenter e_2 : A$}
+        \RightLabel{\scriptsize $\to$-elim}
+        \BIC{$\Gamma \fCenter (app \ e_1 \ e_2) : B$}
+      \end{scprooftree}
+    \end{minipage}
+
+    \begin{minipage}[c]{0.45\linewidth}
+      \begin{scprooftree}{0.8}
+        \AXC{$\Gamma \fCenter e_1 : A$}
+        \AXC{$\Gamma \fCenter e_2 : B$}
+        \RightLabel{\scriptsize $\times$-intro}
+        \BIC{$\Gamma \fCenter (pair \ e_1 \ e_2) : A \times B$}
+      \end{scprooftree}
+    \end{minipage}%
+    \begin{minipage}[c]{0.45\linewidth}
+      \begin{scprooftree}{0.8}
+        \AXC{$\Gamma \fCenter e_1 : A \times B$}
+        \AXC{$\Gamma \fCenter e_2 : A \to B \to C$}
+        \RightLabel{\scriptsize $\times$-elim}
+        \BIC{$\Gamma \fCenter (case \ e_1 \ e_2) : C$}
+      \end{scprooftree}
+    \end{minipage}
+  \end{mdframed}
+
+  \caption{Inference rules for \textbf{IL} corresponding to the de Bruijn notation.}
+  \label{fig:intuitionisticlogic}
+\end{figure}
 
 %<*type>
 \begin{code}

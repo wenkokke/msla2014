@@ -28,10 +28,14 @@
 
 
 % Buss' Proofs
+\usepackage{mdframed}
 \usepackage{bussproofs}
 \EnableBpAbbreviations%
 \def\fCenter{\ \vdash\ }
 \def\limpl{\multimap}
+\newenvironment{scprooftree}[1]%
+  {\gdef\scalefactor{#1}\begin{center}\proofSkipAmount \leavevmode}%
+  {\scalebox{\scalefactor}{\DisplayProof}\proofSkipAmount \end{center} }
 
 % Symbols
 \usepackage{textgreek}

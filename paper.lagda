@@ -84,13 +84,10 @@ for using Agda as a tool to model logical systems.
 
 \section{Motivation}
 
-\begin{itemize}
-\item \todo{forces you to make a logic concrete---no hand-waving is allowed;}
-\item \todo{allows you to use the Agda proof assistent to write proofs;}
-\item \todo{can catch errors in your logic;}
-\item \todo{gives you an implementation of your calculus in addition
-    to a proof of its validity.}
-\end{itemize}
+\todo{forces you to make a logic concrete---no hand-waving is allowed;}
+\todo{allows you to use the Agda proof assistent to write proofs;}
+\todo{can catch errors in your logic;}
+\todo{gives you an implementation of your calculus in addition to a proof of its validity.}
 
 \section{Intuitionistic Logic}
 \input{IntuitionisticLogic}
