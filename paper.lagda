@@ -66,8 +66,7 @@ use Agda's built-in mechanisms for reduction and evaluation.
 
 
 In this paper we will examine the use of such models when analysing
-substructural logics such as linear logic and the Lambek and
-Lambek-Grishin calculi.
+substructural logics such as linear logic and the Lambek-Grishin calculus.
 In addition, we present an implementation of the \emph{CPS}-interpretation
 of the Lambek-Grishin calculus as developed in \citet{moortgat2013}.
 
@@ -79,8 +78,15 @@ tutorials maintained on the Agda website.\footnote{
   \url{http://wiki.portal.chalmers.se/agda/pmwiki.php?n=Main.Othertutorials}
 }
 
-Before we start off, we will elaborate a bit further on the motivation
+Before we start off, it should be mentioned that (although we hide
+some of the more tedious parts) this paper is literate Agda.
+
+
+ we will elaborate a bit further on the motivation
 for using Agda as a tool to model logical systems.
+
+\todo{mention that the paper is literate code, to make any reference
+  to a ``user'' less awkward}
 
 \section{Motivation}
 

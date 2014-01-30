@@ -1,4 +1,16 @@
 *.agdai
 /auto
 /depr
+IntuitionisticLogic.tex
+LambekGrishinCalculus.tex
+LinearLogic.tex
+paper.aux
+paper.bbl
+paper.bib
+paper.blg
+paper.fmt
+paper.log
+paper.out
 paper.pdf
+paper.ptb
+paper.tex
