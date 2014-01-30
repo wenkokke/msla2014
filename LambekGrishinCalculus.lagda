@@ -183,9 +183,13 @@ lower : ∀ {A B} → · B ⇚ (A ⇛ B) · ⊢ · A ·
 lower = ⇚L (dres₂ (dres₃ (μ* (⇛R covar var))))
 \end{code}
 
+
+\subsection{Reification into LP}
+
 \hidden{
 \begin{code}
-open import LinearLogic U R ⟦_⟧ᵁ as LP hiding (reify) renaming (Type to TypeLP; _⊢_ to _⊢LP_; ⟦_⟧ to ⟦_⟧ᵀ)
+open import LinearLogic U R ⟦_⟧ᵁ as LP
+  renaming (Type to TypeLP; _⊢_ to _⊢LP_; reify to reifyLP)
 \end{code}
 }
 
@@ -231,17 +235,15 @@ mutual
 
 \hidden{
 \begin{code}
-record CPS (A B : Set) : Set where
-  field
-    ⟦_⟧ : A → B
 
-open CPS {{...}} public using (⟦_⟧)
+private
+  open Reify {{...}} using (⟦_⟧)
 
-Struct+CPS : CPS Struct+ (List TypeLP)
-Struct+CPS = record { ⟦_⟧ = str+ }
+Struct+Reify : Reify Struct+ (List TypeLP)
+Struct+Reify = record { ⟦_⟧ = str+ }
 
-Struct-CPS : CPS Struct- (List TypeLP)
-Struct-CPS = record { ⟦_⟧ = str- }
+Struct-Reify : Reify Struct- (List TypeLP)
+Struct-Reify = record { ⟦_⟧ = str- }
 \end{code}
 }
 

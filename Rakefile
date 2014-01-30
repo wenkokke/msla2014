@@ -20,7 +20,8 @@ end
 
 rule(/#{CodeDir}.*\.agda/ => [ proc {|task_name| to_lagda(task_name) } ]) do |t|
   Dir.mkdir(CodeDir) unless File.exists?(CodeDir)
-  cmd = "lhs2TeX --agda --code #{to_lagda(t.name)}-o #{t.name}"
+  p t
+  cmd = "lhs2TeX --agda --code #{to_lagda(t.name)} -o #{t.name}"
   puts cmd
   system cmd
 end
@@ -91,7 +92,7 @@ end
 CLEAN.include('*.lhs','*.log','*.ptb','*.blg','*.bbl','*.aux','*.snm',
               '*.toc','*.nav','*.out','*.agdai','auto','paper.tex',
               SourceFiles.ext('.tex'))
-CLOBBER.include('paper.pdf','slides.pdf')
+CLOBBER.include('paper.pdf','slides.pdf','code')
 
 
 

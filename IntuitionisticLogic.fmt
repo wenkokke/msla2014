@@ -7,3 +7,7 @@
 
 %format Vec.lookup = lookup
 %format Vec-exch   = exch
+
+%format TypeIL = Type "^{IL}"
+%format ⊢IL = ⊢ "^{IL}"
+%format ⟧IL = ⟧ "^{IL}"

@@ -71,10 +71,11 @@ In addition, we present an implementation of the \emph{CPS}-interpretation
 of the Lambek-Grishin calculus as developed in \citet{moortgat2013}.
 
 
-Since this is not an introduction to Agda or to dependently-typed
-programming, we advise the interested reader to refer to \citet{norell2009}
-for a detailed discussion of Agda in general, or to the list of Agda
-tutorials maintained on the Agda website.\footnote{
+Since this paper by no means a complete introduction to Agda or to
+dependently-typed programming, we advise the interested reader to
+refer to \citet{norell2009} for a detailed discussion of Agda in
+general, or to the list of Agda tutorials maintained on the Agda
+website.\footnote{
   See \url{http://wiki.portal.chalmers.se/agda/pmwiki.php?n=Main.Othertutorials}.
 }
 
@@ -87,6 +88,7 @@ is available on GitHub.\footnote{
 
 
 \section{Motivation}
+\label{sec:Motivation}
 
 \todo{forces you to make a logic concrete---no hand-waving is allowed;}
 \todo{allows you to use the Agda proof assistent to write proofs;}
@@ -94,12 +96,15 @@ is available on GitHub.\footnote{
 \todo{gives you an implementation of your calculus in addition to a proof of its validity.}
 
 \section{Intuitionistic Logic}
+\label{sec:IntuitionisticLogic}
 \input{IntuitionisticLogic}
 
 \section{Linear Logic}
+\label{sec:LinearLogic}
 \input{LinearLogic}
 
 \section{Lambek-Grishin Calculus}
+\label{sec:LambekGrishinCalculus}
 \input{LambekGrishinCalculus}
 
 \bibliographystyle{apalike}

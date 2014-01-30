@@ -1,2 +1,10 @@
 %include agda.fmt
+%format ?0 = "\{\ \}0"
+%format ?1 = "\{\ \}1"
+
+%format Env-head   = head
+%format Env-insert = insert
+%format Env-exch   = exch
+%format Env-split  = split
+
 
