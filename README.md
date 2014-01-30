@@ -1,4 +1,4 @@
-ShiftReset
-==========
+Modeling Substructural Logics in Agda
+=====================================
 
-Implementation of shift and reset in several logics for natural language analysis.
+Implementation of several substructural logics in Agda.
