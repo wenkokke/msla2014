@@ -1,11 +1,32 @@
 #encoding: utf-8
 require 'rake/clean'
 
+CodeDir = 'code'
 SourceFiles = FileList[
   'IntuitionisticLogic.lagda'   ,
   'LinearLogic.lagda'           ,
   'LambekGrishinCalculus.lagda' ]
 
+
+
+### Code ###
+
+desc "Extract the code from the paper"
+task :code => SourceFiles.pathmap("#{CodeDir}/%n.agda")
+
+def to_lagda(task_name)
+  task_name.sub("#{CodeDir}/",'').sub('.agda','.lagda')
+end
+
+rule(/#{CodeDir}.*\.agda/ => [ proc {|task_name| to_lagda(task_name) } ]) do |t|
+  Dir.mkdir(CodeDir) unless File.exists?(CodeDir)
+  cmd = "lhs2TeX --agda --code #{to_lagda(t.name)}-o #{t.name}"
+  puts cmd
+  system cmd
+end
+
+
+### Paper ###
 
 desc "Compile and open the paper"
 task :default => 'paper.pdf' do
@@ -37,14 +58,18 @@ rule '.tex' => [ '.lagda' ] do |t|
   src = strip_implicits( src )
   IO.write( f_lhs , src , :encoding => 'utf-8' )
 
-  system "lhs2TeX --agda #{ f_lhs } -o #{ f_tex }"
+  cmd = "lhs2TeX --agda #{ f_lhs } -o #{ f_tex }"
+  puts cmd
+  system cmd
 
   File.delete f_lhs
 
   fail "error in lhs2TeX" unless $?.success?
 end
 
-# Slides
+
+
+### Slides ###
 
 desc "Compile and open the slides"
 task :slides => 'slides.pdf' do
@@ -59,24 +84,30 @@ file 'slides.pdf' => [ 'slides.tex' , 'slides.code.tex' ] + SourceFiles.ext('.te
   end
 end
 
-# Cleanup directives.
+
+
+### Cleanup ###
 
 CLEAN.include('*.lhs','*.log','*.ptb','*.blg','*.bbl','*.aux','*.snm',
               '*.toc','*.nav','*.out','*.agdai','auto','paper.tex',
               SourceFiles.ext('.tex'))
 CLOBBER.include('paper.pdf','slides.pdf')
 
+
+
+### Utilities ###
+
 # Regular expression that filters implicit arguments from Agda source.
 RE_IMPLICIT = /(?<!λ\s)(?<!record)(?<!λ)\s*(∀\s*)?\{([^\}]*?)\}(\s*→)?/
 
-# Function that strips implicits from literate Agda source.
+# Strip implicits from literate Agda source.
 def strip_implicits(src)
   src.gsub(/\\begin\{code\}(.*?)\\end\{code\}/m) do |m|
     "\\begin{code}#{ $1.gsub(RE_IMPLICIT,'') }\\end{code}"
   end
 end
 
-# Function that replaces certain unicode tokens.
+# Replaces certain unicode tokens that trip LaTeX up.
 def strip_unicode(src)
   src.
     gsub('μ̃*','Ν*').

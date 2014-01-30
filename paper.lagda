@@ -75,18 +75,16 @@ Since this is not an introduction to Agda or to dependently-typed
 programming, we advise the interested reader to refer to \citet{norell2009}
 for a detailed discussion of Agda in general, or to the list of Agda
 tutorials maintained on the Agda website.\footnote{
-  \url{http://wiki.portal.chalmers.se/agda/pmwiki.php?n=Main.Othertutorials}
+  See \url{http://wiki.portal.chalmers.se/agda/pmwiki.php?n=Main.Othertutorials}.
 }
 
 Before we start off, it should be mentioned that (although we hide
-some of the more tedious parts) this paper is literate Agda.
+some of the more tedious parts) this paper is literate Agda. The code
+is available on GitHub.\footnote{
+  See \url{https://github.com/pepijnkokke/SubstructuralLogicsInAgda}.
+}
 
 
- we will elaborate a bit further on the motivation
-for using Agda as a tool to model logical systems.
-
-\todo{mention that the paper is literate code, to make any reference
-  to a ``user'' less awkward}
 
 \section{Motivation}
 

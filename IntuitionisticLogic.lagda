@@ -243,4 +243,3 @@ module Explicit where
   swap : ∀ {A B} → A ⊗ B , ∅ ⊢ B ⊗ A
   swap = case var (exch₀ (pair var var))
 \end{code}
-%}
