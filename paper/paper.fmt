@@ -1,0 +1,10 @@
+%include agda.fmt
+%format ?0 = "\{\ \}0"
+%format ?1 = "\{\ \}1"
+
+%format Ctxt-head   = head
+%format Ctxt-insert = insert
+%format Ctxt-exch   = exch
+%format Ctxt-split  = split
+
+
