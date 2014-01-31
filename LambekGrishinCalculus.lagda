@@ -28,7 +28,7 @@ connectives, together with a set of interaction principles, allows for
 the treatment of patterns beyond the context-free, which cannot be
 satisfactorily handled in the Lambek calculus \citep{moortgat2013}.
 
-The formulation of the Lambek-Grishin calculus that we will formalize
+The formulation of the Lambek-Grishin calculus that we will model
 is the formulation developed in \citet{moortgat2013}, which uses the
 mechanisms of polarity and focusing \citep{andreoli1992} together with
 concepts from display logics \citep{belnap1982} to ensure, amongst

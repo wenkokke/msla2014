@@ -162,6 +162,8 @@ logic and the Lambek-Grishin calculus).
 We have shown how proofs in these models can be given an
 interpretation in Agda through reification and translation.
 
+
+
 \nocite{*}
 \bibliographystyle{apalike}
 \bibliography{paper}
