@@ -2,17 +2,21 @@
 require 'rake/clean'
 
 CodeDir = 'code'
-SourceFiles = FileList[
-  'IntuitionisticLogic.lagda'   ,
-  'LinearLogic.lagda'           ,
-  'LambekGrishinCalculus.lagda' ]
+AgdaFiles = FileList[
+  'paper/IntuitionisticLogic.lagda'   ,
+  'paper/LinearLogic.lagda'           ,
+  'paper/LambekGrishinCalculus.lagda' ]
+PaperFiles = FileList[
+  'paper/paper.tex'  ,
+  'paper/paper.bib'    ,
+  'paper/preamble.tex' ]
 
 
 
 ### Code ###
 
 desc "Extract the code from the paper"
-task :code => SourceFiles.pathmap("#{CodeDir}/%n.agda")
+task :code => AgdaFiles.pathmap("#{CodeDir}/%n.agda")
 
 def to_lagda(task_name)
   task_name.sub("#{CodeDir}/",'').sub('.agda','.lagda')
@@ -30,58 +34,50 @@ end
 ### Paper ###
 
 desc "Compile and open the paper"
-task :default => 'paper.pdf' do
-  system "open paper.pdf"
+task :default => 'paper/paper.pdf' do
+  system "open paper/paper.pdf"
 end
 
 desc "Compile the paper"
-file 'paper.pdf' => [ 'paper.tex' , 'paper.preamble.tex' , 'paper.bib' ] + SourceFiles.ext('.tex') do
+file 'paper/paper.pdf' => PaperFiles + AgdaFiles.ext('.tex') do
+  Dir.chdir("paper") do
 
-  system "pdflatex paper.tex"
-  if $?.success?
-    system "bibtex paper"
+    system "pdflatex paper.tex"
     if $?.success?
-      system "pdflatex paper.tex"
-      system "pdflatex paper.tex"
+      system "bibtex paper"
+      if $?.success?
+        system "pdflatex paper.tex"
+        system "pdflatex paper.tex"
+      end
     end
+
   end
 end
 
 desc "Compile literate Agda to TeX (and remove implicits)"
 rule '.tex' => [ '.lagda' ] do |t|
 
-  f_lagda = t.name.ext('.lagda')
-  f_lhs   = t.name.ext('.lhs')
-  f_tex   = t.name.ext('.tex')
+  f_abs   = File.absolute_path(t.name)
+  f_lagda = f_abs.ext('.lagda')
+  f_lhs   = f_abs.ext('.lhs')
+  f_tex   = f_abs.ext('.tex')
+  f_dir   = File.dirname(f_abs)
 
-  src = IO.read( f_lagda , :encoding => 'utf-8' )
-  src = strip_unicode( src )
-  src = strip_implicits( src )
-  IO.write( f_lhs , src , :encoding => 'utf-8' )
+  Dir.chdir(f_dir) do
 
-  cmd = "lhs2TeX --agda #{ f_lhs } -o #{ f_tex }"
-  puts cmd
-  system cmd
+    src = IO.read( f_lagda , :encoding => 'utf-8' )
+    src = strip_unicode( src )
+    src = strip_implicits( src )
+    IO.write( f_lhs , src , :encoding => 'utf-8' )
 
-  File.delete f_lhs
+    cmd = "lhs2TeX --agda #{ f_lhs } -o #{ f_tex }"
+    puts cmd
+    system cmd
 
-  fail "error in lhs2TeX" unless $?.success?
-end
+    File.delete f_lhs
 
+    fail "error in lhs2TeX" unless $?.success?
 
-
-### Slides ###
-
-desc "Compile and open the slides"
-task :slides => 'slides.pdf' do
-  system "open slides.pdf"
-end
-
-desc "Compile the slides"
-file 'slides.pdf' => [ 'slides.tex' , 'slides.code.tex' ] + SourceFiles.ext('.tex') do
-  system "pdflatex slides.tex"
-  if $?.success?
-    system "pdflatex slides.tex"
   end
 end
 
@@ -91,7 +87,7 @@ end
 
 CLEAN.include('*.lhs','*.log','*.ptb','*.blg','*.bbl','*.aux','*.snm',
               '*.toc','*.nav','*.out','*.agdai','auto','paper.tex',
-              SourceFiles.ext('.tex'))
+              AgdaFiles.ext('.tex'))
 CLOBBER.include('paper.pdf','slides.pdf','code')
 
 

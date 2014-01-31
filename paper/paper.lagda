@@ -1,7 +1,7 @@
 \documentclass{article}
 
 %include paper.fmt
-\input{paper.preamble}
+\input{preamble}
 
 \begin{document}
 
