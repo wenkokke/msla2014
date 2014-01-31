@@ -156,6 +156,12 @@ of computer science.
 
 \section{Conclusion}
 
+We have presented the reader with several models of intuitionistic
+logic, and examined several models for substructural logics (linear
+logic and the Lambek-Grishin calculus).
+We have shown how proofs in these models can be given an
+interpretation in Agda through reification and translation.
+
 \nocite{*}
 \bibliographystyle{apalike}
 \bibliography{paper}
