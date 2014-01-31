@@ -3,13 +3,14 @@
 
 \hidden{
 \begin{code}
+open import Level using (Level; _⊔_)
 open import Function using (id; case_of_)
 open import Data.Nat using (ℕ; suc)
 open import Data.Fin using (Fin; suc; zero)
 open import Data.Vec as Vec using (Vec) renaming (_∷_ to _,_; [] to ∅)
 open import Data.List using (_∷_; [])
 open import Data.List as List using (List; _++_) renaming (_∷_ to _,_; [] to ∅)
-open import Data.Product using (∃; _×_; _,_; map)
+open import Data.Product as Product using (∃; _×_; _,_)
 open import Relation.Binary.PropositionalEquality as P using (_≡_; refl; sym; cong)
 \end{code}
 }
@@ -293,7 +294,7 @@ result if we use this new index with the exchanged context.
   lemma-var {Γ = A , B , Γ} zero     (suc zero)     = zero , refl
   lemma-var {Γ = A , B , Γ} zero     (suc (suc x))  = suc (suc x) , refl
   lemma-var {Γ = A , Γ} (suc i)  zero           = zero , refl
-  lemma-var {Γ = A , Γ} (suc i)  (suc x)        = map suc id (lemma-var {Γ = Γ} i x)
+  lemma-var {Γ = A , Γ} (suc i)  (suc x)        = Product.map suc id (lemma-var {Γ = Γ} i x)
 \end{code}
 
 Finally, we can define exchange as a recursive function over proofs,
@@ -378,9 +379,10 @@ example---the commutativity of $\_\!×\!\_$.\footnote{
   which has the type $B , A , X ⊢ C → A , B , X ⊢ C$, i.e.\ it
   exchanges the first two types in the context.
 }%
-\footnote{We can also prove $∅ ⊢ A \times B \Rightarrow B \times A$,
-but for that we either need a stronger weakening principle or apply
-the current weakening principle recursively.}
+\footnote{We can also prove $\Gamma ⊢ A \times B \Rightarrow B \times
+A$, i.e.\ commutativity in the presence of a context, but for that we
+either need a stronger weakening principle or apply the current
+weakening principle recursively.}
 
 \begin{code}
   swap : ∀ {A B} → ∅ ⊢ A ⊗ B ⇒ B ⊗ A
@@ -407,7 +409,7 @@ A reification generally consists of two parts:
 \end{itemize}
 However, since Agda has no explicit notation for contexts, we can only
 define a reification in this style for closed terms. For open terms,
-we shall have to provide our encoding of contexts.
+we shall have to provide our own encoding of contexts.
 
 First of all, however, let us look at the translation of our
 \textbf{IL} types into Agda's |Set|. Since we are abstracting over a
@@ -416,11 +418,27 @@ types in this universe to. Therefore, we shall require the user to
 provide us with a translation function |⟦_⟧ᵁ|. Once we have this
 function, the full translation is trivial.
 
+\hidden{
 \begin{code}
-  ⟦_⟧ : Type → Set
-  ⟦ el A    ⟧ = ⟦ A ⟧ᵁ
-  ⟦ A ⊗ B   ⟧ = ⟦ A ⟧ × ⟦ B ⟧
-  ⟦ A ⇒ B  ⟧ = ⟦ A ⟧ → ⟦ B ⟧
+  record Reify {a b : Level} (A : Set a) (B : Set b) : Set (a ⊔ b) where
+    field
+      ⟦_⟧ : A → B
+\end{code}
+}
+
+\hidden{
+\begin{code}
+  ReifyType : Reify Type Set
+  ReifyType = record { ⟦_⟧ = ⟦_⟧ }
+    where
+\end{code}
+}
+
+\begin{code}
+    ⟦_⟧ : Type → Set
+    ⟦ el A    ⟧ = ⟦ A ⟧ᵁ
+    ⟦ A ⊗ B   ⟧ = ⟦ A ⟧ × ⟦ B ⟧
+    ⟦ A ⇒ B  ⟧ = ⟦ A ⟧ → ⟦ B ⟧
 \end{code}
 
 We encounter the first real difficulty when we wish to translate
@@ -428,30 +446,21 @@ terms. As mentioned above, Agda has no explicit notation for
 contexts. To overcome this, we need to cook up our own encoding:
 so what is a context? A context is a list of values of different
 types. This means that we can use heterogeneous lists---a list that is
-indexed on the type-level by a list of types
-\citep{kiselyov2004}.\footnote{We are cutting corners here; our |Env|
-datatype is only an instance of heterogeneous lists specified to our
-current problem.}
-We shall henceforth refer to such a context with values attached as an
-environment.
+indexed on the type-level by a list of types.
 
 \begin{code}
-  data Env : ∀ (X : List Type) → Set where
-    ∅    : Env ∅
-    _,_  : ∀ {A X} → ⟦ A ⟧ → Env X → Env (A , X)
+  data Ctxt : ∀ (X : List Set) → Set₁ where
+    ∅ : Ctxt ∅
+    _,_ : ∀ {A X} → A → Ctxt X → Ctxt (A , X)
 \end{code}
 
-Using our encoding for we can define a few simple function to work on
-environments. A |head| function, which retrieves the first element in
-a type-safe manner; an |exch| function, which applies our exchange
-principle to a context; and a split function, which splits an
-environment in two, if we know that the context is a concatinated
-context.
+Using this encoding for we can define a few simple function to work on
+environments. An |exch| function, which applies our exchange principle
+to a context; and a split function, which splits a context in two parts.
 
 \begin{spec}
-  Env-head : ∀ {A X} → Env (A , X) → ⟦ A ⟧
-  Env-exch   : Env ((X ++ Y) ++ (Z ++ W)) → Env ((X ++ Z) ++ (Y ++ W))
-  Env-split  : Env (X ++ Y) → (Env X) × (Env Y)
+  Ctxt-exch   : Ctxt ((X ++ Y) ++ (Z ++ W)) → Ctxt ((X ++ Z) ++ (Y ++ W))
+  Ctxt-split  : Ctxt (X ++ Y) → (Ctxt X) × (Ctxt Y)
 \end{spec}
 
 For brevity's sake, we will omit the definitions for these
@@ -461,21 +470,30 @@ into Agda.
 
 \hidden{
 \begin{code}
-  Env-head : ∀ {A X} → Env (A , X) → ⟦ A ⟧
-  Env-head (A′ , X) = A′
+  private
+    open Reify {{...}} using (⟦_⟧)
+\end{code}
 
-  Env-insert : ∀ A X Y → ⟦ A ⟧ → Env (X ++ Y) → Env (X ++ (A , Y))
-  Env-insert A ∅ Y A′ E = A′ , E
-  Env-insert A (B , X) Y A′ (B′ , E) = B′ , Env-insert A X Y A′ E
+\begin{code}
+  ReifyCtxt : Reify (List Type) (List Set)
+  ReifyCtxt = record { ⟦_⟧ = List.map ⟦_⟧ }
+\end{code}
+}
 
-  Env-exch : ∀ {X Y Z W} → Env ((X ++ Y) ++ (Z ++ W)) → Env ((X ++ Z) ++ (Y ++ W))
-  Env-exch {X = ∅} {Y = ∅} {Z} {W} E = E
-  Env-exch {X = ∅} {Y = A , Y} {Z} {W} (A′ , E) = Env-insert A Z (Y ++ W) A′ (Env-exch {∅} {Y} {Z} {W} E)
-  Env-exch {X = A , X} {Y} {Z} {W} (A′ , E) = A′ , Env-exch {X} {Y} {Z} {W} E
+\hidden{
+\begin{code}
+  Ctxt-insert : {A : Type} {X Y : List Type} → ⟦ A ⟧ → Ctxt ⟦ X ++ Y ⟧ → Ctxt ⟦ X ++ (A , Y) ⟧
+  Ctxt-insert {A} {∅} {Y} A′ E = A′ , E
+  Ctxt-insert {A} {B , X} {Y} A′ (B′ , E) = B′ , Ctxt-insert {A} {X} {Y} A′ E
 
-  Env-split : ∀ {X Y} → Env (X ++ Y) → (Env X) × (Env Y)
-  Env-split {∅} {Y} E = ∅ , E
-  Env-split {A , X} {Y} (A′ , E) with Env-split {X} {Y} E
+  Ctxt-exch : {X Y Z W : List Type} → Ctxt ⟦ (X ++ Y) ++ (Z ++ W) ⟧ → Ctxt ⟦ (X ++ Z) ++ (Y ++ W) ⟧
+  Ctxt-exch {X = ∅} {Y = ∅} {Z} {W} E = E
+  Ctxt-exch {X = ∅} {Y = A , Y} {Z} {W} (A′ , E) = Ctxt-insert {A} {Z} {Y ++ W} A′ (Ctxt-exch {∅} {Y} {Z} {W} E)
+  Ctxt-exch {X = A , X} {Y} {Z} {W} (A′ , E) = A′ , Ctxt-exch {X} {Y} {Z} {W} E
+
+  Ctxt-split : {X Y : List Type} → Ctxt ⟦ X ++ Y ⟧ → Ctxt ⟦ X ⟧ × Ctxt ⟦ Y ⟧
+  Ctxt-split {∅} {Y} E = ∅ , E
+  Ctxt-split {A , X} {Y} (A′ , E) with Ctxt-split {X} {Y} E
   ... | Eˣ , Eʸ = ((A′ , Eˣ) , Eʸ)
 \end{code}
 }
@@ -492,33 +510,36 @@ Note that for binary rules we indeed split the environment in two, and
 pass the halves down the corresponding branches of the translation.
 
 \begin{code}
-  reify : ∀ {A X} → Env X → X ⊢ A → ⟦ A ⟧
-  reify E var             = Env-head E
-  reify E (abs t)         = λ x → reify (x , E) t
-  reify E (app s t)       with Env-split E
-  ... | Eˢ , Eᵗ           = (reify Eˢ s) (reify Eᵗ t)
-  reify E (pair s t)      with Env-split E
-  ... | Eˢ , Eᵗ           = (reify Eˢ s , reify Eᵗ t)
-  reify E (case s t)      with Env-split E
-  ... | Eˢ , Eᵗ           = case (reify Eˢ s) of λ{ (x , y) → reify (x , y , Eᵗ) t }
-  reify (A , E) (weak t)  = reify E t
-  reify (A , E) (cont t)  = reify (A , A , E) t
-  reify E (exch {X} {Y} {Z} {W} t)        = reify (Env-exch {X} {Y} {Z} {W} E) t
+  reify : {A : Type} {X : List Type} → X ⊢ A → Ctxt ⟦ X ⟧ → ⟦ A ⟧
+  reify var         (A′ , ∅)  = A′
+  reify (abs t)     E         = λ A′ → reify t (A′ , E)
+  reify (app s t)   E         with Ctxt-split E
+  ... | Eˢ , Eᵗ               = (reify s Eˢ) (reify t Eᵗ)
+  reify (pair s t)  E         with Ctxt-split E
+  ... | Eˢ , Eᵗ               = (reify s Eˢ , reify t Eᵗ)
+  reify (case s t)  E         with Ctxt-split E
+  ... | Eˢ , Eᵗ               = case reify s Eˢ of λ{ (A′ , B′) → reify t (A′ , B′ , Eᵗ)}
+  reify (weak t)    (A′ , E)  = reify t E
+  reify (cont t)    (A′ , E)  = reify t (A′ , A′ , E)
+  reify (exch {X} {Y} {Z} {W} t)    E         = reify t (Ctxt-exch {X} {Y} {Z} {W} E)
 \end{code}
 
 \noindent
-Using this reification, we can define our originally intended
-translation function |[_]| for closed terms.
+We could see the type $Ctxt \ ⟦ X ⟧ → ⟦ A ⟧$ as Agda's notation of
+sequents, and, though in some cases it is more convenient to work on
+closed terms, we shall define the reification |[_]| as a function
+returning this type (as a simple alias).
 
 \begin{code}
-  [_] : ∀ {A} → ∅ ⊢ A → ⟦ A ⟧
-  [_] = reify ∅
+  [_] : {A : Type} {X : List Type} → X ⊢ A → (Ctxt ⟦ X ⟧ → ⟦ A ⟧)
+  [_] = reify
 \end{code}
 
 \noindent
-And translate our running example into Agda.
+We can translate our running example into Agda. Note that we insert
+the empty context, since our example is a closed term.
 
 \begin{code}
   swap′ : ∀ {A B} → ⟦ A ⟧ × ⟦ B ⟧ → ⟦ B ⟧ × ⟦ A ⟧
-  swap′ {A} {B} = [ swap {A} {B} ]
+  swap′ {A} {B} = [ swap {A} {B} ] ∅
 \end{code}

@@ -2,9 +2,9 @@
 %format ?0 = "\{\ \}0"
 %format ?1 = "\{\ \}1"
 
-%format Env-head   = head
-%format Env-insert = insert
-%format Env-exch   = exch
-%format Env-split  = split
+%format Ctxt-head   = head
+%format Ctxt-insert = insert
+%format Ctxt-exch   = exch
+%format Ctxt-split  = split
 
 

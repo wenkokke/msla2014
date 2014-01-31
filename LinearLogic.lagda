@@ -3,10 +3,10 @@
 
 \hidden{
 \begin{code}
-open import Level using (Level; _⊔_)
-open import Function using (case_of_)
+open import Function using (case_of_; _∘_)
 open import Data.List using (List; _++_; map) renaming (_∷_ to _,_; _∷ʳ_ to _,′_; [] to ∅)
 open import Data.List.Properties using (map-++-commute)
+open import Data.Product using () renaming (_×_ to _×′_)
 open import Relation.Binary.PropositionalEquality as PropEq using (_≡_; refl; sym; cong)
 \end{code}
 }
@@ -33,8 +33,8 @@ infix  4  _⊢_
 Moving down to multiplicative intuitionistic linear logic
 (\textbf{LP}) from our current implementation of \textbf{IL} is
 relatively simple. First we define a new model for our types, to match
-the conventions of linear logic. We have added bottom as we will need
-it later on.
+the conventions of linear logic (we are adding bottom as an atomic type
+here, as we will need it later on).
 
 \begin{code}
 data Type : Set where
@@ -256,15 +256,9 @@ translation is almost trivial.
 \hidden{
 \begin{code}
 open import IntuitionisticLogic U ⟦_⟧ᵁ as IL renaming (Type to TypeIL; _⊗_ to _×_)
-open IL.Explicit renaming (_⊢_ to _⊢IL_; ⟦_⟧ to ⟦_⟧IL; reify to reifyIL)
-\end{code}
-}
-
-\hidden{
-\begin{code}
-record Reify {a b : Level} (A : Set a) (B : Set b) : Set (a ⊔ b) where
-  field
-    ⟦_⟧ : A → B
+open IL.Explicit
+  hiding (swap; swap′)
+  renaming (_⊢_ to _⊢IL_; ReifyType to ReifyTypeIL; ReifyCtxt to ReiftCtxtIL; [_] to reifyIL)
 \end{code}
 }
 
@@ -305,15 +299,8 @@ context.
 
 \hidden{
 \begin{code}
-ReifyStruct : Reify (List Type) (List TypeIL)
-ReifyStruct = record { ⟦_⟧ = map ⟦_⟧ }
-\end{code}
-}
-
-\hidden{
-\begin{code}
-⟦X++Y⟧=⟦X⟧++⟦Y⟧ : ∀ X Y → ⟦ X ++ Y ⟧ ≡ ⟦ X ⟧ ++ ⟦ Y ⟧
-⟦X++Y⟧=⟦X⟧++⟦Y⟧ X Y = map-++-commute ⟦_⟧ X Y
+ReifyCtxt : Reify (List Type) (List TypeIL)
+ReifyCtxt = record { ⟦_⟧ = map ⟦_⟧ }
 \end{code}
 }
 
@@ -322,13 +309,20 @@ ReifyStruct = record { ⟦_⟧ = map ⟦_⟧ }
 ⟦_⟧ = map ⟦_⟧
 \end{spec}
 
+\hidden{
+\begin{code}
+⟦X++Y⟧=⟦X⟧++⟦Y⟧ : (X Y : List Type) → ⟦ X ++ Y ⟧ ≡ ⟦ X ⟧ ++ ⟦ Y ⟧
+⟦X++Y⟧=⟦X⟧++⟦Y⟧ X Y = map-++-commute ⟦_⟧ X Y
+\end{code}
+}
+
 \noindent
 Lastly, we define a translation from \textbf{LP} to \textbf{IL}. The
 translation is almost able to reconstruct the proof in \textbf{IL}
 verbatim, though we are omitting some minor details.\footnote{
   The problematic details have to do with the distribution of $⟦\_⟧$
   over contexts; we have to rewrite using a lemma that states that
-  $⟦X ++ Y⟧ = ⟦X⟧ ++ ⟦Y⟧$ for every binary rule.
+  $⟦X \plus Y⟧ ≡ ⟦X⟧ \plus ⟦Y⟧$ for every binary rule.
 }
 
 \begin{spec}
@@ -365,3 +359,21 @@ toIL (exch {X} {Y} {Z} {W} {A} t)  = lem4
                |  ⟦X++Y⟧=⟦X⟧++⟦Y⟧ Z W = lem3
 \end{code}
 }
+
+\noindent
+Then we can define the reification of closed terms into Agda by simple
+function composition.
+
+\begin{code}
+[_] : {A : Type} {X : List Type} → X ⊢ A → (Ctxt ⟦ ⟦ X ⟧ ⟧ → ⟦ ⟦ A ⟧ ⟧)
+[_] = reifyIL ∘ toIL
+\end{code}
+
+
+\noindent
+And again, we can reify our (now linear) |swap| function back into Agda.
+
+\begin{code}
+swap′ : {A B : Type} → ⟦ ⟦ A ⟧ ⟧ ×′ ⟦ ⟦ B ⟧ ⟧ → ⟦ ⟦ B ⟧ ⟧ ×′ ⟦ ⟦ A ⟧ ⟧
+swap′ {A} {B} = [ swap {A} {B} ] ∅
+\end{code}

@@ -5,8 +5,9 @@
 %format  ⊗   = "\times"
 %format _⊗_  = "\_\!\!\times\!\!\_"
 
-%format Vec.lookup = lookup
-%format Vec-exch   = exch
+%format Vec.lookup  = lookup
+%format Vec-exch    = exch
+%format Product.map = map
 
 %format TypeIL = Type "^{IL}"
 %format ⊢IL = ⊢ "^{IL}"

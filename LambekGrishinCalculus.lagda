@@ -5,6 +5,7 @@
 \begin{code}
 open import Data.List using (List; _++_) renaming (_∷_ to _,_; _∷ʳ_ to _,′_; [] to ∅)
 open import Data.Sum using (_⊎_; inj₁; inj₂)
+open import Data.Product using (∃; _,_)
 open import Relation.Nullary using (Dec; yes; no)
 open import Relation.Nullary.Decidable using (True; toWitness)
 open import Relation.Binary.PropositionalEquality as PropEq using (_≡_; refl; sym; cong)
@@ -16,6 +17,33 @@ open import Relation.Binary.PropositionalEquality as PropEq using (_≡_; refl; 
 module LambekGrishinCalculus (U : Set) (R : U) (⟦_⟧ᵁ : U → Set) where
 \end{code}
 }
+
+
+The Lambek-Grishin calculus is a symmetric version of the Lambek
+calculus. This means that in addition to left and right implication
+and conjunction, we add left and right difference (the operator dual
+to implication) and disjunction.
+From a linguistic perspective, the basic inference rules for these
+connectives, together with a set of interaction principles, allows for
+the treatment of patterns beyond the context-free, which cannot be
+satisfactorily handled in the Lambek calculus \citep{moortgat2013}.
+
+The formulation of the Lambek-Grishin calculus that we will formalize
+is the formulation developed in \citet{moortgat2013}, which uses the
+mechanisms of polarity and focusing \citep{andreoli1992} together with
+concepts from display logics \citep{belnap1982} to ensure, amongst
+others, that all proofs are in normal form.
+Below we will discuss the roles the influences play in our model of
+the Lambek-Grishin calculus in turn.
+
+Since this paper is not by far a complete discussion of the
+Lambek-Grishin calculus, we must refer the interested reader to
+\citet{moortgat2013} and \citet{bastenhof2010}.
+
+\subsection{Modeling a polarized logic}
+
+The Lambek-Grishin calculus as developed in \citet{moortgat2013} is a
+polarized logic. Therefore, we will have to define a notion of polarity.
 
 \hidden{
 \begin{code}
@@ -44,6 +72,10 @@ _≟ᴾ_ : (p q : Polarity) → Dec (p ≡ q)
 \end{code}
 }
 
+\noindent
+Using this definition, we can define our types, assigning a polarity
+to atomic type.
+
 %<*type>
 \begin{code}
 data Type : Set where
@@ -56,6 +88,12 @@ data Type : Set where
   _⇛_  : Type → Type → Type
 \end{code}
 %</type>
+
+\noindent
+While the atomic types are assigned a polarity, the polarity of
+complex types is implicit in the connectives. We shall therefore
+define a pair of predicates that have inhabitants only if their
+argument is a positive or negative type.
 
 %<*pos>
 \begin{code}
@@ -105,7 +143,10 @@ Neg? (A ⇛ B) = no (λ ())
 \end{code}
 }
 
-\hidden{
+\noindent
+We can trivially show that polarity is a decidable property, and that
+every type is either positive or negative.
+
 \begin{code}
 Pol? : ∀ A → Pos A ⊎ Neg A
 Pol? (el A +)  = inj₁ (el A)
@@ -117,7 +158,17 @@ Pol? (A ⊕ B)   = inj₂ (A ⊕ B)
 Pol? (A ⇒ B)  = inj₂ (A ⇒ B)
 Pol? (A ⇐ B)  = inj₂ (A ⇐ B)
 \end{code}
-}
+
+
+
+\subsection{Modeling a display calculus}
+
+Since the Lambek-Grishin calculus is a display calculus, we will also
+have to model polarized structures (positive/input structures for the
+antacedent, negative/output structures for the succedent).
+In this case, the formulas that can appear as arguments to a
+connective are actually limited by their polarity, so we can encode
+the polarities at the type-level.
 
 %<*struct>
 \begin{code}
@@ -136,8 +187,30 @@ mutual
 \end{code}
 %</struct>
 
+\noindent
+As a consequence of this, we do not have to bother with predicates for
+polarity in the case of structures, as a structure's polarity is
+immediately obvious from its type.
+
+
+\subsection{Modeling a focused logic}
+
 \begin{code}
 mutual
+  data _⊢[_] : Struct+ → Type → Set where
+    var    : ∀ {A} → · A · ⊢[ A ]
+    μ      : ∀ {X A} {p : True (Neg? A)} → X ⊢ · A · → X ⊢[ A ]
+    ⊗R     : ∀ {X Y A B} → X ⊢[ A ] → Y ⊢[ B ] → X ⊗ Y ⊢[ A ⊗ B ]
+    ⇚R    : ∀ {X Y A B} → X ⊢[ A ] → [ B ]⊢ Y → X ⇚ Y ⊢[ A ⇚ B ]
+    ⇛R    : ∀ {X Y A B} → [ A ]⊢ X → Y ⊢[ B ] → X ⇛ Y ⊢[ A ⇛ B ]
+
+  data [_]⊢_ : Type → Struct- → Set where
+    covar  : ∀ {A} → [ A ]⊢ · A ·
+    μ̃      : ∀ {X A} {p : True (Pos? A)} → · A · ⊢ X → [ A ]⊢ X
+    ⊕L     : ∀ {X Y A B} → [ A ]⊢ Y → [ B ]⊢ X → [ A ⊕ B ]⊢ X ⊕ Y
+    ⇒L    : ∀ {X Y A B} → X ⊢[ A ] → [ B ]⊢ Y → [ A ⇒ B ]⊢ X ⇒ Y
+    ⇐L    : ∀ {X Y A B} → [ A ]⊢ Y → X ⊢[ B ] → [ A ⇐ B ]⊢ Y ⇐ X
+
   data _⊢_ : Struct+ → Struct- → Set where
     μ*     : ∀ {X A} {p : True (Pos? A)} → X ⊢[ A ] → X ⊢ · A ·
     μ̃*     : ∀ {X A} {p : True (Neg? A)}→ [ A ]⊢ X → · A · ⊢ X
@@ -159,20 +232,6 @@ mutual
     dist₂  : ∀ {X Y Z W} → X ⊗ Y ⊢ Z ⊕ W → Y ⇚ W ⊢ X ⇒ Z
     dist₃  : ∀ {X Y Z W} → X ⊗ Y ⊢ Z ⊕ W → Z ⇛ X ⊢ W ⇐ Y
     dist₄  : ∀ {X Y Z W} → X ⊗ Y ⊢ Z ⊕ W → Z ⇛ Y ⊢ X ⇒ W
-
-  data _⊢[_] : Struct+ → Type → Set where
-    var    : ∀ {A} → · A · ⊢[ A ]
-    μ      : ∀ {X A} {p : True (Neg? A)} → X ⊢ · A · → X ⊢[ A ]
-    ⊗R     : ∀ {X Y A B} → X ⊢[ A ] → Y ⊢[ B ] → X ⊗ Y ⊢[ A ⊗ B ]
-    ⇚R    : ∀ {X Y A B} → X ⊢[ A ] → [ B ]⊢ Y → X ⇚ Y ⊢[ A ⇚ B ]
-    ⇛R    : ∀ {X Y A B} → [ A ]⊢ X → Y ⊢[ B ] → X ⇛ Y ⊢[ A ⇛ B ]
-
-  data [_]⊢_ : Type → Struct- → Set where
-    covar  : ∀ {A} → [ A ]⊢ · A ·
-    μ̃      : ∀ {X A} {p : True (Pos? A)} → · A · ⊢ X → [ A ]⊢ X
-    ⊕L     : ∀ {X Y A B} → [ A ]⊢ Y → [ B ]⊢ X → [ A ⊕ B ]⊢ X ⊕ Y
-    ⇒L    : ∀ {X Y A B} → X ⊢[ A ] → [ B ]⊢ Y → [ A ⇒ B ]⊢ X ⇒ Y
-    ⇐L    : ∀ {X Y A B} → [ A ]⊢ Y → X ⊢[ B ] → [ A ⇐ B ]⊢ Y ⇐ X
 \end{code}
 
 \begin{code}
@@ -188,8 +247,10 @@ lower = ⇚L (dres₂ (dres₃ (μ* (⇛R covar var))))
 
 \hidden{
 \begin{code}
-open import LinearLogic U R ⟦_⟧ᵁ as LP
-  renaming (Type to TypeLP; _⊢_ to _⊢LP_; reify to reifyLP)
+import IntuitionisticLogic U ⟦_⟧ᵁ as IL
+open IL.Explicit hiding (_⊢_; reify)
+import LinearLogic U R ⟦_⟧ᵁ as LP
+open LP renaming (Type to TypeLP; _⊢_ to _⊢LP_)
 \end{code}
 }
 
@@ -342,6 +403,10 @@ mutual
   reifyˡ (⇐L {X} {Y} {A} {B} s t) = pair (reifyˡ s) (reifyʳ t)
 \end{code}
 }
+
+\begin{code}
+
+\end{code}
 
 %%% Local Variables:
 %%% mode: latex

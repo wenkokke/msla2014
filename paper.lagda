@@ -30,6 +30,7 @@ module paper where
 }
 
 \section{Introduction}
+\label{sec:Introduction}
 
 You can find implementations of the simply-typed lambda calculus in
 Agda all across the web---for instance, the implementations by
@@ -67,9 +68,9 @@ use Agda's built-in mechanisms for reduction and evaluation.
 
 In this paper we will examine the use of such models when analysing
 substructural logics such as linear logic and the Lambek-Grishin calculus.
-In addition, we present an implementation of the \emph{CPS}-interpretation
-of the Lambek-Grishin calculus as developed in \citet{moortgat2013}.
-
+In addition, we present an implementation and verification of the
+CPS-interpretation of the Lambek-Grishin calculus as developed in
+\citet{moortgat2013}.
 
 Since this paper by no means a complete introduction to Agda or to
 dependently-typed programming, we advise the interested reader to
@@ -79,7 +80,7 @@ website.\footnote{
   See \url{http://wiki.portal.chalmers.se/agda/pmwiki.php?n=Main.Othertutorials}.
 }
 
-Before we start off, it should be mentioned that (although we hide
+Before we start off, it should be mentioned that (although we omit
 some of the more tedious parts) this paper is literate Agda. The code
 is available on GitHub.\footnote{
   See \url{https://github.com/pepijnkokke/SubstructuralLogicsInAgda}.
@@ -90,10 +91,56 @@ is available on GitHub.\footnote{
 \section{Motivation}
 \label{sec:Motivation}
 
-\todo{forces you to make a logic concrete---no hand-waving is allowed;}
-\todo{allows you to use the Agda proof assistent to write proofs;}
-\todo{can catch errors in your logic;}
-\todo{gives you an implementation of your calculus in addition to a proof of its validity.}
+This paper has three main contributions; we will present
+\begin{itemize}
+\item an investigation into the modeling of logics in Agda;
+\item an investigation into the modeling of \emph{substructural}
+  logics in Agda;
+\item and a verification of linear logic and the Lambek-Grishin
+  calculus and their translations into the intuitionistic calculus.
+\end{itemize}
+Therefore it is not absurd to motivate these contributions separately.
+
+First of all, why should we attempt to model logics at all? In our
+opinion there are several good reasons.
+Creating a formal model of a logical system forces you to make every
+detail of the system explicit. Not only may this help you by
+revealing small errors that would otherwise have gone unnoticed, but
+it also forces you to scrutinise the precise formulation of your
+axiomas.\footnote{
+  An example: a common formulation of the exchange principle is
+  $\Gamma , B , A , \Delta \vdash C \to \Gamma A, B , \Delta \vdash
+  C$. However, using this principle to define, for instance, the
+  swapping of two contexts $\Delta , \Gamma \vdash A \to \Gamma ,
+  \Delta \vdash A$ is quadratic in the lengths of $\Gamma$ and $\Delta$.
+}
+Another reason is that a model of a logical system in Agda is not only
+a proof of its sanity, but also a direct implementation, allowing you
+to compute directly with your system using proofs and inference rules
+as first-class citizens.
+
+Why then should we explore substructural logics in Agda?
+As discussed in \autoref{sec:Introduction}, most models of logic
+currently implemented in Agda are models of the intuitionistic
+calculus. The manner in which these models are implemented usually
+leaves structural rules implicit, which makes then unsuitable for
+modeling substructural logics.
+In recent years, however, substructural logics have seen a surge in
+fields as diverse as philosophy (relevant logics), linguistics (the
+Lambek calculus) and computing science (linear logic)
+\citep{restall2011}.
+If we create a model of a logic with certain behaviour (such as, e.g.
+linearity for linear logic), then we can be sure that, if we reify
+terms of this logic back into Agda, the corresponding Agda terms will
+share this behaviour.
+
+Finally, we would we choose to model the Lambek-Grishin calculus?
+The Lambek-Grishin calculus, especially the formulation that we
+present here, is quite a complex system. Therefore, we hope that our
+formalisation, as it makes everything explicit, can aid in the
+understanding of the workings of the calculus and its
+CPS-interpretation, especially for readers who come from a background
+of computer science.
 
 \section{Intuitionistic Logic}
 \label{sec:IntuitionisticLogic}
@@ -107,6 +154,9 @@ is available on GitHub.\footnote{
 \label{sec:LambekGrishinCalculus}
 \input{LambekGrishinCalculus}
 
+\section{Conclusion}
+
+\nocite{*}
 \bibliographystyle{apalike}
 \bibliography{paper}
 

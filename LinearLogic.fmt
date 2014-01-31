@@ -8,4 +8,7 @@
 %format ⊢IL = ⊢ "_{IL}"
 %format ⟧IL = ⟧ "^{IL}"
 
+%format reifyIL = [_] "^{IL}"
+%format x′ = x
+
 %format ⟦X++Y⟧=⟦X⟧++⟦Y⟧ = ⟦X "\!\!\plus\!\!" Y⟧=⟦X⟧ "\!\!\plus\!\!" ⟦Y⟧
