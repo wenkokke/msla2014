@@ -4,19 +4,24 @@ open import Data.Product using (∃; _,_)
 open import Relation.Nullary using (Dec; yes; no)
 open import Relation.Nullary.Decidable using (True; toWitness)
 open import Relation.Binary.PropositionalEquality as PropEq using (_≡_; refl; sym; cong)
+
 module LambekGrishinCalculus (U : Set) (R : U) (⟦_⟧ᵁ : U → Set) where
+
 infix  30 _⊗_ _⊕_
 infixr 20 _⇒_ _⇛_
 infixl 20 _⇐_ _⇚_
 infix  5  _⊢_ [_]⊢_ _⊢[_]
+
 data Polarity : Set where
   + : Polarity
   - : Polarity
+
 _≟ᴾ_ : (p q : Polarity) → Dec (p ≡ q)
 + ≟ᴾ + = yes refl
 + ≟ᴾ - = no (λ ())
 - ≟ᴾ + = no (λ ())
 - ≟ᴾ - = yes refl
+
 data Type : Set where
   el   : (A : U) → (p : Polarity) → Type
   _⊗_  : Type → Type → Type
@@ -25,11 +30,13 @@ data Type : Set where
   _⊕_  : Type → Type → Type
   _⇚_  : Type → Type → Type
   _⇛_  : Type → Type → Type
+
 data Pos : Type → Set where
   el : ∀ A → Pos (el A +)
   _⊗_ : ∀ A B → Pos (A ⊗ B)
   _⇚_ : ∀ B A → Pos (B ⇚ A)
   _⇛_ : ∀ A B → Pos (A ⇛ B)
+
 Pos? : ∀ A → Dec (Pos A)
 Pos? (el A +) = yes (el A)
 Pos? (el A -) = no (λ ())
@@ -39,11 +46,13 @@ Pos? (A ⇐ B) = no (λ ())
 Pos? (A ⊕ B) = no (λ ())
 Pos? (A ⇚ B) = yes (A ⇚ B)
 Pos? (A ⇛ B) = yes (A ⇛ B)
+
 data Neg : Type → Set where
   el : ∀ A → Neg (el A -)
   _⊕_ : ∀ A B → Neg (A ⊕ B)
   _⇒_ : ∀ A B → Neg (A ⇒ B)
   _⇐_ : ∀ B A → Neg (B ⇐ A)
+
 Neg? : ∀ A → Dec (Neg A)
 Neg? (el A +) = no (λ ())
 Neg? (el A -) = yes (el A)
@@ -53,6 +62,7 @@ Neg? (A ⇐ B) = yes (A ⇐ B)
 Neg? (A ⊕ B) = yes (A ⊕ B)
 Neg? (A ⇚ B) = no (λ ())
 Neg? (A ⇛ B) = no (λ ())
+
 Pol? : ∀ A → Pos A ⊎ Neg A
 Pol? (el A +)  = inj₁ (el A)
 Pol? (el A -)  = inj₂ (el A)
@@ -62,6 +72,7 @@ Pol? (A ⇛ B)  = inj₁ (A ⇛ B)
 Pol? (A ⊕ B)   = inj₂ (A ⊕ B)
 Pol? (A ⇒ B)  = inj₂ (A ⇒ B)
 Pol? (A ⇐ B)  = inj₂ (A ⇐ B)
+
 mutual
   data Struct+ : Set where
     ·_·  : Type → Struct+
@@ -74,6 +85,7 @@ mutual
     _⊕_  : Struct- → Struct- → Struct-
     _⇒_  : Struct+ → Struct- → Struct-
     _⇐_  : Struct- → Struct+ → Struct-
+
 mutual
   data _⊢[_] : Struct+ → Type → Set where
     var    : ∀ {A} → · A · ⊢[ A ]
@@ -110,15 +122,18 @@ mutual
     dist₂  : ∀ {X Y Z W} → X ⊗ Y ⊢ Z ⊕ W → Y ⇚ W ⊢ X ⇒ Z
     dist₃  : ∀ {X Y Z W} → X ⊗ Y ⊢ Z ⊕ W → Z ⇛ X ⊢ W ⇐ Y
     dist₄  : ∀ {X Y Z W} → X ⊗ Y ⊢ Z ⊕ W → Z ⇛ Y ⊢ X ⇒ W
+
 raise : ∀ {A B} → · A · ⊢ · (B ⇐ A) ⇒ B ·
 raise = ⇒R (res₂ (res₃ (μ̃* (⇐L covar var))))
 
 lower : ∀ {A B} → · B ⇚ (A ⇛ B) · ⊢ · A ·
 lower = ⇚L (dres₂ (dres₃ (μ* (⇛R covar var))))
+
 import IntuitionisticLogic U ⟦_⟧ᵁ as IL
 open IL.Explicit hiding (_⊢_; reify)
 import LinearLogic U R ⟦_⟧ᵁ as LP
 open LP renaming (Type to TypeLP; _⊢_ to _⊢LP_)
+
 mutual
   ⟦_⟧+ : Type → TypeLP
   ⟦ el A +  ⟧+ = el A
@@ -139,6 +154,7 @@ mutual
   ⟦ A ⊕ B   ⟧- = ⟦ A ⟧- ⊗ ⟦ B ⟧-
   ⟦ A ⇒ B  ⟧- = ⟦ A ⟧+ ⊗ ⟦ B ⟧-
   ⟦ A ⇐ B  ⟧- = ⟦ A ⟧- ⊗ ⟦ B ⟧+
+
 mutual
   str+ : Struct+ → List TypeLP
   str+ (· A ·)   = ⟦ A ⟧+ , ∅
@@ -152,6 +168,7 @@ mutual
   str- (A ⇒ B)  = str+ A ++ str- B
   str- (A ⇐ B)  = str- A ++ str+ B
 
+
 private
   open Reify {{...}} using (⟦_⟧)
 
@@ -160,6 +177,7 @@ Struct+Reify = record { ⟦_⟧ = str+ }
 
 Struct-Reify : Reify Struct- (List TypeLP)
 Struct-Reify = record { ⟦_⟧ = str- }
+
 Neg-≡ : ∀ {A} → Neg A → ⟦ A ⟧+ ≡ ⟦ A ⟧- ⊸ ⊥
 Neg-≡ {.(el A -)} (el A) = refl
 Neg-≡ {.(A ⊕ B)} (A ⊕ B) = refl
@@ -171,6 +189,7 @@ Pos-≡ {.(el A +)} (el A) = refl
 Pos-≡ {.(A ⊗ B)} (A ⊗ B) = refl
 Pos-≡ {.(A ⇚ B)} (A ⇚ B) = refl
 Pos-≡ {.(A ⇛ B)} (A ⇛ B) = refl
+
 mutual
   reify  : ∀ {X Y} → X ⊢ Y → ⟦ X ⟧ ++ ⟦ Y ⟧ ⊢LP ⊥
   reify (μ* {X} {A} {p} t) rewrite Pos-≡ (toWitness p) = to-front (app var (reifyʳ t))
@@ -207,4 +226,6 @@ mutual
   reifyˡ (⊕L {X} {Y} {A} {B} s t) = YX↝XY ⟦ X ⟧ ⟦ Y ⟧ (pair (reifyˡ s) (reifyˡ t))
   reifyˡ (⇒L {X} {Y} {A} {B} s t) = pair (reifyʳ s) (reifyˡ t)
   reifyˡ (⇐L {X} {Y} {A} {B} s t) = pair (reifyˡ s) (reifyʳ t)
+
+
 
