@@ -19,7 +19,7 @@
 
 #### Technical Details
 
-This repository contains the sources for the *[Modelling Substructural Logics in Agda](/paper.pdf)*.
+This repository contains the sources for the *[Modelling Substructural Logics in Agda](/paper.pdf?raw=true)*.
 The `paper` sub-directory contains the literate Agda files that make up the paper.
 The `code` sub-directory contains the extracted Agda source code.
 
