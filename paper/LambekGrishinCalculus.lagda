@@ -3,6 +3,7 @@
 
 \hidden{
 \begin{code}
+open import Function using (_∘_)
 open import Data.List using (List; _++_) renaming (_∷_ to _,_; _∷ʳ_ to _,′_; [] to ∅)
 open import Data.Sum using (_⊎_; inj₁; inj₂)
 open import Data.Product using (∃; _,_)
@@ -49,7 +50,7 @@ polarized logic. Therefore, we will have to define a notion of polarity.
 
 \hidden{
 \begin{code}
-infix  30 _⊗_ _⊕_
+infixr 30 _⊗_ _⊕_
 infixr 20 _⇒_ _⇛_
 infixl 20 _⇐_ _⇚_
 infix  5  _⊢_ [_]⊢_ _⊢[_]
@@ -294,6 +295,16 @@ lower = ⇚L (dres₂ (dres₃ (μ* (⇛R covar var))))
 \end{code}
 
 
+
+\hidden{
+\begin{code}
+import IntuitionisticLogic U ⟦_⟧ᵁ as IL
+open IL.Explicit hiding ([_]; _⊢_; reify)
+import LinearLogic U R ⟦_⟧ᵁ as LP
+open LP renaming (Type to TypeLP; _⊢_ to _⊢LP_; [_] to reifyLP)
+\end{code}
+}
+
 \subsection{Reification into LP}
 
 Finally, we will present the reification of \textbf{LG} terms into
@@ -301,15 +312,6 @@ Finally, we will present the reification of \textbf{LG} terms into
 \autoref{sec:reifylp2il}. Since \textbf{LG} is a classical logic, in
 the sense that every connective has a dual, we cannot give it a direct
 interpretation in the intuitionistic \textbf{LP}.
-
-\hidden{
-\begin{code}
-import IntuitionisticLogic U ⟦_⟧ᵁ as IL
-open IL.Explicit hiding (_⊢_; reify)
-import LinearLogic U R ⟦_⟧ᵁ as LP
-open LP renaming (Type to TypeLP; _⊢_ to _⊢LP_)
-\end{code}
-}
 
 \begin{code}
 mutual
@@ -334,7 +336,8 @@ mutual
   ⟦ A ⇐ B  ⟧- =      ⟦ A ⟧- ⊗ ⟦ B ⟧+
 \end{code}
 
-\begin{code}
+\hidden{
+\begin{spec}
 mutual
   ⟦_⟧+ : Struct+ → List TypeLP
   ⟦ · A ·   ⟧+ = ⟦ A ⟧+ , ∅
@@ -347,7 +350,8 @@ mutual
   ⟦ X ⊕ Y   ⟧- = ⟦ X ⟧- ⊗ ⟦ Y ⟧-
   ⟦ X ⇒ Y  ⟧- = ⟦ X ⟧+ ⊗ ⟦ Y ⟧-
   ⟦ X ⇐ Y  ⟧- = ⟦ X ⟧- ⊗ ⟦ Y ⟧+
-\end{code}
+\end{spec}
+}
 
 \hidden{
 \begin{code}
@@ -377,6 +381,9 @@ Struct+Reify = record { ⟦_⟧ = str+ }
 
 Struct-Reify : Reify Struct- (List TypeLP)
 Struct-Reify = record { ⟦_⟧ = str- }
+
+TypeReify : Reify Type Set
+TypeReify = record { ⟦_⟧ = λ A → ⟦ ⟦ ⟦ A ⟧+ ⟧ ⟧ }
 \end{code}
 }
 
@@ -465,7 +472,8 @@ mutual
 }
 
 \begin{code}
-
+[_] : ∀ {X A} → X ⊢[ A ] → (Ctxt ⟦ ⟦ ⟦ X ⟧ ⟧ ⟧ → ⟦ A ⟧)
+[_] = reifyLP ∘ reifyʳ
 \end{code}
 
 %%% Local Variables:

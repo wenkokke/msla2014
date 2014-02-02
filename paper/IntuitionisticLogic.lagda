@@ -119,8 +119,7 @@ In addition, we will abstract over some type $U$. The reason for
 this is that we do not want to be forced to specify the atomic
 types---instead we shall allow the user to provide their own universe
 of atomic types.\footnote{
-  For an example of this, see \todo{make a link and, y'know, a section
-  with an actual example of this.}
+  For an example of this, see \autoref{sec:example}.
 }
 
 
@@ -460,8 +459,8 @@ to encode our contexts.
 \end{code}
 
 \noindent
-Using this definition, our representation of sequents in Agda is the
-type $Ctxt \ ⟦ X ⟧ → ⟦ A ⟧$.
+Using this definition, our representation of a sequent $X ⊢ A$ in Agda
+will be the type $Ctxt \ ⟦ X ⟧ → ⟦ A ⟧$.
 
 Next we need a few simple function to work with these
 contexts. Specifically, an |exch| function, which applies our exchange
@@ -520,7 +519,7 @@ context. For binary rules we split the context, and pass pass the
 parts down the corresponding branches of the reification.
 
 \begin{code}
-  reify : {A : Type} {X : List Type} → X ⊢ A → Ctxt ⟦ X ⟧ → ⟦ A ⟧
+  reify : {A : Type} {X : List Type} → X ⊢ A → (Ctxt ⟦ X ⟧ → ⟦ A ⟧)
   reify var         (A′ , ∅)  = A′
   reify (abs t)     E         = λ A′ → reify t (A′ , E)
   reify (app s t)   E         with Ctxt-split E

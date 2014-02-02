@@ -180,6 +180,112 @@ literate Agda. The code is available on GitHub.\footnote{
 \label{sec:LambekGrishinCalculus}
 \input{LambekGrishinCalculus}
 
+\subsection{Examples from natural language}
+\label{sec:example}
+%include LambekGrishinCalculus.fmt
+
+\hidden{
+\begin{code}
+open import Data.Bool using (Bool; not; _∨_; _∧_)
+open import Data.Nat using (ℕ)
+open import Data.Fin using (Fin; suc; zero)
+open import Data.List using (List; _++_) renaming (_∷_ to _,_; [] to ∅)
+open import Data.Product using (_×_; _,_)
+
+_⊃_ : Bool → Bool → Bool
+x ⊃ y = (not x) ∨ y
+\end{code}
+}
+
+In this final section we will present a demonstration of using our
+model of \textbf{LG}. We will derive the denotation of an example
+sentence.
+
+\begin{center}
+\textit{``Everyone finds some unicorn.''}
+\end{center}
+
+\noindent
+First, we define a couple of meaning postulates. For brevity's sake,
+we will also postulate the existence of an |Entity| type with the
+corresponding universal and existential quantifiers, though we could
+trivially define this ourselves.
+
+\begin{code}
+postulate
+  Entity   : Set
+  FORALL   : (Entity → Bool) → Bool
+  EXISTS   : (Entity → Bool) → Bool
+  PERSON   : Entity → Bool
+  FIND     : Entity → Entity → Bool
+  UNICORN  : Entity → Bool
+\end{code}
+
+\noindent
+Secondly, we must define our type universe. In this case we will
+define it to be the usual set of atomic syntactic types.
+
+\begin{code}
+data U : Set where S N NP : U
+
+⟦_⟧ᵁ : U → Set
+⟦ S   ⟧ᵁ = Bool
+⟦ N   ⟧ᵁ = Entity → Bool
+⟦ NP  ⟧ᵁ = Entity
+\end{code}
+
+\hidden{
+\begin{code}
+import IntuitionisticLogic U ⟦_⟧ᵁ as IL
+open import LinearLogic U S ⟦_⟧ᵁ as LP using ()
+open import LambekGrishinCalculus U S ⟦_⟧ᵁ as LG
+open IL.Explicit.Reify TypeReify
+\end{code}
+}
+
+\noindent
+Next, we define our lexicon. The entries of our lexicon are lambda
+terms that implement the translations of their syntactic types.
+
+\begin{code}
+everyone  : ⟦ (el NP + ⇐ el N +) ⊗ el N + ⟧
+everyone  = ( (λ{ (A , B) → FORALL (λ x → B x ⊃ A x) }) , PERSON )
+finds     : ⟦ (el NP + ⇒ el S -) ⇐ el NP + ⟧
+finds     = λ{ ((x , k) , y) → k (FIND y x) }
+some      : ⟦ el NP + ⇐ el N + ⟧
+some      = λ{ (A , B) → EXISTS (λ x → A x ∧ B x) }
+unicorn   : ⟦ el N + ⟧
+unicorn   = UNICORN
+\end{code}
+
+\noindent
+Last, since we have not yet proven decidability, we have to give a
+proof that our sentence structure is syntactically correct.
+
+\begin{code}
+sent :
+  · (el NP + ⇐ el N +) ⊗ el N +         -- everyone
+  · ⊗ (· (el NP + ⇒ el S -) ⇐ el NP +  -- finds
+  · ⊗ (· el NP + ⇐ el N +               -- some
+  · ⊗ · el N + ·                         -- unicorn
+  )) ⊢[ el S - ]
+sent =
+  μ (res₃ (⊗L (res₃ (μ̃* (⇐L (
+    μ̃ (res₄ (res₁ (res₁ (res₃ (μ̃* (⇐L (
+      μ̃ (res₂ (res₃ (μ̃* (⇐L (⇒L var covar) var))))) var))))))) var)))))
+\end{code}
+
+\noindent
+With all these components, we can finally compute the meaning of our
+sentence, leaving our meaning postulates unevaluated as usual.
+
+\begin{spec}
+  [ sent ] (everyone , finds , some , unicorn , ∅) ↝β
+    λ k → FORALL (λ x → PERSON x ⊃ (EXISTS (λ y → k (FINDS y x) ∧ UNICORN y)))
+\end{spec}
+
+
+
 \section{Future work}
 
 \paragraph{Reification of properties.}
@@ -211,6 +317,8 @@ Since Agda supports the extraction of programs into several languages
 optimised Haskell library for \textbf{LG} (and its use in natural
 language processing) from our implementation.
 
+
+
 \section{Conclusion}
 
 We have presented the reader with several models of intuitionistic
@@ -218,6 +326,8 @@ logic, and examined several models for substructural logics (linear
 logic and the Lambek-Grishin calculus).
 We have shown how proofs in these models can be given an
 interpretation in Agda through reification and translation.
+And, last, we have demonstrated the usage of our models in an example
+taken from formal linguistics.
 
 \nocite{*}
 \bibliographystyle{apalike}
