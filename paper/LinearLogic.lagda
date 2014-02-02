@@ -31,11 +31,10 @@ infix  4  _⊢_
 \subsection{Moving down to linear logic}
 
 As we have taken care to make all structural rules explicit, moving
-down to (multiplicative) intuitionistic linear logic (\textbf{LP}) from
-our current model of \textbf{IL} is trivial.
-As a first step we define a new model for our types, to match
-the conventions of linear logic (we are adding bottom as an atomic type
-here, as we will need it later on).
+down to intuitionistic linear logic (\textbf{LP}) from our current
+model of \textbf{IL} is trivial. As a first step we define a new model
+for our types, to match the conventions of linear logic (we are adding
+bottom as an atomic type here, as we will need it later on).
 
 \begin{code}
 data Type : Set where
@@ -262,7 +261,6 @@ ReifyType = record { ⟦_⟧ = ⟦_⟧ }
 \end{code}
 }
 
-\noindent
 We first define a translation of our types into the types of
 \textbf{IL}. Note that we have abstracted over an element of the
 user-provided type universe $U$---called $R$---to which we will map
@@ -315,7 +313,7 @@ verbatim, though we are omitting some minor details.\footnote{
   The problematic details have to do with the application of $⟦\_⟧$
   to contexts; we have to rewrite using a lemma that states that
   $⟦X \plus Y⟧ ≡ ⟦X⟧ \plus ⟦Y⟧$, i.e.\ that our translation commutes
-  over context concatination, for every binary rule.
+  over context concatenation, for every binary rule.
 }
 
 \begin{spec}

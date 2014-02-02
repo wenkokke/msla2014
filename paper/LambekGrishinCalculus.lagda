@@ -47,7 +47,7 @@ Lambek-Grishin calculus, we refer the interested reader to
 \label{sec:polarity}
 
 The Lambek-Grishin calculus as developed in \citet{moortgat2013} is a
-polarized logic. Therefore, we will have to define a notion of polarity.
+polarised logic. Therefore, we will have to define a notion of polarity.
 
 \hidden{
 \begin{code}
@@ -178,8 +178,8 @@ For instance, the full type of the \textmu-rule (see
 The idea behind this type is that, since we know that the decision
 procedure |Neg?| terminates, we can run it during type-checking to see
 if we can construct a witness of |Neg A|. If we can, |True (Neg? A)|
-reduces to to the unit type $\top$, and is trivially inferred; if we
-cannot, it to the empty type $\bot$---for which we know that we
+reduces to to the unit type $\top$, and its value is trivially inferred; if we
+cannot, it reduces to the empty type $\bot$---for which we know that we
 cannot construct an inhabitant---and a type-error is raised.\footnote{
   See \url{http://agda.github.io/agda-stdlib/html/Relation.Nullary.Decidable.html\#783}
   for the complete implementation.
@@ -190,8 +190,8 @@ cannot construct an inhabitant---and a type-error is raised.\footnote{
 \label{sec:display}
 
 Since the Lambek-Grishin calculus is a display calculus, we will also
-have to model polarized structures (positive/input structures for the
-antacedent, negative/output structures for the succedent).
+have to model polarised structures (positive/input structures for the
+antecedent, negative/output structures for the succedent).
 In this case, the formulas that can appear as arguments to a
 connective are actually limited by their polarity, so we can encode
 the polarities at the type-level.
@@ -218,7 +218,7 @@ As a consequence of this, we do not have to bother with predicates for
 polarity in the case of structures, as a structure's polarity is
 immediately obvious from its type.
 
-As \textbf{LG} is formulated as a diplay logic, we define a left and
+As \textbf{LG} is formulated as a display logic, we define a left and
 a right inference rule for each connective, where the one is a rule
 that simply structuralises the formula, and the other eliminates the
 connective when it appears as the outermost connective on both sides.
@@ -238,7 +238,7 @@ rules for $\_\!\otimes\!\_$ are presented below.
 
 Since \textbf{LG} is a focused calculus, and thus has several kinds of
 sequents, we will have to define its inference rules in several
-datatypes. Every inference rule is defined in the datatype
+data types. Every inference rule is defined in the data type
 corresponding to the sequent-type of its conclusion.
 
 Though it is a bit verbose, due to \textbf{LG}'s many inference rules,
@@ -246,7 +246,7 @@ we would like to present the reader with the complete definition
 below.
 
 Note we use the technique discussed in \autoref{sec:polarity} to
-restrict the applications of $\tilde{mu}$ and $\mu*$ to the cases
+restrict the applications of $\tilde{\mu}$ and $\mu*$ to the cases
 where $A$ is positive and of $\mu$ and $\tilde{\mu}*$ those where $A$
 is negative. We will discuss the motives behind this in
 \autoref{sec:reifylg2lp}.
@@ -291,7 +291,7 @@ mutual
 \end{code}
 
 \noindent
-Since we have dropped exchange, we will have to let go of our running
+As we have dropped exchange, we will have to let go of our running
 example. Instead we will present the proof of the law of raising, and
 its dual law of lowering.
 
@@ -318,7 +318,7 @@ open LP renaming (Type to TypeLP; _⊢_ to _⊢LP_; [_] to reifyLP)
 \label{sec:reifylg2lp}
 
 Finally, we will present the reification of \textbf{LG} terms into
-\textbf{LP}, as we did for \textbf{LP} in
+\textbf{LP}, as we did for \textbf{LP} to \textbf{IL} in
 \autoref{sec:reifylp2il}. Since \textbf{LG} is a classical logic, in
 the sense that every connective has a dual, we cannot give it a direct
 interpretation in the intuitionistic \textbf{LP}.
@@ -326,7 +326,7 @@ interpretation in the intuitionistic \textbf{LP}.
 The term language of \textbf{LG}, however, is a refinement of the
 $\bar{\lambda}\mu\tilde{\mu}$-calculus as developed in
 \citet{curien2000}, which has a known computational interpretation
-through translation to the \citeauthor{parigot1992}'s
+through translation to \citeauthor{parigot1992}'s
 $\lambda\mu$-calculus. Therefore, we can give an interpretation
 through a CPS-translation.
 
@@ -334,7 +334,9 @@ Below we formalise the CPS-translation of \textbf{LG} as presented in
 \citet{moortgat2013}. The idea of the CPS-translation is to interpret
 all connectives as a conjunctions, and use the polarities of the
 connectives and their argument positions to guide the introduction of
-negations---i.e.\ when to introduce continuations.
+negations---when the natural polarity of an argument position clashes
+with the polarity of its inhabitant, we lift the inhabitant's type to
+a continuation.
 
 \begin{code}
 mutual
@@ -420,21 +422,23 @@ Pos-≡ {.(A ⇛ B)} (A ⇛ B) = refl
 
 Below we will present an implementation of the reification function
 up to exchange (that is, we do not show applications of the exchange
-princple).
+principle).
+
 As we stated above, we interpret all connectives as pairs. Therefore,
 all left and right rules are interpreted as $⊗$-introduction or
 $⊗$-elimination.
+
 The $\mu$- and $\tilde{\mu}$-rules are translated as lambda
 abstractions, and the $\mu*$ and $\tilde{\mu}$-rules are translated as
 applications. However, if you look closely at the types, you will
-notice that the types $\mu$ and $\tilde{\mu}$ are translated to are
-not function types---and neither are the types for the first arguments
-of $\mu*$ or $\tilde{\mu}$. This is where the polarity restrictions
-come in: we restrict the application of these rules to a certain
-polarity, so we can later use this fact to prove that a clash in
-polarities \emph{must} occur during the CPS-translation, and therefore
-that a function-type \emph{must} be generated, using the following
-lemmas.
+notice that the sequents $\mu$ and $\tilde{\mu}$ are translated to do
+not necessarily derive function types---and neither do the sequents for
+the first arguments of $\mu*$ or $\tilde{\mu}$. This is where the
+polarity restrictions come in: we restrict the application of these
+rules to a certain polarity, so we can later use this fact to prove
+that a clash in polarities \emph{must} occur during the
+CPS-translation, and therefore that a function-type \emph{must} be
+generated, using the following lemmas.
 
 \begin{spec}
   Neg-≡  : Neg A  → ⟦ A ⟧+  ≡ ⟦ A ⟧-  ⊸ ⊥
@@ -442,7 +446,7 @@ lemmas.
 \end{spec}
 
 \noindent
-Lastly, variables and covariables are simply translated as
+Lastly, variables and co-variables are both simply translated as
 variables.\footnote{
   In \citet{moortgat2013}, applications of the |var| and |covar| rules
   is also limited to certain polarities. However, we do not need this
@@ -521,8 +525,8 @@ mutual
 }
 
 \noindent
-Finally we can now define the function for CPS-interpretation of
-\textbf{LG} by composition.
+Using the above definition, we can now define the function for
+CPS-interpretation of \textbf{LG} by composition.
 
 \begin{code}
 [_] : ∀ {X A} → X ⊢[ A ] → (Ctxt ⟦ X ⟧ → ⟦ A ⟧)

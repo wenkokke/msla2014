@@ -12,15 +12,20 @@
 \maketitle
 
 \begin{abstract}
-Bacon ipsum dolor sit amet bacon capicola flank rump pork chop in, strip steak
-shankle commodo aliqua turducken sunt ground round. Sed tempor fugiat, short
-loin exercitation sausage tenderloin shankle nulla hamburger venison. Qui
-proident strip steak ut fatback commodo chuck sunt ut pork loin aute. Id in
-doner laboris, short ribs ut short loin laborum pastrami ad capicola t-bone
-sirloin. Ham meatloaf laborum reprehenderit, jerky ut in pork loin ad aliquip
-tail. Cow ut kevin landjaeger, spare ribs eu filet mignon tri-tip meatloaf
-voluptate. Venison laborum tail, eiusmod deserunt rump landjaeger corned beef
-non labore aliqua jowl tempor.
+In this paper, we will examine models of substructural logics in
+Agda. The reason for this is that most existing models formalise
+intuitionistic logic and are entirely unsuitable to modelling
+substructural logics. In recent years, however, substructural logics
+have seen a surge in usage.
+
+Concretely we present the reader with an explicit model of
+intuitionistic logic, and derive models for linear logic and the
+Lambek-Grishin calculus. In addition, we show how to reify proofs in
+these logics into terms in Agda. All this is implemented as an Agda
+library, which is made available on GitHub.
+
+Finally we conclude with an example from formal linguistics in which
+we demonstrate one possible usage of our implemented Agda library.
 \end{abstract}
 
 \hidden{
@@ -37,7 +42,7 @@ Agda all across the web---for instance, the implementations by
 \citet{mazzoli2013}, \citet{erdi2013} or \citet{mu2008}. It is used
 as a running example in \citeauthor{norell2009}'s \emph{Introduction
 to  Agda}, and \citeauthor{erdi2013} goes as far as to call it the
-``FizzBuzz of depently-typed programming''---the problem that any
+``FizzBuzz of dependently-typed programming''---the problem that any
 capable programmer in the field should be able to solve.
 
 Though each of these implementation has its own merits, they are all
@@ -69,9 +74,9 @@ your proofs.
 This paper has three main contributions; we will present
 \begin{itemize}
 \myitem
-  an investigation into the modeling of logics in Agda;
+  an investigation into the modelling of logics in Agda;
 \myitem
-  an investigation into the modeling of \emph{substructural}
+  an investigation into the modelling of \emph{substructural}
   logics in Agda;
 \myitem
   and---concretely---models of linear logic and of the Lambek-Grishin
@@ -100,12 +105,12 @@ axiomas.\footnote{
   lengths of $\Gamma$ and $\Delta$.
 }
 
-Secondly, a model of a logical system in Agda is more than a proof of
-its sanity. It is also a direct implementation of the calculus, which
-allows you play with your logic in a computational environment, using
-inference rules and proofs as first-class citizens.
-In addition to this, as mentioned before, the correctness of your
-proofs is checked by Agda's type-checker; and you can use theorem
+Secondly, a model of a logical system in Agda is more than just a
+proof of its sanity. It is also a direct implementation of the
+calculus, which allows you play with your logic in a computational
+environment, using inference rules and proofs as first-class
+citizens. In addition to this, as mentioned before, the correctness of
+your proofs is checked by Agda's type-checker; and you can use theorem
 provers built in or for Agda, such as Agsy \citep{lindblad2006}, to
 prove theorems in your modelled logic.
 
@@ -141,15 +146,15 @@ based on the non-associative Lambek calculus (\textbf{NL}), but adds
 the dual for each connective \citep{moortgat2013}.
 It is formulated in the style of display logic \citep{belnap1982}, and
 uses techniques such as polarisation and focusing \citep{andreoli1992}.
-We therefore feel that it would be an interesting to model the
-Lambek-Grishin calculus, as it allows us to examine not only the
+We therefore feel that it would be an interesting enterprise to model
+the Lambek-Grishin calculus, as it allows us to examine not only the
 formalisation of substructure in isolation, but also in the presence
 of other techniques.
 
 And, since \textbf{LG} is a very complex logical system, we hope
 that an explicit and interactive formalisation may be able to aid
 students in understanding it---especially those coming from a
-background of computer science.
+background in computer science.
 
 \vspace{1em}
 
@@ -162,9 +167,12 @@ website.\footnote{
   See \url{http://wiki.portal.chalmers.se/agda/pmwiki.php?n=Main.Othertutorials}.
 }
 
-In addition, before we start off, it should be mentioned that
-(although we omit some of the more tedious parts) this paper is
-literate Agda. The code is available on GitHub.\footnote{
+\vspace{1em}
+
+\noindent
+Before we start off, it should be mentioned that (although we omit
+some of the more tedious parts) this paper is written in literate
+Agda, and the code has been made available on GitHub.\footnote{
   See \url{https://github.com/pepijnkokke/SubstructuralLogicsInAgda}.
 }
 
@@ -197,9 +205,9 @@ x ⊃ y = (not x) ∨ y
 \end{code}
 }
 
-In this final section we will present a demonstration of using our
-model of \textbf{LG}. We will derive the denotation of an example
-sentence.
+In this final section we will demonstrate a possible usage of our
+model of \textbf{LG}. We will derive the denotation of the following
+example sentence.
 
 \begin{center}
 \textit{``Everyone finds some unicorn.''}
@@ -245,7 +253,7 @@ open IL.Explicit.Reify TypeReify
 
 \noindent
 Next, we define our lexicon. The entries of our lexicon are lambda
-terms that implement the translations of their syntactic types.
+terms typed by the translations of their syntactic types.
 
 \begin{code}
 everyone  : ⟦ (el NP + ⇐ el N +) ⊗ el N + ⟧
@@ -303,19 +311,26 @@ of \textbf{LG}. This would make writing proofs much easier, and would
 be a good step in the direction of proving decidability of \textbf{LG}
 in general.
 
+\paragraph{Decidability of LG.}
+We could implement a decision procedure for \textbf{LG} in
+general. Using this procedure we would no longer have to manually
+prove syntactic correctness. In addition to this, if we implemented
+decidability of \textbf{LG} plus associativity, we could use the
+resulting procedure as an implementation of parsing-as-deduction.
+
 \paragraph{Mirror symmetries.}
 Another property of \textbf{LG} is that types and proofs obey certain
 mirror symmetries (due to the presence of dual operators and
 directional implications). Implementing these symmetries as functions
 on types and proofs would allow us to easily construct the duals of
-types and their proofs, plus it would aid in the understanding of the
+types and their proofs, and would aid in the understanding of these
 dualities.
 
 \paragraph{Extract Haskell library.}
 Since Agda supports the extraction of programs into several languages
-(Haskell, JavaScript, etc.) we could investigate the extraction of an
-optimised Haskell library for \textbf{LG} (and its use in natural
-language processing) from our implementation.
+(most notably Haskell and JavaScript) we could investigate the
+extraction of an optimised Haskell library for \textbf{LG} (and its
+use in natural language processing) from our implementation.
 
 
 
