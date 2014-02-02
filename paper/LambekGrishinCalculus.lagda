@@ -44,6 +44,7 @@ Lambek-Grishin calculus, we refer the interested reader to
 \citet{moortgat2013} or \citet{bastenhof2013}.
 
 \subsection{Basic types and polarisation}
+\label{sec:polarity}
 
 The Lambek-Grishin calculus as developed in \citet{moortgat2013} is a
 polarized logic. Therefore, we will have to define a notion of polarity.
@@ -184,10 +185,9 @@ cannot construct an inhabitant---and a type-error is raised.\footnote{
   for the complete implementation.
 }
 
-\todo{mention which types are constrained for polarity}
-
 
 \subsection{Contexts and the display property}
+\label{sec:display}
 
 Since the Lambek-Grishin calculus is a display calculus, we will also
 have to model polarized structures (positive/input structures for the
@@ -242,7 +242,14 @@ datatypes. Every inference rule is defined in the datatype
 corresponding to the sequent-type of its conclusion.
 
 Though it is a bit verbose, due to \textbf{LG}'s many inference rules,
-we would like to present the reader with the complete definition below.
+we would like to present the reader with the complete definition
+below.
+
+Note we use the technique discussed in \autoref{sec:polarity} to
+restrict the applications of $\tilde{mu}$ and $\mu*$ to the cases
+where $A$ is positive and of $\mu$ and $\tilde{\mu}*$ those where $A$
+is negative. We will discuss the motives behind this in
+\autoref{sec:reifylg2lp}.
 
 \begin{code}
 mutual
@@ -308,6 +315,7 @@ open LP renaming (Type to TypeLP; _⊢_ to _⊢LP_; [_] to reifyLP)
 }
 
 \subsection{Reification into LP}
+\label{sec:reifylg2lp}
 
 Finally, we will present the reification of \textbf{LG} terms into
 \textbf{LP}, as we did for \textbf{LP} in
@@ -356,21 +364,6 @@ In addition to this, we define a CPS-translation of positive and
 negative structures. This translation is much the same, but since the
 structures' types enforce that no clashes in polarity occur, no
 negations are introduced.
-
-\begin{spec}
-mutual
-  ⟦_⟧+ : Struct+ → List TypeLP
-  ⟦ · A ·   ⟧+ = ⟦ A ⟧+ , ∅
-  ⟦ X ⊗ Y   ⟧+ = ⟦ X ⟧+ ⊗ ⟦ Y ⟧+
-  ⟦ X ⇚ Y  ⟧+ = ⟦ X ⟧+ ⊗ ⟦ Y ⟧-
-  ⟦ X ⇛ Y  ⟧+ = ⟦ X ⟧- ⊗ ⟦ Y ⟧+
-
-  ⟦_⟧- : Struct- → List TypeLP
-  ⟦ · A ·   ⟧- = ⟦ A ⟧- , ∅
-  ⟦ X ⊕ Y   ⟧- = ⟦ X ⟧- ⊗ ⟦ Y ⟧-
-  ⟦ X ⇒ Y  ⟧- = ⟦ X ⟧+ ⊗ ⟦ Y ⟧-
-  ⟦ X ⇐ Y  ⟧- = ⟦ X ⟧- ⊗ ⟦ Y ⟧+
-\end{spec}
 
 \hidden{
 \begin{code}
@@ -436,15 +429,16 @@ abstractions, and the $\mu*$ and $\tilde{\mu}$-rules are translated as
 applications. However, if you look closely at the types, you will
 notice that the types $\mu$ and $\tilde{\mu}$ are translated to are
 not function types---and neither are the types for the first arguments
-of $\mu*$ or $\tilde{\mu}$. This is where polarity comes in: because
-we have restricted these rules to a certain polarity, we can use this
-fact to prove that a clash in polarities \emph{must} occur during the
-CPS-translation, and therefore that a function-type \emph{must} be
-generated, using the following lemmas.
+of $\mu*$ or $\tilde{\mu}$. This is where the polarity restrictions
+come in: we restrict the application of these rules to a certain
+polarity, so we can later use this fact to prove that a clash in
+polarities \emph{must} occur during the CPS-translation, and therefore
+that a function-type \emph{must} be generated, using the following
+lemmas.
 
 \begin{spec}
-  Neg-≡ : Neg A → ⟦ A ⟧+ ≡ ⟦ A ⟧- ⊸ ⊥
-  Pos-≡ : Pos A → ⟦ A ⟧- ≡ ⟦ A ⟧+ ⊸ ⊥
+  Neg-≡  : Neg A  → ⟦ A ⟧+  ≡ ⟦ A ⟧-  ⊸ ⊥
+  Pos-≡  : Pos A  → ⟦ A ⟧-  ≡ ⟦ A ⟧+  ⊸ ⊥
 \end{spec}
 
 \noindent
@@ -462,27 +456,27 @@ variables.\footnote{
 mutual
   reifyʳ : ∀ {X A} → X ⊢[ A ] → ⟦ X ⟧ ⊢LP ⟦ A ⟧+
   reifyʳ var        = var
-  reifyʳ (μ t)      rewrite Neg-≡ = abs (reify t)
+  reifyʳ (μ t)      rewrite Neg-≡ _ = abs (reify t)
   reifyʳ (⊗R s t)   = pair (reifyʳ s) (reifyʳ t)
   reifyʳ (⇚R s t)  = pair (reifyʳ s) (reifyˡ t)
   reifyʳ (⇛R s t)  = pair (reifyˡ s) (reifyʳ t)
 
   reifyˡ : ∀ {A Y} → [ A ]⊢ Y → ⟦ Y ⟧ ⊢LP ⟦ A ⟧-
   reifyˡ covar      = var
-  reifyˡ (μ̃ t)      rewrite Pos-≡ = abs (reify t)
+  reifyˡ (μ̃ t)      rewrite Pos-≡ _ = abs (reify t)
   reifyˡ (⊕L s t)   = pair (reifyˡ s) (reifyˡ t)
   reifyˡ (⇒L s t)  = pair (reifyʳ s) (reifyˡ t)
   reifyˡ (⇐L s t)  = pair (reifyˡ s) (reifyʳ t)
 
   reify : ∀ {X Y} → X ⊢ Y → ⟦ X ⟧ ++ ⟦ Y ⟧ ⊢LP ⊥
-  reify (μ* t)     rewrite Pos-≡ = app var (reifyʳ t)
-  reify (μ̃* t)     rewrite Neg-≡ = app var (reifyˡ t)
-  reify (⊗L t)     = case var (reify t)
-  reify (⇚L t)    = case var (reify t)
-  reify (⇛L t)    = case var (reify t)
-  reify (⊕R t)     = case var (reify t)
-  reify (⇒R t)    = case var (reify t)
-  reify (⇐R t)    = case var (reify t)
+  reify (μ* t)      rewrite Pos-≡ _ = app var (reifyʳ t)
+  reify (μ̃* t)      rewrite Neg-≡ _ = app var (reifyˡ t)
+  reify (⊗L t)      = case var (reify t)
+  reify (⇚L t)     = case var (reify t)
+  reify (⇛L t)     = case var (reify t)
+  reify (⊕R t)      = case var (reify t)
+  reify (⇒R t)     = case var (reify t)
+  reify (⇐R t)     = case var (reify t)
 \end{spec}
 
 \hidden{
