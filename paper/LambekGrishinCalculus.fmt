@@ -63,7 +63,4 @@
 %format ⟦_⟧+ = ⟦_⟧ "^{+}"
 %format ⟦_⟧- = ⟦_⟧ "^{-}"
 
-%format cps+ = cps "^{+}"
-%format cps- = cps "^{-}"
-%format str+ = str "^{+}"
-%format str- = str "^{-}"
+%format reifyLP = [_] "^{LP}"

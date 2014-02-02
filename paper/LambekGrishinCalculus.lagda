@@ -184,6 +184,8 @@ cannot construct an inhabitant---and a type-error is raised.\footnote{
   for the complete implementation.
 }
 
+\todo{mention which types are constrained for polarity}
+
 
 \subsection{Contexts and the display property}
 
@@ -313,6 +315,19 @@ Finally, we will present the reification of \textbf{LG} terms into
 the sense that every connective has a dual, we cannot give it a direct
 interpretation in the intuitionistic \textbf{LP}.
 
+The term language of \textbf{LG}, however, is a refinement of the
+$\bar{\lambda}\mu\tilde{\mu}$-calculus as developed in
+\citet{curien2000}, which has a known computational interpretation
+through translation to the \citeauthor{parigot1992}'s
+$\lambda\mu$-calculus. Therefore, we can give an interpretation
+through a CPS-translation.
+
+Below we formalise the CPS-translation of \textbf{LG} as presented in
+\citet{moortgat2013}. The idea of the CPS-translation is to interpret
+all connectives as a conjunctions, and use the polarities of the
+connectives and their argument positions to guide the introduction of
+negations---i.e.\ when to introduce continuations.
+
 \begin{code}
 mutual
   ⟦_⟧+ : Type → TypeLP
@@ -336,7 +351,12 @@ mutual
   ⟦ A ⇐ B  ⟧- =      ⟦ A ⟧- ⊗ ⟦ B ⟧+
 \end{code}
 
-\hidden{
+\noindent
+In addition to this, we define a CPS-translation of positive and
+negative structures. This translation is much the same, but since the
+structures' types enforce that no clashes in polarity occur, no
+negations are introduced.
+
 \begin{spec}
 mutual
   ⟦_⟧+ : Struct+ → List TypeLP
@@ -351,7 +371,6 @@ mutual
   ⟦ X ⇒ Y  ⟧- = ⟦ X ⟧+ ⊗ ⟦ Y ⟧-
   ⟦ X ⇐ Y  ⟧- = ⟦ X ⟧- ⊗ ⟦ Y ⟧+
 \end{spec}
-}
 
 \hidden{
 \begin{code}
@@ -384,6 +403,9 @@ Struct-Reify = record { ⟦_⟧ = str- }
 
 TypeReify : Reify Type Set
 TypeReify = record { ⟦_⟧ = λ A → ⟦ ⟦ ⟦ A ⟧+ ⟧ ⟧ }
+
+StructReify : Reify Struct+ (List Set)
+StructReify = record { ⟦_⟧ = λ X → ⟦ ⟦ ⟦ X ⟧ ⟧ ⟧ }
 \end{code}
 }
 
@@ -401,6 +423,39 @@ Pos-≡ {.(A ⊗ B)} (A ⊗ B) = refl
 Pos-≡ {.(A ⇚ B)} (A ⇚ B) = refl
 Pos-≡ {.(A ⇛ B)} (A ⇛ B) = refl
 \end{code}
+}
+
+Below we will present an implementation of the reification function
+up to exchange (that is, we do not show applications of the exchange
+princple).
+As we stated above, we interpret all connectives as pairs. Therefore,
+all left and right rules are interpreted as $⊗$-introduction or
+$⊗$-elimination.
+The $\mu$- and $\tilde{\mu}$-rules are translated as lambda
+abstractions, and the $\mu*$ and $\tilde{\mu}$-rules are translated as
+applications. However, if you look closely at the types, you will
+notice that the types $\mu$ and $\tilde{\mu}$ are translated to are
+not function types---and neither are the types for the first arguments
+of $\mu*$ or $\tilde{\mu}$. This is where polarity comes in: because
+we have restricted these rules to a certain polarity, we can use this
+fact to prove that a clash in polarities \emph{must} occur during the
+CPS-translation, and therefore that a function-type \emph{must} be
+generated, using the following lemmas.
+
+\begin{spec}
+  Neg-≡ : Neg A → ⟦ A ⟧+ ≡ ⟦ A ⟧- ⊸ ⊥
+  Pos-≡ : Pos A → ⟦ A ⟧- ≡ ⟦ A ⟧+ ⊸ ⊥
+\end{spec}
+
+\noindent
+Lastly, variables and covariables are simply translated as
+variables.\footnote{
+  In \citet{moortgat2013}, applications of the |var| and |covar| rules
+  is also limited to certain polarities. However, we do not need this
+  fact to implement the CPS-translation, and therefore we have chosen
+  not to add this restriction. A benefit of this is that defining
+  derived inference rules becomes much more manageable, as we no
+  longer have to ensure that the used variables have a certain polarity.
 }
 
 \begin{spec}
@@ -471,8 +526,12 @@ mutual
 \end{code}
 }
 
+\noindent
+Finally we can now define the function for CPS-interpretation of
+\textbf{LG} by composition.
+
 \begin{code}
-[_] : ∀ {X A} → X ⊢[ A ] → (Ctxt ⟦ ⟦ ⟦ X ⟧ ⟧ ⟧ → ⟦ A ⟧)
+[_] : ∀ {X A} → X ⊢[ A ] → (Ctxt ⟦ X ⟧ → ⟦ A ⟧)
 [_] = reifyLP ∘ reifyʳ
 \end{code}
 
