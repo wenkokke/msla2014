@@ -45,7 +45,7 @@ rule CodeFile => [ proc { |fn| code2lit(fn) } ]  do |t|
     src = add_spacing( src )
     IO.write( f_lhs , src , :encoding => 'utf-8' )
 
-    cmd = "lhs2TeX --agda --code #{ f_lhs } -o #{ f_agda }"
+    cmd = "lhs2TeX --agda --code --no-pragmas #{ f_lhs } -o #{ f_agda }"
     puts cmd
     system cmd
 
@@ -126,7 +126,7 @@ CLOBBER.include('paper/paper.pdf',CodeFiles)
 ### Utilities ###
 
 # Regular expression that filters implicit arguments from Agda source.
-RE_IMPLICIT = /(?<!λ\s)(?<!record)(?<!λ)\s*(∀\s*)?\{([^\}]*?)\}(\s*→)?/
+RE_IMPLICIT = /(?<!record)(?<!λ)\s*(∀\s*)?\{([^\}]*?)\}(\s*→)?/
 
 # Add spacing to literate Agda source.
 def add_spacing(src)

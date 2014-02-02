@@ -1,8 +1,14 @@
 % Bibliography
-\usepackage{hyperref}
-\usepackage{color}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage[
+  colorlinks = true,
+  linkcolor  = Maroon,
+  urlcolor   = MidnightBlue,
+  citecolor  = ForestGreen
+  ]{hyperref}
 \usepackage{natbib}
 \usepackage{ifthen}
+\renewcommand{\hscodestyle}{\small}
 
 \newboolean{marginNotes}
 \setboolean{marginNotes}{false}
@@ -26,6 +32,8 @@
              {\marginNote{\textcolor{red}{\textbf{TODO:~}#1}}}
              {}}
 
+\renewcommand{\sectionautorefname}{\S}
+\renewcommand{\subsectionautorefname}{\S\S}
 
 % Buss' Proofs
 \usepackage{mdframed}
@@ -51,3 +59,6 @@
 \DeclareUnicodeCharacter{738}{$^s$}
 \DeclareUnicodeCharacter{739}{$^x$}
 \DeclareUnicodeCharacter{740}{$^y$}
+
+% Itemize Customisation
+\def\myitem{\item[$\circ$]}

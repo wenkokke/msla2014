@@ -6,7 +6,7 @@
 open import Function using (case_of_; _∘_)
 open import Data.List using (List; _++_; map) renaming (_∷_ to _,_; _∷ʳ_ to _,′_; [] to ∅)
 open import Data.List.Properties using (map-++-commute)
-open import Data.Product using () renaming (_×_ to _×′_)
+open import Data.Product using () renaming (_×_ to _x'_)
 open import Relation.Binary.PropositionalEquality as PropEq using (_≡_; refl; sym; cong)
 \end{code}
 }
@@ -30,9 +30,10 @@ infix  4  _⊢_
 
 \subsection{Moving down to linear logic}
 
-Moving down to multiplicative intuitionistic linear logic
-(\textbf{LP}) from our current implementation of \textbf{IL} is
-relatively simple. First we define a new model for our types, to match
+As we have taken care to make all structural rules explicit, moving
+down to (multiplicative) intuitionistic linear logic (\textbf{LP}) from
+our current model of \textbf{IL} is trivial.
+As a first step we define a new model for our types, to match
 the conventions of linear logic (we are adding bottom as an atomic type
 here, as we will need it later on).
 
@@ -45,8 +46,8 @@ data Type : Set where
 \end{code}
 
 \noindent
-Then we can create the model of \textbf{LP} by copying our explicit
-model for \textbf{IL}, and simply dropping the axioms for weakening
+Next we can create the model of \textbf{LP} by copying our explicit
+model for \textbf{IL}, and simply removing the axioms for weakening
 and contraction.
 
 %<*ill>
@@ -63,8 +64,8 @@ data _⊢_ : ∀ (X : List Type) (A : Type) → Set where
 %</ill>
 
 \noindent
-And, since we added an atomic type for bottom, we can add a definition
-for negation as usual.
+And, since we added an atomic type for bottom, we can also add the
+usual definition for negation.
 
 \begin{code}
 ¬_ : Type → Type
@@ -79,9 +80,10 @@ exch₀ {A} {B} {X = X} t = exch {∅} {B , ∅} {A , ∅} {X} t
 }
 
 \noindent
-Now we can define our running example as usual. In fact, the
-definition has not changed since \autoref{sec:IntuitionisticLogic} at
-all.
+Now we can define our running example. In fact, the definition has
+hardly changed since \autoref{sec:IntuitionisticLogic}. The only
+difference is that now the term \emph{has to be closed}, as swapping
+in the presence of a context is not linear.
 
 \begin{code}
 swap : ∀ {A B} → ∅ ⊢ A ⊗ B ⊸ B ⊗ A
@@ -89,21 +91,24 @@ swap {A} {B} = abs (case var (exch₀ (pair var var)))
 \end{code}
 
 \noindent
-Or we can give a proof for the validity of type-lifting.
+As a new example, we can also give a proof for the validity of
+type-raising.
 
 \begin{code}
 raise : ∀ {A B X} → X ⊢ A → X ⊢ (A ⊸ B) ⊸ B
 raise t = abs (app var t)
 \end{code}
 
+
+%%% The following theorems are not in the paper, but required for the
+%%% reification of Lambek-Grishin calculus into linear logic.
+
 \hidden{
 \begin{code}
 ++-assoc : ∀ {a} {A : Set a} (X Y Z : List A) → X ++ (Y ++ Z) ≡ (X ++ Y) ++ Z
 ++-assoc ∅ Y Z = refl
 ++-assoc (x , X) Y Z = cong (_,_ x) (++-assoc X Y Z)
-\end{code}
 
-\begin{code}
 xs++[]=xs : ∀ {a} {A : Set a} (xs : List A) → xs ++ ∅ ≡ xs
 xs++[]=xs ∅ = refl
 xs++[]=xs (x , xs) = cong (_,_ x) (xs++[]=xs xs)
@@ -119,9 +124,7 @@ to-front {X} {A} {B} t = lem1 lem2
     lem1 = exch {∅} {X} {A , ∅} {∅}
     lem2 : A , (X ++ ∅) ⊢ B
     lem2 rewrite xs++[]=xs X = t
-\end{code}
 
-\begin{code}
 to-back : ∀ {X A B} → X ,′ A ⊢ B → A , X ⊢ B
 to-back {X} {A} {B} t = lem2
   where
@@ -129,11 +132,7 @@ to-back {X} {A} {B} t = lem2
     lem1 = exch {∅} {A , ∅} {X} {∅} t
     lem2 : A , X ⊢ B
     lem2 rewrite sym (xs++[]=xs (A , X)) = lem1
-\end{code}
-}
 
-\hidden{
-\begin{code}
 YX↝XY : ∀ {A} X Y → Y ++ X ⊢ A → X ++ Y ⊢ A
 YX↝XY {A} X Y t = lem₃
   where
@@ -143,9 +142,7 @@ YX↝XY {A} X Y t = lem₃
     lem₂ = exch {∅} {X} {Y} {∅} lem₁
     lem₃ : X ++ Y ⊢ A
     lem₃ = PropEq.subst (λ Y → X ++ Y ⊢ A) (xs++[]=xs Y) lem₂
-\end{code}
 
-\begin{code}
 Y[XZ]↝X[YZ] : ∀ {A} X Y Z → Y ++ (X ++ Z) ⊢ A → X ++ (Y ++ Z) ⊢ A
 Y[XZ]↝X[YZ] {A} X Y Z t = exch {∅} {X} {Y} {Z} t
 
@@ -178,9 +175,7 @@ X[ZY]↝X[YZ] {A} X Y Z t = lem₃
     lem₂ = [XZ]Y↝[XY]Z X Y Z lem₁
     lem₃ : X ++ Y ++ Z ⊢ A
     lem₃ rewrite ++-assoc X Y Z = lem₂
-\end{code}
 
-\begin{code}
 XYZW↝XWZY : ∀ {A} X Y Z W → (X ++ Y) ++ (Z ++ W) ⊢ A → (X ++ W) ++ (Z ++ Y) ⊢ A
 XYZW↝XWZY {A} X Y Z W t = lem₃
   where
@@ -227,9 +222,7 @@ XYZW↝ZYXW {A} X Y Z W t = lem₃
 \begin{code}
 pair-left : ∀ {X A B C} → A , B , X ⊢ C → A ⊗ B , X ⊢ C
 pair-left t = case var t
-\end{code}
 
-\begin{code}
 pair-left′ : ∀ {X A B C} → X ++ (A , B , ∅) ⊢ C → X ,′ A ⊗ B ⊢ C
 pair-left′ {X} {A} {B} {C} = lem₃
   where
@@ -246,12 +239,11 @@ pair-left′ {X} {A} {B} {C} = lem₃
 
 
 \subsection{Reification into IL}
+\label{sec:reifylp2il}
 
 We could define the reification of \textbf{LP} into Agda as we showed
-for \textbf{IL}, but it is much easier to translate our proofs in
-\textbf{LP} to \textbf{IL} and use the reification function as defined
-for \textbf{IL}. Since we have hardly changed our model at all, the
-translation is almost trivial.
+for \textbf{IL}, but it is much easier to translate our proofs to
+\textbf{IL} and use the previously defined reification.
 
 \hidden{
 \begin{code}
@@ -278,8 +270,8 @@ bottom in the translation of our types.
 
 \begin{code}
     ⟦_⟧ : Type → TypeIL
-    ⟦ el A   ⟧ = el A
     ⟦ ⊥      ⟧ = el R
+    ⟦ el A   ⟧ = el A
     ⟦ A ⊗ B  ⟧ = ⟦ A ⟧ × ⟦ B ⟧
     ⟦ A ⊸ B  ⟧ = ⟦ A ⟧ ⇒ ⟦ B ⟧
 \end{code}
@@ -317,12 +309,13 @@ ReifyCtxt = record { ⟦_⟧ = map ⟦_⟧ }
 }
 
 \noindent
-Lastly, we define a translation from \textbf{LP} to \textbf{IL}. The
+Last, we define a translation from \textbf{LP} to \textbf{IL}. The
 translation is almost able to reconstruct the proof in \textbf{IL}
 verbatim, though we are omitting some minor details.\footnote{
-  The problematic details have to do with the distribution of $⟦\_⟧$
-  over contexts; we have to rewrite using a lemma that states that
-  $⟦X \plus Y⟧ ≡ ⟦X⟧ \plus ⟦Y⟧$ for every binary rule.
+  The problematic details have to do with the application of $⟦\_⟧$
+  to contexts; we have to rewrite using a lemma that states that
+  $⟦X \plus Y⟧ ≡ ⟦X⟧ \plus ⟦Y⟧$, i.e.\ that our translation commutes
+  over context concatination, for every binary rule.
 }
 
 \begin{spec}
@@ -374,6 +367,11 @@ function composition.
 And again, we can reify our (now linear) |swap| function back into Agda.
 
 \begin{code}
-swap′ : {A B : Type} → ⟦ ⟦ A ⟧ ⟧ ×′ ⟦ ⟦ B ⟧ ⟧ → ⟦ ⟦ B ⟧ ⟧ ×′ ⟦ ⟦ A ⟧ ⟧
+swap′ : {A B : Type} → ⟦ ⟦ A ⟧ ⟧ x' ⟦ ⟦ B ⟧ ⟧ → ⟦ ⟦ B ⟧ ⟧ x' ⟦ ⟦ A ⟧ ⟧
 swap′ {A} {B} = [ swap {A} {B} ] ∅
 \end{code}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

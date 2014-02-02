@@ -1,7 +1,7 @@
 open import Function using (case_of_; _∘_)
 open import Data.List using (List; _++_; map) renaming (_∷_ to _,_; _∷ʳ_ to _,′_; [] to ∅)
 open import Data.List.Properties using (map-++-commute)
-open import Data.Product using () renaming (_×_ to _×′_)
+open import Data.Product using () renaming (_×_ to _x'_)
 open import Relation.Binary.PropositionalEquality as PropEq using (_≡_; refl; sym; cong)
 
 module LinearLogic (U : Set) (R : U) (⟦_⟧ᵁ : U → Set) where
@@ -169,8 +169,8 @@ ReifyType = record { ⟦_⟧ = ⟦_⟧ }
   where
 
     ⟦_⟧ : Type → TypeIL
-    ⟦ el A   ⟧ = el A
     ⟦ ⊥      ⟧ = el R
+    ⟦ el A   ⟧ = el A
     ⟦ A ⊗ B  ⟧ = ⟦ A ⟧ × ⟦ B ⟧
     ⟦ A ⊸ B  ⟧ = ⟦ A ⟧ ⇒ ⟦ B ⟧
 
@@ -207,6 +207,6 @@ toIL (exch {X} {Y} {Z} {W} {A} t)  = lem4
 [_] : {A : Type} {X : List Type} → X ⊢ A → (Ctxt ⟦ ⟦ X ⟧ ⟧ → ⟦ ⟦ A ⟧ ⟧)
 [_] = reifyIL ∘ toIL
 
-swap′ : {A B : Type} → ⟦ ⟦ A ⟧ ⟧ ×′ ⟦ ⟦ B ⟧ ⟧ → ⟦ ⟦ B ⟧ ⟧ ×′ ⟦ ⟦ A ⟧ ⟧
+swap′ : {A B : Type} → ⟦ ⟦ A ⟧ ⟧ x' ⟦ ⟦ B ⟧ ⟧ → ⟦ ⟦ B ⟧ ⟧ x' ⟦ ⟦ A ⟧ ⟧
 swap′ {A} {B} = [ swap {A} {B} ] ∅
 

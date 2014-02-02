@@ -18,29 +18,31 @@ module LambekGrishinCalculus (U : Set) (R : U) (⟦_⟧ᵁ : U → Set) where
 \end{code}
 }
 
-
-The Lambek-Grishin calculus is a symmetric version of the Lambek
-calculus. This means that in addition to left and right implication
-and conjunction, we add left and right difference (the operator dual
-to implication) and disjunction.
-From a linguistic perspective, the basic inference rules for these
-connectives, together with a set of interaction principles, allows for
-the treatment of patterns beyond the context-free, which cannot be
-satisfactorily handled in the Lambek calculus \citep{moortgat2013}.
+The Lambek-Grishin calculus finds its origins in formal linguistics,
+where it is used to model natural language syntax.
+It is a symmetric version of the Lambek calculus, which means that in
+addition to left and right implication and conjunction, we have left
+and right difference (the operators dual to left and right
+implication) and disjunction (dual to conjunction).
+The basic inference rules for these (dual) connectives, together with
+a set of interaction principles between the connectives and their
+duals, allow for the treatment of patterns beyond the context-free,
+which cannot be satisfactorily handled in traditional Lambek calculus.
 
 The formulation of the Lambek-Grishin calculus that we will model
 is the formulation developed in \citet{moortgat2013}, which uses the
-mechanisms of polarity and focusing \citep{andreoli1992} together with
-concepts from display logics \citep{belnap1982} to ensure, amongst
-others, that all proofs are in normal form.
-Below we will discuss the roles the influences play in our model of
-the Lambek-Grishin calculus in turn.
+mechanisms of polarity and focusing together with concepts from
+display logics to ensure, amongst others, that all proof terms are in
+normal form.
+
+Below we will present a formalisation of \textbf{LG}, discussing the
+roles these mechanisms play in our model in turn.
 
 Since this paper is not by far a complete discussion of the
-Lambek-Grishin calculus, we must refer the interested reader to
-\citet{moortgat2013} and \citet{bastenhof2010}.
+Lambek-Grishin calculus, we refer the interested reader to
+\citet{moortgat2013} or \citet{bastenhof2013}.
 
-\subsection{Modeling a polarized logic}
+\subsection{Basic types and polarisation}
 
 The Lambek-Grishin calculus as developed in \citet{moortgat2013} is a
 polarized logic. Therefore, we will have to define a notion of polarity.
@@ -73,8 +75,7 @@ _≟ᴾ_ : (p q : Polarity) → Dec (p ≡ q)
 }
 
 \noindent
-Using this definition, we can define our types, assigning a polarity
-to atomic type.
+Using this definition, we can define our types as below.
 
 %<*type>
 \begin{code}
@@ -159,9 +160,31 @@ Pol? (A ⇒ B)  = inj₂ (A ⇒ B)
 Pol? (A ⇐ B)  = inj₂ (A ⇐ B)
 \end{code}
 
+\noindent
+We also define |Pos?| and |Neg?|, which are decision procedures for
+the predicates |Pos| and |Neg|. Using these decision procedures, we
+can implicitly restrict the usage of inference rules to types of a
+certain polarity using a well-known Agda trick.
+For instance, the full type of the \textmu-rule (see
+\autoref{sec:alltogether}) is:
+
+\begin{spec}
+  μ : ∀ {X A} {p : True (Neg? A)} → X ⊢ · A · → X ⊢[ A ]
+\end{spec}
+
+\noindent
+The idea behind this type is that, since we know that the decision
+procedure |Neg?| terminates, we can run it during type-checking to see
+if we can construct a witness of |Neg A|. If we can, |True (Neg? A)|
+reduces to to the unit type $\top$, and is trivially inferred; if we
+cannot, it to the empty type $\bot$---for which we know that we
+cannot construct an inhabitant---and a type-error is raised.\footnote{
+  See \url{http://agda.github.io/agda-stdlib/html/Relation.Nullary.Decidable.html\#783}
+  for the complete implementation.
+}
 
 
-\subsection{Modeling a display calculus}
+\subsection{Contexts and the display property}
 
 Since the Lambek-Grishin calculus is a display calculus, we will also
 have to model polarized structures (positive/input structures for the
@@ -192,8 +215,31 @@ As a consequence of this, we do not have to bother with predicates for
 polarity in the case of structures, as a structure's polarity is
 immediately obvious from its type.
 
+As \textbf{LG} is formulated as a diplay logic, we define a left and
+a right inference rule for each connective, where the one is a rule
+that simply structuralises the formula, and the other eliminates the
+connective when it appears as the outermost connective on both sides.
+Which is which depends on the polarity of the connective (i.e.\ on
+which side it naturally occurs). As an example, the left and right
+rules for $\_\!\otimes\!\_$ are presented below.
 
-\subsection{Modeling a focused logic}
+\begin{spec}
+  ⊗L : · A · ⊗ · B · ⊢ X → · A ⊗ B · ⊢ X
+  ⊗R : X ⊢[ A ] → Y ⊢[ B ] → X ⊗ Y ⊢[ A ⊗ B ]
+\end{spec}
+
+
+
+\subsection{Inference rules for focused sequents}
+\label{sec:alltogether}
+
+Since \textbf{LG} is a focused calculus, and thus has several kinds of
+sequents, we will have to define its inference rules in several
+datatypes. Every inference rule is defined in the datatype
+corresponding to the sequent-type of its conclusion.
+
+Though it is a bit verbose, due to \textbf{LG}'s many inference rules,
+we would like to present the reader with the complete definition below.
 
 \begin{code}
 mutual
@@ -234,6 +280,11 @@ mutual
     dist₄  : ∀ {X Y Z W} → X ⊗ Y ⊢ Z ⊕ W → Z ⇛ Y ⊢ X ⇒ W
 \end{code}
 
+\noindent
+Since we have dropped exchange, we will have to let go of our running
+example. Instead we will present the proof of the law of raising, and
+its dual law of lowering.
+
 \begin{code}
 raise : ∀ {A B} → · A · ⊢ · (B ⇐ A) ⇒ B ·
 raise = ⇒R (res₂ (res₃ (μ̃* (⇐L covar var))))
@@ -244,6 +295,12 @@ lower = ⇚L (dres₂ (dres₃ (μ* (⇛R covar var))))
 
 
 \subsection{Reification into LP}
+
+Finally, we will present the reification of \textbf{LG} terms into
+\textbf{LP}, as we did for \textbf{LP} in
+\autoref{sec:reifylp2il}. Since \textbf{LG} is a classical logic, in
+the sense that every connective has a dual, we cannot give it a direct
+interpretation in the intuitionistic \textbf{LP}.
 
 \hidden{
 \begin{code}
@@ -259,22 +316,37 @@ mutual
   ⟦_⟧+ : Type → TypeLP
   ⟦ el A +  ⟧+ = el A
   ⟦ el A -  ⟧+ = ¬ (¬ el A)
-  ⟦ A ⊗ B   ⟧+ = ⟦ A ⟧+ ⊗ ⟦ B ⟧+
-  ⟦ A ⇚ B  ⟧+ = ⟦ A ⟧+ ⊗ ⟦ B ⟧-
-  ⟦ A ⇛ B  ⟧+ = ⟦ A ⟧- ⊗ ⟦ B ⟧+
-  ⟦ A ⊕ B   ⟧+ = ¬ (⟦ A ⟧- ⊗ ⟦ B ⟧-)
-  ⟦ A ⇒ B  ⟧+ = ¬ (⟦ A ⟧+ ⊗ ⟦ B ⟧-)
-  ⟦ A ⇐ B  ⟧+ = ¬ (⟦ A ⟧- ⊗ ⟦ B ⟧+)
+  ⟦ A ⊗ B   ⟧+ =      ⟦ A ⟧+ ⊗ ⟦ B ⟧+
+  ⟦ A ⇚ B  ⟧+ =      ⟦ A ⟧+ ⊗ ⟦ B ⟧-
+  ⟦ A ⇛ B  ⟧+ =      ⟦ A ⟧- ⊗ ⟦ B ⟧+
+  ⟦ A ⊕ B   ⟧+ = ¬ (  ⟦ A ⟧- ⊗ ⟦ B ⟧-)
+  ⟦ A ⇒ B  ⟧+ = ¬ (  ⟦ A ⟧+ ⊗ ⟦ B ⟧-)
+  ⟦ A ⇐ B  ⟧+ = ¬ (  ⟦ A ⟧- ⊗ ⟦ B ⟧+)
 
   ⟦_⟧- : Type → TypeLP
   ⟦ el A +  ⟧- = ¬ el A
   ⟦ el A -  ⟧- = ¬ el A
-  ⟦ A ⊗ B   ⟧- = ¬ (⟦ A ⟧+ ⊗ ⟦ B ⟧+)
-  ⟦ A ⇚ B  ⟧- = ¬ (⟦ A ⟧+ ⊗ ⟦ B ⟧-)
-  ⟦ A ⇛ B  ⟧- = ¬ (⟦ A ⟧- ⊗ ⟦ B ⟧+)
-  ⟦ A ⊕ B   ⟧- = ⟦ A ⟧- ⊗ ⟦ B ⟧-
-  ⟦ A ⇒ B  ⟧- = ⟦ A ⟧+ ⊗ ⟦ B ⟧-
-  ⟦ A ⇐ B  ⟧- = ⟦ A ⟧- ⊗ ⟦ B ⟧+
+  ⟦ A ⊗ B   ⟧- = ¬ (  ⟦ A ⟧+ ⊗ ⟦ B ⟧+)
+  ⟦ A ⇚ B  ⟧- = ¬ (  ⟦ A ⟧+ ⊗ ⟦ B ⟧-)
+  ⟦ A ⇛ B  ⟧- = ¬ (  ⟦ A ⟧- ⊗ ⟦ B ⟧+)
+  ⟦ A ⊕ B   ⟧- =      ⟦ A ⟧- ⊗ ⟦ B ⟧-
+  ⟦ A ⇒ B  ⟧- =      ⟦ A ⟧+ ⊗ ⟦ B ⟧-
+  ⟦ A ⇐ B  ⟧- =      ⟦ A ⟧- ⊗ ⟦ B ⟧+
+\end{code}
+
+\begin{code}
+mutual
+  ⟦_⟧+ : Struct+ → List TypeLP
+  ⟦ · A ·   ⟧+ = ⟦ A ⟧+ , ∅
+  ⟦ X ⊗ Y   ⟧+ = ⟦ X ⟧+ ⊗ ⟦ Y ⟧+
+  ⟦ X ⇚ Y  ⟧+ = ⟦ X ⟧+ ⊗ ⟦ Y ⟧-
+  ⟦ X ⇛ Y  ⟧+ = ⟦ X ⟧- ⊗ ⟦ Y ⟧+
+
+  ⟦_⟧- : Struct- → List TypeLP
+  ⟦ · A ·   ⟧- = ⟦ A ⟧- , ∅
+  ⟦ X ⊕ Y   ⟧- = ⟦ X ⟧- ⊗ ⟦ Y ⟧-
+  ⟦ X ⇒ Y  ⟧- = ⟦ X ⟧+ ⊗ ⟦ Y ⟧-
+  ⟦ X ⇐ Y  ⟧- = ⟦ X ⟧- ⊗ ⟦ Y ⟧+
 \end{code}
 
 \hidden{
@@ -326,46 +398,48 @@ Pos-≡ {.(A ⇛ B)} (A ⇛ B) = refl
 
 \begin{spec}
 mutual
-  reify : ∀ {X Y} → X ⊢ Y → ⟦ X ⟧ ++ ⟦ Y ⟧ ⊢LP ⊥
-  reify (μ* t)     = to-front (app var (reifyʳ t))
-  reify (μ̃* t)     = app var (reifyˡ t)
-  reify (⊗L t)     = pair-left (reify t)
-  reify (⇚L t)    = pair-left (reify t)
-  reify (⇛L t)    = pair-left (reify t)
-  reify (⊕R t)     = pair-left′ (reify t)
-  reify (⇒R t)    = pair-left′ (reify t)
-  reify (⇐R t)    = pair-left′ (reify t)
-  reify (res₁ t)   = Y[XZ]↝X[YZ] (reify t)
-  reify (res₂ t)   = [YX]Z↝[XY]Z (reify t)
-  reify (res₃ t)   = X[ZY]↝X[YZ] (reify t)
-  reify (res₄ t)   = [XZ]Y↝[XY]Z (reify t)
-  reify (dres₁ t)  = [XZ]Y↝[XY]Z (reify t)
-  reify (dres₂ t)  = X[ZY]↝X[YZ] (reify t)
-  reify (dres₃ t)  = [YX]Z↝[XY]Z (reify t)
-  reify (dres₄ t)  = Y[XZ]↝X[YZ] (reify t)
-  reify (dist₁ t)  = XYZW↝XWZY (reify t)
-  reify (dist₂ t)  = XYZW↝YWXZ (reify t)
-  reify (dist₃ t)  = XYZW↝ZXWY (reify t)
-  reify (dist₄ t)  = XYZW↝ZYXW (reify t)
-
   reifyʳ : ∀ {X A} → X ⊢[ A ] → ⟦ X ⟧ ⊢LP ⟦ A ⟧+
   reifyʳ var        = var
-  reifyʳ (μ t)      = abs (to-back (reify t))
+  reifyʳ (μ t)      rewrite Neg-≡ = abs (reify t)
   reifyʳ (⊗R s t)   = pair (reifyʳ s) (reifyʳ t)
   reifyʳ (⇚R s t)  = pair (reifyʳ s) (reifyˡ t)
   reifyʳ (⇛R s t)  = pair (reifyˡ s) (reifyʳ t)
 
   reifyˡ : ∀ {A Y} → [ A ]⊢ Y → ⟦ Y ⟧ ⊢LP ⟦ A ⟧-
   reifyˡ covar      = var
-  reifyˡ (μ̃ t)      = abs (reify t)
-  reifyˡ (⊕L s t)   = YX↝XY (pair (reifyˡ s) (reifyˡ t))
+  reifyˡ (μ̃ t)      rewrite Pos-≡ = abs (reify t)
+  reifyˡ (⊕L s t)   = pair (reifyˡ s) (reifyˡ t)
   reifyˡ (⇒L s t)  = pair (reifyʳ s) (reifyˡ t)
   reifyˡ (⇐L s t)  = pair (reifyˡ s) (reifyʳ t)
+
+  reify : ∀ {X Y} → X ⊢ Y → ⟦ X ⟧ ++ ⟦ Y ⟧ ⊢LP ⊥
+  reify (μ* t)     rewrite Pos-≡ = app var (reifyʳ t)
+  reify (μ̃* t)     rewrite Neg-≡ = app var (reifyˡ t)
+  reify (⊗L t)     = case var (reify t)
+  reify (⇚L t)    = case var (reify t)
+  reify (⇛L t)    = case var (reify t)
+  reify (⊕R t)     = case var (reify t)
+  reify (⇒R t)    = case var (reify t)
+  reify (⇐R t)    = case var (reify t)
 \end{spec}
 
 \hidden{
 \begin{code}
 mutual
+  reifyʳ : ∀ {X A} → X ⊢[ A ] → ⟦ X ⟧ ⊢LP ⟦ A ⟧+
+  reifyʳ var = var
+  reifyʳ (μ {X} {A} {q} t) rewrite Neg-≡ (toWitness q) = abs (to-back (reify t))
+  reifyʳ (⊗R {X} {Y} {A} {B} s t) = pair (reifyʳ s) (reifyʳ t)
+  reifyʳ (⇚R {X} {Y} {A} {B} s t) = pair (reifyʳ s) (reifyˡ t)
+  reifyʳ (⇛R {X} {Y} {A} {B} s t) = pair (reifyˡ s) (reifyʳ t)
+
+  reifyˡ : ∀ {A Y} → [ A ]⊢ Y → ⟦ Y ⟧ ⊢LP ⟦ A ⟧-
+  reifyˡ covar = var
+  reifyˡ (μ̃ {X} {A} {p} t) rewrite Pos-≡ (toWitness p) = abs (reify t)
+  reifyˡ (⊕L {X} {Y} {A} {B} s t) = YX↝XY ⟦ X ⟧ ⟦ Y ⟧ (pair (reifyˡ s) (reifyˡ t))
+  reifyˡ (⇒L {X} {Y} {A} {B} s t) = pair (reifyʳ s) (reifyˡ t)
+  reifyˡ (⇐L {X} {Y} {A} {B} s t) = pair (reifyˡ s) (reifyʳ t)
+
   reify  : ∀ {X Y} → X ⊢ Y → ⟦ X ⟧ ++ ⟦ Y ⟧ ⊢LP ⊥
   reify (μ* {X} {A} {p} t) rewrite Pos-≡ (toWitness p) = to-front (app var (reifyʳ t))
   reify (μ̃* {X} {A} {q} t) rewrite Neg-≡ (toWitness q) = app var (reifyˡ t)
@@ -387,20 +461,6 @@ mutual
   reify (dist₂ {X} {Y} {Z} {W} t) = XYZW↝YWXZ ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ ⟦ W ⟧ (reify t)
   reify (dist₃ {X} {Y} {Z} {W} t) = XYZW↝ZXWY ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ ⟦ W ⟧ (reify t)
   reify (dist₄ {X} {Y} {Z} {W} t) = XYZW↝ZYXW ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ ⟦ W ⟧ (reify t)
-
-  reifyʳ : ∀ {X A} → X ⊢[ A ] → ⟦ X ⟧ ⊢LP ⟦ A ⟧+
-  reifyʳ var = var
-  reifyʳ (μ {X} {A} {q} t) rewrite Neg-≡ (toWitness q) = abs (to-back (reify t))
-  reifyʳ (⊗R {X} {Y} {A} {B} s t) = pair (reifyʳ s) (reifyʳ t)
-  reifyʳ (⇚R {X} {Y} {A} {B} s t) = pair (reifyʳ s) (reifyˡ t)
-  reifyʳ (⇛R {X} {Y} {A} {B} s t) = pair (reifyˡ s) (reifyʳ t)
-
-  reifyˡ : ∀ {A Y} → [ A ]⊢ Y → ⟦ Y ⟧ ⊢LP ⟦ A ⟧-
-  reifyˡ covar = var
-  reifyˡ (μ̃ {X} {A} {p} t) rewrite Pos-≡ (toWitness p) = abs (reify t)
-  reifyˡ (⊕L {X} {Y} {A} {B} s t) = YX↝XY ⟦ X ⟧ ⟦ Y ⟧ (pair (reifyˡ s) (reifyˡ t))
-  reifyˡ (⇒L {X} {Y} {A} {B} s t) = pair (reifyʳ s) (reifyˡ t)
-  reifyˡ (⇐L {X} {Y} {A} {B} s t) = pair (reifyˡ s) (reifyʳ t)
 \end{code}
 }
 

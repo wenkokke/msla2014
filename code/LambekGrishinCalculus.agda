@@ -138,22 +138,35 @@ mutual
   ⟦_⟧+ : Type → TypeLP
   ⟦ el A +  ⟧+ = el A
   ⟦ el A -  ⟧+ = ¬ (¬ el A)
-  ⟦ A ⊗ B   ⟧+ = ⟦ A ⟧+ ⊗ ⟦ B ⟧+
-  ⟦ A ⇚ B  ⟧+ = ⟦ A ⟧+ ⊗ ⟦ B ⟧-
-  ⟦ A ⇛ B  ⟧+ = ⟦ A ⟧- ⊗ ⟦ B ⟧+
-  ⟦ A ⊕ B   ⟧+ = ¬ (⟦ A ⟧- ⊗ ⟦ B ⟧-)
-  ⟦ A ⇒ B  ⟧+ = ¬ (⟦ A ⟧+ ⊗ ⟦ B ⟧-)
-  ⟦ A ⇐ B  ⟧+ = ¬ (⟦ A ⟧- ⊗ ⟦ B ⟧+)
+  ⟦ A ⊗ B   ⟧+ =      ⟦ A ⟧+ ⊗ ⟦ B ⟧+
+  ⟦ A ⇚ B  ⟧+ =      ⟦ A ⟧+ ⊗ ⟦ B ⟧-
+  ⟦ A ⇛ B  ⟧+ =      ⟦ A ⟧- ⊗ ⟦ B ⟧+
+  ⟦ A ⊕ B   ⟧+ = ¬ (  ⟦ A ⟧- ⊗ ⟦ B ⟧-)
+  ⟦ A ⇒ B  ⟧+ = ¬ (  ⟦ A ⟧+ ⊗ ⟦ B ⟧-)
+  ⟦ A ⇐ B  ⟧+ = ¬ (  ⟦ A ⟧- ⊗ ⟦ B ⟧+)
 
   ⟦_⟧- : Type → TypeLP
   ⟦ el A +  ⟧- = ¬ el A
   ⟦ el A -  ⟧- = ¬ el A
-  ⟦ A ⊗ B   ⟧- = ¬ (⟦ A ⟧+ ⊗ ⟦ B ⟧+)
-  ⟦ A ⇚ B  ⟧- = ¬ (⟦ A ⟧+ ⊗ ⟦ B ⟧-)
-  ⟦ A ⇛ B  ⟧- = ¬ (⟦ A ⟧- ⊗ ⟦ B ⟧+)
-  ⟦ A ⊕ B   ⟧- = ⟦ A ⟧- ⊗ ⟦ B ⟧-
-  ⟦ A ⇒ B  ⟧- = ⟦ A ⟧+ ⊗ ⟦ B ⟧-
-  ⟦ A ⇐ B  ⟧- = ⟦ A ⟧- ⊗ ⟦ B ⟧+
+  ⟦ A ⊗ B   ⟧- = ¬ (  ⟦ A ⟧+ ⊗ ⟦ B ⟧+)
+  ⟦ A ⇚ B  ⟧- = ¬ (  ⟦ A ⟧+ ⊗ ⟦ B ⟧-)
+  ⟦ A ⇛ B  ⟧- = ¬ (  ⟦ A ⟧- ⊗ ⟦ B ⟧+)
+  ⟦ A ⊕ B   ⟧- =      ⟦ A ⟧- ⊗ ⟦ B ⟧-
+  ⟦ A ⇒ B  ⟧- =      ⟦ A ⟧+ ⊗ ⟦ B ⟧-
+  ⟦ A ⇐ B  ⟧- =      ⟦ A ⟧- ⊗ ⟦ B ⟧+
+
+mutual
+  ⟦_⟧+ : Struct+ → List TypeLP
+  ⟦ · A ·   ⟧+ = ⟦ A ⟧+ , ∅
+  ⟦ X ⊗ Y   ⟧+ = ⟦ X ⟧+ ⊗ ⟦ Y ⟧+
+  ⟦ X ⇚ Y  ⟧+ = ⟦ X ⟧+ ⊗ ⟦ Y ⟧-
+  ⟦ X ⇛ Y  ⟧+ = ⟦ X ⟧- ⊗ ⟦ Y ⟧+
+
+  ⟦_⟧- : Struct- → List TypeLP
+  ⟦ · A ·   ⟧- = ⟦ A ⟧- , ∅
+  ⟦ X ⊕ Y   ⟧- = ⟦ X ⟧- ⊗ ⟦ Y ⟧-
+  ⟦ X ⇒ Y  ⟧- = ⟦ X ⟧+ ⊗ ⟦ Y ⟧-
+  ⟦ X ⇐ Y  ⟧- = ⟦ X ⟧- ⊗ ⟦ Y ⟧+
 
 mutual
   str+ : Struct+ → List TypeLP
@@ -191,6 +204,20 @@ Pos-≡ {.(A ⇚ B)} (A ⇚ B) = refl
 Pos-≡ {.(A ⇛ B)} (A ⇛ B) = refl
 
 mutual
+  reifyʳ : ∀ {X A} → X ⊢[ A ] → ⟦ X ⟧ ⊢LP ⟦ A ⟧+
+  reifyʳ var = var
+  reifyʳ (μ {X} {A} {q} t) rewrite Neg-≡ (toWitness q) = abs (to-back (reify t))
+  reifyʳ (⊗R {X} {Y} {A} {B} s t) = pair (reifyʳ s) (reifyʳ t)
+  reifyʳ (⇚R {X} {Y} {A} {B} s t) = pair (reifyʳ s) (reifyˡ t)
+  reifyʳ (⇛R {X} {Y} {A} {B} s t) = pair (reifyˡ s) (reifyʳ t)
+
+  reifyˡ : ∀ {A Y} → [ A ]⊢ Y → ⟦ Y ⟧ ⊢LP ⟦ A ⟧-
+  reifyˡ covar = var
+  reifyˡ (μ̃ {X} {A} {p} t) rewrite Pos-≡ (toWitness p) = abs (reify t)
+  reifyˡ (⊕L {X} {Y} {A} {B} s t) = YX↝XY ⟦ X ⟧ ⟦ Y ⟧ (pair (reifyˡ s) (reifyˡ t))
+  reifyˡ (⇒L {X} {Y} {A} {B} s t) = pair (reifyʳ s) (reifyˡ t)
+  reifyˡ (⇐L {X} {Y} {A} {B} s t) = pair (reifyˡ s) (reifyʳ t)
+
   reify  : ∀ {X Y} → X ⊢ Y → ⟦ X ⟧ ++ ⟦ Y ⟧ ⊢LP ⊥
   reify (μ* {X} {A} {p} t) rewrite Pos-≡ (toWitness p) = to-front (app var (reifyʳ t))
   reify (μ̃* {X} {A} {q} t) rewrite Neg-≡ (toWitness q) = app var (reifyˡ t)
@@ -212,20 +239,6 @@ mutual
   reify (dist₂ {X} {Y} {Z} {W} t) = XYZW↝YWXZ ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ ⟦ W ⟧ (reify t)
   reify (dist₃ {X} {Y} {Z} {W} t) = XYZW↝ZXWY ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ ⟦ W ⟧ (reify t)
   reify (dist₄ {X} {Y} {Z} {W} t) = XYZW↝ZYXW ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ ⟦ W ⟧ (reify t)
-
-  reifyʳ : ∀ {X A} → X ⊢[ A ] → ⟦ X ⟧ ⊢LP ⟦ A ⟧+
-  reifyʳ var = var
-  reifyʳ (μ {X} {A} {q} t) rewrite Neg-≡ (toWitness q) = abs (to-back (reify t))
-  reifyʳ (⊗R {X} {Y} {A} {B} s t) = pair (reifyʳ s) (reifyʳ t)
-  reifyʳ (⇚R {X} {Y} {A} {B} s t) = pair (reifyʳ s) (reifyˡ t)
-  reifyʳ (⇛R {X} {Y} {A} {B} s t) = pair (reifyˡ s) (reifyʳ t)
-
-  reifyˡ : ∀ {A Y} → [ A ]⊢ Y → ⟦ Y ⟧ ⊢LP ⟦ A ⟧-
-  reifyˡ covar = var
-  reifyˡ (μ̃ {X} {A} {p} t) rewrite Pos-≡ (toWitness p) = abs (reify t)
-  reifyˡ (⊕L {X} {Y} {A} {B} s t) = YX↝XY ⟦ X ⟧ ⟦ Y ⟧ (pair (reifyˡ s) (reifyˡ t))
-  reifyˡ (⇒L {X} {Y} {A} {B} s t) = pair (reifyʳ s) (reifyˡ t)
-  reifyˡ (⇐L {X} {Y} {A} {B} s t) = pair (reifyˡ s) (reifyʳ t)
 
 
 

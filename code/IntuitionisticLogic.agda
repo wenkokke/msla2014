@@ -61,7 +61,7 @@ module Explicit where
     app   : ∀ {X Y A B} → X ⊢ A ⇒ B → Y ⊢ A → X ++ Y ⊢ B
     pair  : ∀ {X Y A B} → X ⊢ A → Y ⊢ B → X ++ Y ⊢ A ⊗ B
     case  : ∀ {X Y A B C} → X ⊢ A ⊗ B → A , B , Y ⊢ C → X ++ Y ⊢ C
-    weak  : ∀ {X A B} → X ⊢ B → A , X ⊢ B
+    weak  : ∀ {X Y A} → X ⊢ A → X ++ Y ⊢ A
     cont  : ∀ {X A B} → A , A , X ⊢ B → A , X ⊢ B
     exch  : ∀ {X Y Z W A} →  (X ++ Z) ++ (Y ++ W) ⊢ A
           →  (X ++ Y) ++ (Z ++ W) ⊢ A
@@ -69,8 +69,8 @@ module Explicit where
   exch₀ : ∀ {X A B C} → B , A , X ⊢ C → A , B , X ⊢ C
   exch₀ {X} {A} {B} = exch {∅} {A , ∅} {B , ∅} {X}
 
-  swap : ∀ {A B} → ∅ ⊢ A ⊗ B ⇒ B ⊗ A
-  swap = abs (case var (exch₀ (pair var var)))
+  swap : ∀ {X A B} → X ⊢ A ⊗ B ⇒ B ⊗ A
+  swap {X} {A} {B} = abs (case var (exch₀ (pair var (weak {A , ∅} {X} var))))
 
   record Reify {a b : Level} (A : Set a) (B : Set b) : Set (a ⊔ b) where
     field
@@ -118,7 +118,8 @@ module Explicit where
   ... | Eˢ , Eᵗ               = (reify s Eˢ , reify t Eᵗ)
   reify (case s t)  E         with Ctxt-split E
   ... | Eˢ , Eᵗ               = case reify s Eˢ of λ{ (A′ , B′) → reify t (A′ , B′ , Eᵗ)}
-  reify (weak t)    (A′ , E)  = reify t E
+  reify (weak {X} s)    E         with Ctxt-split {X} E
+  ... | Eˢ , Eᵗ               = reify s Eˢ
   reify (cont t)    (A′ , E)  = reify t (A′ , A′ , E)
   reify (exch {X} {Y} {Z} {W} t)    E         = reify t (Ctxt-exch {X} {Y} {Z} {W} E)
 
@@ -126,5 +127,5 @@ module Explicit where
   [_] = reify
 
   swap′ : ∀ {A B} → ⟦ A ⟧ × ⟦ B ⟧ → ⟦ B ⟧ × ⟦ A ⟧
-  swap′ {A} {B} = [ swap {A} {B} ] ∅
+  swap′ {A} {B} = [ swap {∅} {A} {B} ] ∅
 

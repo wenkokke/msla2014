@@ -28,17 +28,18 @@ infixr 20 _⇒_
 \end{code}
 }
 
-\subsection{Modeling IL with de Bruijn indices}
+\subsection{Modelling IL with de Bruijn indices}
 
 If we wish to model the intuitionistic calculus, we first have to do
 something about our notation. The reason for this is that the usual
 notation with named variables introduces a whole host of problems,
 such as checking for proper scopal and binding relations.
-To solve this we are going to use a notation introduced first in
-\citet{bruijn1972}. In this notation, instead of using names for
-binding, we are going to use numbers---the semantics being that the
-numbers tell you how many lambdas up they are bound (i.e. they are
-indices into our context.) See \autoref{fig:namedvsdebruijn} for an
+
+We can solve this by using a notation introduced in
+\citet{debruijn1972}, where we instead of variable names for binding,
+we will use numbers. The semantics of these numbers will be that they
+tell you how many lambdas up the variable is bound, i.e. they are
+indices into the context. See \autoref{fig:namedvsdebruijn} for an
 example of how terms in named notation compare to terms in de Bruijn
 notation.
 
@@ -48,20 +49,20 @@ notation.
      Named & de Bruijn
   \\ \hline
   \\ $\lambda x \to x$
-   & $\textcolor{red}{\lambda}\ \textcolor{red}{0}$
+   & $\textcolor{Maroon}{\lambda}\ \textcolor{Maroon}{0}$
   \\ $\lambda x \to \lambda y \to x$
-   & $\textcolor{red}{\lambda}\ \textcolor{blue}{\lambda}\ \textcolor{red}{1}$
+   & $\textcolor{Maroon}{\lambda}\ \textcolor{MidnightBlue}{\lambda}\ \textcolor{Maroon}{1}$
   \\ $\lambda x \to \lambda y \to \lambda z \to x \ z \ (y \ z)$
-   & $\textcolor{red}{\lambda}\ \textcolor{blue}{\lambda}\ \textcolor{green}{\lambda}\
-      \textcolor{red}{2}\ \textcolor{green}{0}\ (\textcolor{blue}{1}\ \textcolor{green}{0})$
+   & $\textcolor{Maroon}{\lambda}\ \textcolor{MidnightBlue}{\lambda}\ \textcolor{ForestGreen}{\lambda}\
+      \textcolor{Maroon}{2}\ \textcolor{ForestGreen}{0}\ (\textcolor{MidnightBlue}{1}\ \textcolor{ForestGreen}{0})$
   \end{tabular}
   \caption{Named notation versus de Bruijn notation \citep{mazzoli2013}.}
   \label{fig:namedvsdebruijn}
 \end{figure}
 
-To aid our translation of the intuitionistic calculus to Agda, we can
-formulate the de Bruijn notation as a set of inference rules. The
-result can be seen in \autoref{fig:debruijnaslogic}.
+As a preparation for the translation of the intuitionistic calculus
+into Agda, we can formulate the de Bruijn notation as a set of
+inference rules; the result can be seen in \autoref{fig:debruijnaslogic}.
 
 \begin{figure}[h]
   \begin{mdframed}
@@ -109,22 +110,19 @@ result can be seen in \autoref{fig:debruijnaslogic}.
   \label{fig:debruijnaslogic}
 \end{figure}
 
-The first thing we need in order to model the intuitionistic calculus
-is a representation for the types (or connectives) that we wish to
-use. In this paper we will limit ourselves to implication and
-conjunction.
+As a first step of we will need a representation of the type
+language/formulas that we wish to model. In this paper we will limit
+ourselves to formulas containing implication (written
+$\_\!\Rightarrow\!\_$) and conjunction (written $\_\!\times\!\_$).
 
-Below, you can see the datatype we use to encode our types. We have
-intuitionistic conjunction ($\_\!\times\!\_$) and implication (written
-as $\_\!\Rightarrow\!\_$, due to the fact that $\_\!\rightarrow\!\_$
-is Agda's function type, or---from our point of view---the
-meta-logical implication). In addition, we are abstracting over some
-type $U$. The reason for this is that we do not want to be forced to
-specify the atomic types---instead we shall allow the user to provide
-their own universe of atomic types.\footnote{
+In addition, we will abstract over some type $U$. The reason for
+this is that we do not want to be forced to specify the atomic
+types---instead we shall allow the user to provide their own universe
+of atomic types.\footnote{
   For an example of this, see \todo{make a link and, y'know, a section
   with an actual example of this.}
 }
+
 
 %<*type>
 \begin{code}
@@ -147,17 +145,24 @@ module Implicit where
 \end{code}
 }
 
-Since we already have the formulation of the simply-typed lambda
-calculus as presented in \autoref{fig:debruijnaslogic}, all that rests
-is to convert it to Agda.
+All that remains for us to do, is to translate our calculus as
+presented in \autoref{fig:debruijnaslogic} to Agda. The translation is
+almost verbatim, save that we write $\_\!\rightarrow\!\_$ for the
+meta-logical implication, and---due to the close relationship between
+proofs and terms---the term constructors (|var|, |abs|, |case|, etc.)
+become constructors of our datatype.
 
-If we use vectors\footnote{
+In addition to this, we use vectors\footnote{
   See \url{http://agda.github.io/agda-stdlib/html/Data.Vec.html\#604}.
-} to model contexts and finite sets\footnote{
+} to model contexts, and finite sets\footnote{
   See \url{http://agda.github.io/agda-stdlib/html/Data.Fin.html\#775}.
-} to model variables, we can ensure that every variable is bound,
-either to a type in the context or to a lambda.%
-\footnote{
+} to model the de Bruijn indices.
+In this way we can ensure that every variable is bound,\footnote{
+  The reason this works is because vectors encode lists of a fixed
+  length $k$, and finite sets ecode a datatype with precisely $k$
+  inhabitants.
+} either to a
+type in the context or to a lambda.\footnote{
   It should be stated that throughout this paper we will use an
   alternative notation for lists and vectors, using $\_,\_$ for the
   cons operator and $∅$ for the empty list (or vector), as we deem
@@ -165,7 +170,8 @@ either to a type in the context or to a lambda.%
   For the concatination of contexts, however, we will stick to
   $\_\!\plus\!\_$, as usual.
 }
-We can then define a |lookup| function as follows.
+Because of this invariant we can define a safe |lookup| function as
+follows.
 
 \begin{spec}
   lookup : Fin k → Vec A k → A
@@ -173,7 +179,7 @@ We can then define a |lookup| function as follows.
   lookup  (suc x)  (A , Γ)  = lookup x Γ
 \end{spec}
 
-And using this function we can finally present a full formalisation of
+And using this function we can finally present the full formalisation of
 our inference rules.
 
 %<*il-implicit>
@@ -187,8 +193,8 @@ our inference rules.
 \end{code}
 %</il-implicit>
 
-In \autoref{sec:Motivation} we mentioned that one of the advantages of
-modeling a logic in Agda was the use of Agda's interactive proof
+In \autoref{sec:Introduction} we mentioned that one of the advantages
+of modeling a logic in Agda was the use of Agda's interactive proof
 assistant.
 Below we will demonstrate how the proof assistant might be used to
 formulate a proof.
@@ -256,26 +262,23 @@ deduction style.
 
 While the above model of \textbf{IL} suffices if all we wish to model
 is the intuitionistic calculus, it poses some problems if we wish to
-model substructural logics such as linear logic or the Lambek
-calculus.
+model substructural logics such as linear logic.
 
 The reason for this is that the structural rules (exchange, weakening
-and contraction) are actually admissible rules for our formulation,
-i.e.\ they are implicit in our formulation of \textbf{IL}.
+and contraction) are admissible rules in our formulation, i.e.\ they
+are implicitly present in our formulation of \textbf{IL}.
 
-We shall demonstrate this by giving an explicit formulation of the following
-exchange principle.\footnote{
-  It should be noted that whilst this is a inconvenient formulation of
-  the exchange principle to work with, it has a simple proof of admissibility.
-}
+We shall demonstrate this by giving an explicit formulation of the
+following simple exchange principle: exchange at the $i$-th position.
 
 \begin{scprooftree}{1}
   \AXC{$\Gamma , B , A , \Delta ⊢ C$}
   \UIC{$\Gamma , A , B , \Delta ⊢ C$}
 \end{scprooftree}
 
-First we define what exchange at the $i$-th position means on the
-level of contexts.
+\noindent
+We can define this principle in three steps. First we define what
+exchange position means on the level of contexts.
 
 \begin{code}
   Vec-exch : ∀ {k} (i : Fin k) → Vec Type (suc k) → Vec Type (suc k)
@@ -283,10 +286,12 @@ level of contexts.
   Vec-exch (suc i)  (A , Γ)      = A , (Vec-exch i Γ)
 \end{code}
 
-Secondly, we define what an exchange does at the level of de Bruijn
-indices. Note that the way we prove this is by return a new index,
+\noindent
+Secondly, we define what an exchange does at the level of the
+indices. Note that the way we prove this is by returning a new index,
 together with a proof that the |lookup| function will return the same
-result if we use this new index with the exchanged context.
+result when we use this new index with the exchanged context, as when
+we use the old index with the old context.
 
 \begin{code}
   lemma-var : ∀ {k} {Γ : Vec Type (suc k)} → ∀ i x → ∃ λ y → Vec.lookup x Γ ≡ Vec.lookup y (Vec-exch i Γ)
@@ -297,9 +302,15 @@ result if we use this new index with the exchanged context.
   lemma-var {Γ = A , Γ} (suc i)  (suc x)        = Product.map suc id (lemma-var {Γ = Γ} i x)
 \end{code}
 
+\noindent
 Finally, we can define exchange as a recursive function over proofs,
 where we exchange for every sub-proof until we reach the axioms (or
-variables), at which point we use the lemma we defined above.
+variables), at which point we use the lemma we defined
+above.\footnote{
+  Note that this is also what makes exchange admissible instead of
+  derivable: we need to inspect the proof terms in order to be able
+  to define it.
+}
 
 \begin{code}
   exch : ∀ {k} {Γ : Vec Type (suc k)} {A} → ∀ i → Γ ⊢ A → Vec-exch i Γ ⊢ A
@@ -311,29 +322,30 @@ variables), at which point we use the lemma we defined above.
   exch i (case s t)  = case (exch i s) (exch (suc (suc i)) t)
 \end{code}
 
-Note that this is also what makes exchange admissible in our current
-formulation: we need to inspect the proof terms in order to be able to
-define it.
-
 
 
 \subsection{Explicit structural rules}
 
-If we wish to fix our model of \textbf{IL}, we will have to remove the
-implicit exchange, weakening and contraction from our axioms, and add
-them as axioms in their own right.
+If we wish to make our model of \textbf{IL} suitable for modelling
+substructural logical, we will have to remove the implicit exchange,
+weakening and contraction from our axioms, and add them as axioms in
+their own right.
 
 The reason that the structural rules are implicitly present in our
-logic is that all premises in our inference rules share a context. If
+logic, is that all premises in our inference rules share a context. If
 we make sure that every premise of a rule has its own context, and all
 contexts are concatinated in the conclusion, this solves our
 issue. Another surprising side-effect is that variables are no longer
-needed---simply marking the position in a term as a variable is
-sufficient. And because of this we can switch to using lists for our
-contexts, instead of vectors.
+needed---simply marking the position in a term as an axiom is
+sufficient. As a consequence of this, we can stop using vectors for
+modelling contexts, and switch to using simple lists.
 
-Below you can find a model of \textbf{IL} in which the structural
-rules have been made explicit.
+Below you will find a model of \textbf{IL} in which the structural
+rules have been made explicit.\footnote{
+  Note that the exchange principle we chose here is slightly different
+  from the exchange principle we proved above, in that it allows the
+  exchange of entire contexts.
+}
 
 \hidden{
 \begin{code}
@@ -355,16 +367,12 @@ module Explicit where
     app   : ∀ {X Y A B} → X ⊢ A ⇒ B → Y ⊢ A → X ++ Y ⊢ B
     pair  : ∀ {X Y A B} → X ⊢ A → Y ⊢ B → X ++ Y ⊢ A ⊗ B
     case  : ∀ {X Y A B C} → X ⊢ A ⊗ B → A , B , Y ⊢ C → X ++ Y ⊢ C
-    weak  : ∀ {X A B} → X ⊢ B → A , X ⊢ B
+    weak  : ∀ {X Y A} → X ⊢ A → X ++ Y ⊢ A
     cont  : ∀ {X A B} → A , A , X ⊢ B → A , X ⊢ B
     exch  : ∀ {X Y Z W A} →  (X ++ Z) ++ (Y ++ W) ⊢ A
           →  (X ++ Y) ++ (Z ++ W) ⊢ A
 \end{code}
 %</il-explicit>
-
-Note that the exchange principle we chose here is slightly different
-from the exchange principle we proved above, in that it allows the
-exchange of entire contexts.
 
 \hidden{
 \begin{code}
@@ -375,48 +383,41 @@ exchange of entire contexts.
 
 Using this model we can once again prove our running
 example---the commutativity of $\_\!×\!\_$.\footnote{
-  Note that we are using a derived inference rule in the proof, exch₀,
-  which has the type $B , A , X ⊢ C → A , B , X ⊢ C$, i.e.\ it
-  exchanges the first two types in the context.
-}%
-\footnote{We can also prove $\Gamma ⊢ A \times B \Rightarrow B \times
-A$, i.e.\ commutativity in the presence of a context, but for that we
-either need a stronger weakening principle or apply the current
-weakening principle recursively.}
+  In the proof we use a derived inference rule, exch₀, which has the
+  type $B , A , X ⊢ C → A , B , X ⊢ C$, i.e.\ it exchanges the first
+  two types in the context.
+}
 
 \begin{code}
-  swap : ∀ {A B} → ∅ ⊢ A ⊗ B ⇒ B ⊗ A
-  swap = abs (case var (exch₀ (pair var var)))
+  swap : ∀ {X A B} → X ⊢ A ⊗ B ⇒ B ⊗ A
+  swap {X} {A} {B} = abs (case var (exch₀ (pair var (weak {A , ∅} {X} var))))
 \end{code}
 
 
 
 \subsection{Reification into Agda}
 
-As mentioned in \autoref{sec:Motivation}, another advantage of
-modeling logics in Agda is that one can reify terms in the modeled
-logic back into Agda terms, and in this way piggyback on Agda's
-evaluation mechanisms.
+Another advantage of modelling logics we mentioned in
+\autoref{sec:Introduction} is that one can reify proofs in the
+modelled system back into Agda terms, and in this way piggyback on
+Agda's evaluation mechanisms.
+
 In this section we will present a reification of our explicit
 \textbf{IL} terms into Agda terms.
 
 A reification generally consists of two parts:
 \begin{itemize}
-\item a translation function (written |⟦_⟧|) that sends types in the
-  source language to types in the target language;
-\item a translation function (written |[_]|) that sends terms
-  in the source language to terms in the target language.
+\myitem a translation function (written |⟦_⟧|) that sends types in the
+  source logic to types in the target logic;
+\myitem a translation function (written |[_]|) that sends terms in the
+  source logic to terms in the target logic.
 \end{itemize}
-However, since Agda has no explicit notation for contexts, we can only
-define a reification in this style for closed terms. For open terms,
-we shall have to provide our own encoding of contexts.
 
-First of all, however, let us look at the translation of our
-\textbf{IL} types into Agda's |Set|. Since we are abstracting over a
-user-provided type universe $U$, we do not know what types to map
-types in this universe to. Therefore, we shall require the user to
-provide us with a translation function |⟦_⟧ᵁ|. Once we have this
-function, the full translation is trivial.
+First of all, let us look at the translation of our \textbf{IL} types
+into Agda's |Set|. Since we cannot know what to map types in the
+user-provided universe $U$ to, we shall requrie the user to provide us
+with a translation function |⟦_⟧ᵁ|.
+With this function, the full translation is trivial.
 
 \hidden{
 \begin{code}
@@ -441,12 +442,16 @@ function, the full translation is trivial.
     ⟦ A ⇒ B  ⟧ = ⟦ A ⟧ → ⟦ B ⟧
 \end{code}
 
-We encounter the first real difficulty when we wish to translate
-terms. As mentioned above, Agda has no explicit notation for
-contexts. To overcome this, we need to cook up our own encoding:
-so what is a context? A context is a list of values of different
-types. This means that we can use heterogeneous lists---a list that is
-indexed on the type-level by a list of types.
+Next we will look at the translation of proofs into Agda terms.
+Unfortunately for us, Agda has no explicit notion of contexts. We
+could therefore require that the proofs we translate are closed terms,
+i.e.\ of the form $\emptyset \vdash A$.
+Another solution, however, is to invent our own encoding of contexts.
+So let us ask ourselves, what is a context? The answer: a context is a
+list of types associated with a list of values of those types. Or to
+phrase it the other way around: a list of values typed by a list of
+types. This means we can use heterogeneous lists \citep{kiselyov2004}
+to encode our contexts.
 
 \begin{code}
   data Ctxt : ∀ (X : List Set) → Set₁ where
@@ -454,17 +459,23 @@ indexed on the type-level by a list of types.
     _,_ : ∀ {A X} → A → Ctxt X → Ctxt (A , X)
 \end{code}
 
-Using this encoding for we can define a few simple function to work on
-environments. An |exch| function, which applies our exchange principle
-to a context; and a split function, which splits a context in two parts.
+\noindent
+Using this definition, our representation of sequents in Agda is the
+type $Ctxt \ ⟦ X ⟧ → ⟦ A ⟧$.
+
+Next we need a few simple function to work with these
+contexts. Specifically, an |exch| function, which applies our exchange
+principle to the context, and a split function, which splits a context
+in two parts (for binary rules).
 
 \begin{spec}
   Ctxt-exch   : Ctxt ((X ++ Y) ++ (Z ++ W)) → Ctxt ((X ++ Z) ++ (Y ++ W))
   Ctxt-split  : Ctxt (X ++ Y) → (Ctxt X) × (Ctxt Y)
 \end{spec}
 
+\noindent
 For brevity's sake, we will omit the definitions for these
-function. The interested reader can refer to the code for a full
+functions. The interested reader can refer to the code for a full
 account. Instead we will present the reader with the full reification
 into Agda.
 
@@ -498,16 +509,15 @@ into Agda.
 \end{code}
 }
 
+\noindent
 The reification is fairly straightforward: we simply have to the
-constructors of our model with the corresponding constructs in
-Agda.
-In the case of variables, we know that the environment will contain
-exactly one value of exactly the right type.
-For lambda abstractions, we abstract over a value and then insert it
-into the environment (and thus its type into the context).
-The translations for the other rules operate on a similar logic.
-Note that for binary rules we indeed split the environment in two, and
-pass the halves down the corresponding branches of the translation.
+constructors of our model with the corresponding constructs in Agda.
+
+In the case of \emph{variables}, we know that the environment will
+contain exactly one value of exactly the right type. For \emph{lambda
+abstractions}, we abstract over a value, which we insert into the
+context. For binary rules we split the context, and pass pass the
+parts down the corresponding branches of the reification.
 
 \begin{code}
   reify : {A : Type} {X : List Type} → X ⊢ A → Ctxt ⟦ X ⟧ → ⟦ A ⟧
@@ -519,16 +529,14 @@ pass the halves down the corresponding branches of the translation.
   ... | Eˢ , Eᵗ               = (reify s Eˢ , reify t Eᵗ)
   reify (case s t)  E         with Ctxt-split E
   ... | Eˢ , Eᵗ               = case reify s Eˢ of λ{ (A′ , B′) → reify t (A′ , B′ , Eᵗ)}
-  reify (weak t)    (A′ , E)  = reify t E
+  reify (weak {X} s)    E         with Ctxt-split {X} E
+  ... | Eˢ , Eᵗ               = reify s Eˢ
   reify (cont t)    (A′ , E)  = reify t (A′ , A′ , E)
   reify (exch {X} {Y} {Z} {W} t)    E         = reify t (Ctxt-exch {X} {Y} {Z} {W} E)
 \end{code}
 
 \noindent
-We could see the type $Ctxt \ ⟦ X ⟧ → ⟦ A ⟧$ as Agda's notation of
-sequents, and, though in some cases it is more convenient to work on
-closed terms, we shall define the reification |[_]| as a function
-returning this type (as a simple alias).
+We can now define the reification function |[_]| as a simple alias.
 
 \begin{code}
   [_] : {A : Type} {X : List Type} → X ⊢ A → (Ctxt ⟦ X ⟧ → ⟦ A ⟧)
@@ -536,10 +544,15 @@ returning this type (as a simple alias).
 \end{code}
 
 \noindent
-We can translate our running example into Agda. Note that we insert
-the empty context, since our example is a closed term.
+And translate our running example into Agda. Note that we can already
+insert the empty context, as our example is a closed term.
 
 \begin{code}
   swap′ : ∀ {A B} → ⟦ A ⟧ × ⟦ B ⟧ → ⟦ B ⟧ × ⟦ A ⟧
-  swap′ {A} {B} = [ swap {A} {B} ] ∅
+  swap′ {A} {B} = [ swap {∅} {A} {B} ] ∅
 \end{code}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
