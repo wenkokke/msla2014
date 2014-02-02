@@ -1,3 +1,4 @@
+open import Function using (_∘_)
 open import Data.List using (List; _++_) renaming (_∷_ to _,_; _∷ʳ_ to _,′_; [] to ∅)
 open import Data.Sum using (_⊎_; inj₁; inj₂)
 open import Data.Product using (∃; _,_)
@@ -7,7 +8,7 @@ open import Relation.Binary.PropositionalEquality as PropEq using (_≡_; refl; 
 
 module LambekGrishinCalculus (U : Set) (R : U) (⟦_⟧ᵁ : U → Set) where
 
-infix  30 _⊗_ _⊕_
+infixr 30 _⊗_ _⊕_
 infixr 20 _⇒_ _⇛_
 infixl 20 _⇐_ _⇚_
 infix  5  _⊢_ [_]⊢_ _⊢[_]
@@ -130,9 +131,9 @@ lower : ∀ {A B} → · B ⇚ (A ⇛ B) · ⊢ · A ·
 lower = ⇚L (dres₂ (dres₃ (μ* (⇛R covar var))))
 
 import IntuitionisticLogic U ⟦_⟧ᵁ as IL
-open IL.Explicit hiding (_⊢_; reify)
+open IL.Explicit hiding ([_]; _⊢_; reify)
 import LinearLogic U R ⟦_⟧ᵁ as LP
-open LP renaming (Type to TypeLP; _⊢_ to _⊢LP_)
+open LP renaming (Type to TypeLP; _⊢_ to _⊢LP_; [_] to reifyLP)
 
 mutual
   ⟦_⟧+ : Type → TypeLP
@@ -156,19 +157,6 @@ mutual
   ⟦ A ⇐ B  ⟧- =      ⟦ A ⟧- ⊗ ⟦ B ⟧+
 
 mutual
-  ⟦_⟧+ : Struct+ → List TypeLP
-  ⟦ · A ·   ⟧+ = ⟦ A ⟧+ , ∅
-  ⟦ X ⊗ Y   ⟧+ = ⟦ X ⟧+ ⊗ ⟦ Y ⟧+
-  ⟦ X ⇚ Y  ⟧+ = ⟦ X ⟧+ ⊗ ⟦ Y ⟧-
-  ⟦ X ⇛ Y  ⟧+ = ⟦ X ⟧- ⊗ ⟦ Y ⟧+
-
-  ⟦_⟧- : Struct- → List TypeLP
-  ⟦ · A ·   ⟧- = ⟦ A ⟧- , ∅
-  ⟦ X ⊕ Y   ⟧- = ⟦ X ⟧- ⊗ ⟦ Y ⟧-
-  ⟦ X ⇒ Y  ⟧- = ⟦ X ⟧+ ⊗ ⟦ Y ⟧-
-  ⟦ X ⇐ Y  ⟧- = ⟦ X ⟧- ⊗ ⟦ Y ⟧+
-
-mutual
   str+ : Struct+ → List TypeLP
   str+ (· A ·)   = ⟦ A ⟧+ , ∅
   str+ (A ⊗ B)   = str+ A ++ str+ B
@@ -190,6 +178,12 @@ Struct+Reify = record { ⟦_⟧ = str+ }
 
 Struct-Reify : Reify Struct- (List TypeLP)
 Struct-Reify = record { ⟦_⟧ = str- }
+
+TypeReify : Reify Type Set
+TypeReify = record { ⟦_⟧ = λ A → ⟦ ⟦ ⟦ A ⟧+ ⟧ ⟧ }
+
+StructReify : Reify Struct+ (List Set)
+StructReify = record { ⟦_⟧ = λ X → ⟦ ⟦ ⟦ X ⟧ ⟧ ⟧ }
 
 Neg-≡ : ∀ {A} → Neg A → ⟦ A ⟧+ ≡ ⟦ A ⟧- ⊸ ⊥
 Neg-≡ {.(el A -)} (el A) = refl
@@ -240,5 +234,6 @@ mutual
   reify (dist₃ {X} {Y} {Z} {W} t) = XYZW↝ZXWY ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ ⟦ W ⟧ (reify t)
   reify (dist₄ {X} {Y} {Z} {W} t) = XYZW↝ZYXW ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ ⟦ W ⟧ (reify t)
 
-
+[_] : ∀ {X A} → X ⊢[ A ] → (Ctxt ⟦ X ⟧ → ⟦ A ⟧)
+[_] = reifyLP ∘ reifyʳ
 

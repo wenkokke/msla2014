@@ -109,7 +109,7 @@ module Explicit where
   Ctxt-split {A , X} {Y} (A′ , E) with Ctxt-split {X} {Y} E
   ... | Eˣ , Eʸ = ((A′ , Eˣ) , Eʸ)
 
-  reify : {A : Type} {X : List Type} → X ⊢ A → Ctxt ⟦ X ⟧ → ⟦ A ⟧
+  reify : {A : Type} {X : List Type} → X ⊢ A → (Ctxt ⟦ X ⟧ → ⟦ A ⟧)
   reify var         (A′ , ∅)  = A′
   reify (abs t)     E         = λ A′ → reify t (A′ , E)
   reify (app s t)   E         with Ctxt-split E
