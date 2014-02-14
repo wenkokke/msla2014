@@ -1,0 +1,369 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Relation.Binary.HeterogeneousEquality.Core</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="73"
+      >
+</a
+      ><a name="74" class="Comment"
+      >-- The Agda standard library</a
+      ><a name="102"
+      >
+</a
+      ><a name="103" class="Comment"
+      >--</a
+      ><a name="105"
+      >
+</a
+      ><a name="106" class="Comment"
+      >-- Heterogeneous equality</a
+      ><a name="131"
+      >
+</a
+      ><a name="132" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="204"
+      >
+
+</a
+      ><a name="206" class="Comment"
+      >-- This file contains some core definitions which are reexported by</a
+      ><a name="273"
+      >
+</a
+      ><a name="274" class="Comment"
+      >-- Relation.Binary.HeterogeneousEquality.</a
+      ><a name="315"
+      >
+
+</a
+      ><a name="317" class="Keyword"
+      >module</a
+      ><a name="323"
+      > </a
+      ><a name="324" href="Relation.Binary.HeterogeneousEquality.Core.html#1" class="Module"
+      >Relation.Binary.HeterogeneousEquality.Core</a
+      ><a name="366"
+      > </a
+      ><a name="367" class="Keyword"
+      >where</a
+      ><a name="372"
+      >
+
+</a
+      ><a name="374" class="Keyword"
+      >open</a
+      ><a name="378"
+      > </a
+      ><a name="379" class="Keyword"
+      >import</a
+      ><a name="385"
+      > </a
+      ><a name="386" href="Relation.Binary.Core.html#1" class="Module"
+      >Relation.Binary.Core</a
+      ><a name="406"
+      > </a
+      ><a name="407" class="Keyword"
+      >using</a
+      ><a name="412"
+      > </a
+      ><a name="413" class="Symbol"
+      >(</a
+      ><a name="414"
+      >_&#8801;_</a
+      ><a name="417" class="Symbol"
+      >;</a
+      ><a name="418"
+      > refl</a
+      ><a name="423" class="Symbol"
+      >)</a
+      ><a name="424"
+      >
+
+</a
+      ><a name="426" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="498"
+      >
+</a
+      ><a name="499" class="Comment"
+      >-- Heterogeneous equality</a
+      ><a name="524"
+      >
+
+</a
+      ><a name="526" class="Keyword"
+      >infix</a
+      ><a name="531"
+      > </a
+      ><a name="532" class="Number"
+      >4</a
+      ><a name="533"
+      > _&#8773;_
+
+</a
+      ><a name="539" class="Keyword"
+      >data</a
+      ><a name="543"
+      > </a
+      ><a name="544" href="Relation.Binary.HeterogeneousEquality.Core.html#544" class="Datatype Operator"
+      >_&#8773;_</a
+      ><a name="547"
+      > </a
+      ><a name="548" class="Symbol"
+      >{</a
+      ><a name="549" href="Relation.Binary.HeterogeneousEquality.Core.html#549" class="Bound"
+      >a</a
+      ><a name="550" class="Symbol"
+      >}</a
+      ><a name="551"
+      > </a
+      ><a name="552" class="Symbol"
+      >{</a
+      ><a name="553" href="Relation.Binary.HeterogeneousEquality.Core.html#553" class="Bound"
+      >A</a
+      ><a name="554"
+      > </a
+      ><a name="555" class="Symbol"
+      >:</a
+      ><a name="556"
+      > </a
+      ><a name="557" class="PrimitiveType"
+      >Set</a
+      ><a name="560"
+      > </a
+      ><a name="561" href="Relation.Binary.HeterogeneousEquality.Core.html#549" class="Bound"
+      >a</a
+      ><a name="562" class="Symbol"
+      >}</a
+      ><a name="563"
+      > </a
+      ><a name="564" class="Symbol"
+      >(</a
+      ><a name="565" href="Relation.Binary.HeterogeneousEquality.Core.html#565" class="Bound"
+      >x</a
+      ><a name="566"
+      > </a
+      ><a name="567" class="Symbol"
+      >:</a
+      ><a name="568"
+      > </a
+      ><a name="569" href="Relation.Binary.HeterogeneousEquality.Core.html#553" class="Bound"
+      >A</a
+      ><a name="570" class="Symbol"
+      >)</a
+      ><a name="571"
+      > </a
+      ><a name="572" class="Symbol"
+      >:</a
+      ><a name="573"
+      > </a
+      ><a name="574" class="Symbol"
+      >&#8704;</a
+      ><a name="575"
+      > </a
+      ><a name="576" class="Symbol"
+      >{</a
+      ><a name="577" href="Relation.Binary.HeterogeneousEquality.Core.html#577" class="Bound"
+      >b</a
+      ><a name="578" class="Symbol"
+      >}</a
+      ><a name="579"
+      > </a
+      ><a name="580" class="Symbol"
+      >{</a
+      ><a name="581" href="Relation.Binary.HeterogeneousEquality.Core.html#581" class="Bound"
+      >B</a
+      ><a name="582"
+      > </a
+      ><a name="583" class="Symbol"
+      >:</a
+      ><a name="584"
+      > </a
+      ><a name="585" class="PrimitiveType"
+      >Set</a
+      ><a name="588"
+      > </a
+      ><a name="589" href="Relation.Binary.HeterogeneousEquality.Core.html#577" class="Bound"
+      >b</a
+      ><a name="590" class="Symbol"
+      >}</a
+      ><a name="591"
+      > </a
+      ><a name="592" class="Symbol"
+      >&#8594;</a
+      ><a name="593"
+      > </a
+      ><a name="594" href="Relation.Binary.HeterogeneousEquality.Core.html#581" class="Bound"
+      >B</a
+      ><a name="595"
+      > </a
+      ><a name="596" class="Symbol"
+      >&#8594;</a
+      ><a name="597"
+      > </a
+      ><a name="598" class="PrimitiveType"
+      >Set</a
+      ><a name="601"
+      > </a
+      ><a name="602" class="Keyword"
+      >where</a
+      ><a name="607"
+      >
+  </a
+      ><a name="610" href="Relation.Binary.HeterogeneousEquality.Core.html#610" class="InductiveConstructor"
+      >refl</a
+      ><a name="614"
+      > </a
+      ><a name="615" class="Symbol"
+      >:</a
+      ><a name="616"
+      > </a
+      ><a name="617" href="Relation.Binary.HeterogeneousEquality.Core.html#565" class="Bound"
+      >x</a
+      ><a name="618"
+      > </a
+      ><a name="619" href="Relation.Binary.HeterogeneousEquality.Core.html#544" class="Datatype Operator"
+      >&#8773;</a
+      ><a name="620"
+      > </a
+      ><a name="621" href="Relation.Binary.HeterogeneousEquality.Core.html#565" class="Bound"
+      >x</a
+      ><a name="622"
+      >
+
+</a
+      ><a name="624" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="696"
+      >
+</a
+      ><a name="697" class="Comment"
+      >-- Conversion</a
+      ><a name="710"
+      >
+
+</a
+      ><a name="712" href="Relation.Binary.HeterogeneousEquality.Core.html#712" class="Function"
+      >&#8773;-to-&#8801;</a
+      ><a name="718"
+      > </a
+      ><a name="719" class="Symbol"
+      >:</a
+      ><a name="720"
+      > </a
+      ><a name="721" class="Symbol"
+      >&#8704;</a
+      ><a name="722"
+      > </a
+      ><a name="723" class="Symbol"
+      >{</a
+      ><a name="724" href="Relation.Binary.HeterogeneousEquality.Core.html#724" class="Bound"
+      >a</a
+      ><a name="725" class="Symbol"
+      >}</a
+      ><a name="726"
+      > </a
+      ><a name="727" class="Symbol"
+      >{</a
+      ><a name="728" href="Relation.Binary.HeterogeneousEquality.Core.html#728" class="Bound"
+      >A</a
+      ><a name="729"
+      > </a
+      ><a name="730" class="Symbol"
+      >:</a
+      ><a name="731"
+      > </a
+      ><a name="732" class="PrimitiveType"
+      >Set</a
+      ><a name="735"
+      > </a
+      ><a name="736" href="Relation.Binary.HeterogeneousEquality.Core.html#724" class="Bound"
+      >a</a
+      ><a name="737" class="Symbol"
+      >}</a
+      ><a name="738"
+      > </a
+      ><a name="739" class="Symbol"
+      >{</a
+      ><a name="740" href="Relation.Binary.HeterogeneousEquality.Core.html#740" class="Bound"
+      >x</a
+      ><a name="741"
+      > </a
+      ><a name="742" href="Relation.Binary.HeterogeneousEquality.Core.html#742" class="Bound"
+      >y</a
+      ><a name="743"
+      > </a
+      ><a name="744" class="Symbol"
+      >:</a
+      ><a name="745"
+      > </a
+      ><a name="746" href="Relation.Binary.HeterogeneousEquality.Core.html#728" class="Bound"
+      >A</a
+      ><a name="747" class="Symbol"
+      >}</a
+      ><a name="748"
+      > </a
+      ><a name="749" class="Symbol"
+      >&#8594;</a
+      ><a name="750"
+      > </a
+      ><a name="751" href="Relation.Binary.HeterogeneousEquality.Core.html#740" class="Bound"
+      >x</a
+      ><a name="752"
+      > </a
+      ><a name="753" href="Relation.Binary.HeterogeneousEquality.Core.html#544" class="Datatype Operator"
+      >&#8773;</a
+      ><a name="754"
+      > </a
+      ><a name="755" href="Relation.Binary.HeterogeneousEquality.Core.html#742" class="Bound"
+      >y</a
+      ><a name="756"
+      > </a
+      ><a name="757" class="Symbol"
+      >&#8594;</a
+      ><a name="758"
+      > </a
+      ><a name="759" href="Relation.Binary.HeterogeneousEquality.Core.html#740" class="Bound"
+      >x</a
+      ><a name="760"
+      > </a
+      ><a name="761" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="762"
+      > </a
+      ><a name="763" href="Relation.Binary.HeterogeneousEquality.Core.html#742" class="Bound"
+      >y</a
+      ><a name="764"
+      >
+</a
+      ><a name="765" href="Relation.Binary.HeterogeneousEquality.Core.html#712" class="Function"
+      >&#8773;-to-&#8801;</a
+      ><a name="771"
+      > </a
+      ><a name="772" href="Relation.Binary.HeterogeneousEquality.Core.html#610" class="InductiveConstructor"
+      >refl</a
+      ><a name="776"
+      > </a
+      ><a name="777" class="Symbol"
+      >=</a
+      ><a name="778"
+      > </a
+      ><a name="779" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="783"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>
