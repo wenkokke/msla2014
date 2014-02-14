@@ -1,0 +1,6444 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >IntuitionisticLogic</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >open</a
+      ><a name="5"
+      > </a
+      ><a name="6" class="Keyword"
+      >import</a
+      ><a name="12"
+      > </a
+      ><a name="13" href="Level.html#1" class="Module"
+      >Level</a
+      ><a name="18"
+      > </a
+      ><a name="19" class="Keyword"
+      >using</a
+      ><a name="24"
+      > </a
+      ><a name="25" class="Symbol"
+      >(</a
+      ><a name="26"
+      >Level</a
+      ><a name="31" class="Symbol"
+      >;</a
+      ><a name="32"
+      > _&#8852;_</a
+      ><a name="36" class="Symbol"
+      >)</a
+      ><a name="37"
+      >
+</a
+      ><a name="38" class="Keyword"
+      >open</a
+      ><a name="42"
+      > </a
+      ><a name="43" class="Keyword"
+      >import</a
+      ><a name="49"
+      > </a
+      ><a name="50" href="Function.html#1" class="Module"
+      >Function</a
+      ><a name="58"
+      > </a
+      ><a name="59" class="Keyword"
+      >using</a
+      ><a name="64"
+      > </a
+      ><a name="65" class="Symbol"
+      >(</a
+      ><a name="66"
+      >id</a
+      ><a name="68" class="Symbol"
+      >;</a
+      ><a name="69"
+      > case_of_</a
+      ><a name="78" class="Symbol"
+      >)</a
+      ><a name="79"
+      >
+</a
+      ><a name="80" class="Keyword"
+      >open</a
+      ><a name="84"
+      > </a
+      ><a name="85" class="Keyword"
+      >import</a
+      ><a name="91"
+      > </a
+      ><a name="92" href="Data.Nat.html#1" class="Module"
+      >Data.Nat</a
+      ><a name="100"
+      > </a
+      ><a name="101" class="Keyword"
+      >using</a
+      ><a name="106"
+      > </a
+      ><a name="107" class="Symbol"
+      >(</a
+      ><a name="108"
+      >&#8469;</a
+      ><a name="109" class="Symbol"
+      >;</a
+      ><a name="110"
+      > suc</a
+      ><a name="114" class="Symbol"
+      >)</a
+      ><a name="115"
+      >
+</a
+      ><a name="116" class="Keyword"
+      >open</a
+      ><a name="120"
+      > </a
+      ><a name="121" class="Keyword"
+      >import</a
+      ><a name="127"
+      > </a
+      ><a name="128" href="Data.Fin.html#1" class="Module"
+      >Data.Fin</a
+      ><a name="136"
+      > </a
+      ><a name="137" class="Keyword"
+      >using</a
+      ><a name="142"
+      > </a
+      ><a name="143" class="Symbol"
+      >(</a
+      ><a name="144"
+      >Fin</a
+      ><a name="147" class="Symbol"
+      >;</a
+      ><a name="148"
+      > suc</a
+      ><a name="152" class="Symbol"
+      >;</a
+      ><a name="153"
+      > zero</a
+      ><a name="158" class="Symbol"
+      >)</a
+      ><a name="159"
+      >
+</a
+      ><a name="160" class="Keyword"
+      >open</a
+      ><a name="164"
+      > </a
+      ><a name="165" class="Keyword"
+      >import</a
+      ><a name="171"
+      > </a
+      ><a name="172" href="Data.Vec.html#1" class="Module"
+      >Data.Vec</a
+      ><a name="180"
+      > </a
+      ><a name="181" class="Symbol"
+      >as</a
+      ><a name="183"
+      > </a
+      ><a name="184" class="Module"
+      >Vec</a
+      ><a name="187"
+      > </a
+      ><a name="188" class="Keyword"
+      >using</a
+      ><a name="193"
+      > </a
+      ><a name="194" class="Symbol"
+      >(</a
+      ><a name="195"
+      >Vec</a
+      ><a name="198" class="Symbol"
+      >)</a
+      ><a name="199"
+      > </a
+      ><a name="200" class="Keyword"
+      >renaming</a
+      ><a name="208"
+      > </a
+      ><a name="209" class="Symbol"
+      >(</a
+      ><a name="210"
+      >_&#8759;_ </a
+      ><a name="214" class="Symbol"
+      >to</a
+      ><a name="216"
+      > _,_</a
+      ><a name="220" class="Symbol"
+      >;</a
+      ><a name="221"
+      > [] </a
+      ><a name="225" class="Symbol"
+      >to</a
+      ><a name="227"
+      > &#8709;</a
+      ><a name="229" class="Symbol"
+      >)</a
+      ><a name="230"
+      >
+</a
+      ><a name="231" class="Keyword"
+      >open</a
+      ><a name="235"
+      > </a
+      ><a name="236" class="Keyword"
+      >import</a
+      ><a name="242"
+      > </a
+      ><a name="243" href="Data.List.html#1" class="Module"
+      >Data.List</a
+      ><a name="252"
+      > </a
+      ><a name="253" class="Keyword"
+      >using</a
+      ><a name="258"
+      > </a
+      ><a name="259" class="Symbol"
+      >(</a
+      ><a name="260"
+      >_&#8759;_</a
+      ><a name="263" class="Symbol"
+      >;</a
+      ><a name="264"
+      > []</a
+      ><a name="267" class="Symbol"
+      >)</a
+      ><a name="268"
+      >
+</a
+      ><a name="269" class="Keyword"
+      >open</a
+      ><a name="273"
+      > </a
+      ><a name="274" class="Keyword"
+      >import</a
+      ><a name="280"
+      > </a
+      ><a name="281" href="Data.List.html#1" class="Module"
+      >Data.List</a
+      ><a name="290"
+      > </a
+      ><a name="291" class="Symbol"
+      >as</a
+      ><a name="293"
+      > </a
+      ><a name="294" class="Module"
+      >List</a
+      ><a name="298"
+      > </a
+      ><a name="299" class="Keyword"
+      >using</a
+      ><a name="304"
+      > </a
+      ><a name="305" class="Symbol"
+      >(</a
+      ><a name="306"
+      >List</a
+      ><a name="310" class="Symbol"
+      >;</a
+      ><a name="311"
+      > _++_</a
+      ><a name="316" class="Symbol"
+      >)</a
+      ><a name="317"
+      > </a
+      ><a name="318" class="Keyword"
+      >renaming</a
+      ><a name="326"
+      > </a
+      ><a name="327" class="Symbol"
+      >(</a
+      ><a name="328"
+      >_&#8759;_ </a
+      ><a name="332" class="Symbol"
+      >to</a
+      ><a name="334"
+      > _,_</a
+      ><a name="338" class="Symbol"
+      >;</a
+      ><a name="339"
+      > [] </a
+      ><a name="343" class="Symbol"
+      >to</a
+      ><a name="345"
+      > &#8709;</a
+      ><a name="347" class="Symbol"
+      >)</a
+      ><a name="348"
+      >
+</a
+      ><a name="349" class="Keyword"
+      >open</a
+      ><a name="353"
+      > </a
+      ><a name="354" class="Keyword"
+      >import</a
+      ><a name="360"
+      > </a
+      ><a name="361" href="Data.Product.html#1" class="Module"
+      >Data.Product</a
+      ><a name="373"
+      > </a
+      ><a name="374" class="Symbol"
+      >as</a
+      ><a name="376"
+      > </a
+      ><a name="377" class="Module"
+      >Product</a
+      ><a name="384"
+      > </a
+      ><a name="385" class="Keyword"
+      >using</a
+      ><a name="390"
+      > </a
+      ><a name="391" class="Symbol"
+      >(</a
+      ><a name="392"
+      >&#8707;</a
+      ><a name="393" class="Symbol"
+      >;</a
+      ><a name="394"
+      > _&#215;_</a
+      ><a name="398" class="Symbol"
+      >;</a
+      ><a name="399"
+      > _,_</a
+      ><a name="403" class="Symbol"
+      >)</a
+      ><a name="404"
+      >
+</a
+      ><a name="405" class="Keyword"
+      >open</a
+      ><a name="409"
+      > </a
+      ><a name="410" class="Keyword"
+      >import</a
+      ><a name="416"
+      > </a
+      ><a name="417" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >Relation.Binary.PropositionalEquality</a
+      ><a name="454"
+      > </a
+      ><a name="455" class="Symbol"
+      >as</a
+      ><a name="457"
+      > </a
+      ><a name="458" class="Module"
+      >P</a
+      ><a name="459"
+      > </a
+      ><a name="460" class="Keyword"
+      >using</a
+      ><a name="465"
+      > </a
+      ><a name="466" class="Symbol"
+      >(</a
+      ><a name="467"
+      >_&#8801;_</a
+      ><a name="470" class="Symbol"
+      >;</a
+      ><a name="471"
+      > refl</a
+      ><a name="476" class="Symbol"
+      >;</a
+      ><a name="477"
+      > sym</a
+      ><a name="481" class="Symbol"
+      >;</a
+      ><a name="482"
+      > cong</a
+      ><a name="487" class="Symbol"
+      >)</a
+      ><a name="488"
+      >
+
+</a
+      ><a name="490" class="Keyword"
+      >module</a
+      ><a name="496"
+      > </a
+      ><a name="497" href="IntuitionisticLogic.html#1" class="Module"
+      >IntuitionisticLogic</a
+      ><a name="516"
+      > </a
+      ><a name="517" class="Symbol"
+      >(</a
+      ><a name="518" href="IntuitionisticLogic.html#518" class="Bound"
+      >U</a
+      ><a name="519"
+      > </a
+      ><a name="520" class="Symbol"
+      >:</a
+      ><a name="521"
+      > </a
+      ><a name="522" class="PrimitiveType"
+      >Set</a
+      ><a name="525" class="Symbol"
+      >)</a
+      ><a name="526"
+      > </a
+      ><a name="527" class="Symbol"
+      >(</a
+      ><a name="528" href="IntuitionisticLogic.html#528" class="Bound Operator"
+      >&#10214;_&#10215;&#7489;</a
+      ><a name="532"
+      > </a
+      ><a name="533" class="Symbol"
+      >:</a
+      ><a name="534"
+      > </a
+      ><a name="535" href="IntuitionisticLogic.html#518" class="Bound"
+      >U</a
+      ><a name="536"
+      > </a
+      ><a name="537" class="Symbol"
+      >&#8594;</a
+      ><a name="538"
+      > </a
+      ><a name="539" class="PrimitiveType"
+      >Set</a
+      ><a name="542" class="Symbol"
+      >)</a
+      ><a name="543"
+      > </a
+      ><a name="544" class="Keyword"
+      >where</a
+      ><a name="549"
+      >
+
+</a
+      ><a name="551" class="Keyword"
+      >infix</a
+      ><a name="556"
+      >  </a
+      ><a name="558" class="Number"
+      >30</a
+      ><a name="560"
+      > _&#8855;_
+</a
+      ><a name="565" class="Keyword"
+      >infixr</a
+      ><a name="571"
+      > </a
+      ><a name="572" class="Number"
+      >20</a
+      ><a name="574"
+      > _&#8658;_
+
+</a
+      ><a name="580" class="Keyword"
+      >data</a
+      ><a name="584"
+      > </a
+      ><a name="585" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="589"
+      > </a
+      ><a name="590" class="Symbol"
+      >:</a
+      ><a name="591"
+      > </a
+      ><a name="592" class="PrimitiveType"
+      >Set</a
+      ><a name="595"
+      > </a
+      ><a name="596" class="Keyword"
+      >where</a
+      ><a name="601"
+      >
+  </a
+      ><a name="604" href="IntuitionisticLogic.html#604" class="InductiveConstructor"
+      >el</a
+      ><a name="606"
+      >    </a
+      ><a name="610" class="Symbol"
+      >:</a
+      ><a name="611"
+      > </a
+      ><a name="612" class="Symbol"
+      >(</a
+      ><a name="613" href="IntuitionisticLogic.html#613" class="Bound"
+      >A</a
+      ><a name="614"
+      > </a
+      ><a name="615" class="Symbol"
+      >:</a
+      ><a name="616"
+      > </a
+      ><a name="617" href="IntuitionisticLogic.html#518" class="Bound"
+      >U</a
+      ><a name="618" class="Symbol"
+      >)</a
+      ><a name="619"
+      > </a
+      ><a name="620" class="Symbol"
+      >&#8594;</a
+      ><a name="621"
+      > </a
+      ><a name="622" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="626"
+      >
+  </a
+      ><a name="629" href="IntuitionisticLogic.html#629" class="InductiveConstructor Operator"
+      >_&#8855;_</a
+      ><a name="632"
+      >   </a
+      ><a name="635" class="Symbol"
+      >:</a
+      ><a name="636"
+      > </a
+      ><a name="637" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="641"
+      > </a
+      ><a name="642" class="Symbol"
+      >&#8594;</a
+      ><a name="643"
+      > </a
+      ><a name="644" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="648"
+      > </a
+      ><a name="649" class="Symbol"
+      >&#8594;</a
+      ><a name="650"
+      > </a
+      ><a name="651" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="655"
+      >
+  </a
+      ><a name="658" href="IntuitionisticLogic.html#658" class="InductiveConstructor Operator"
+      >_&#8658;_</a
+      ><a name="661"
+      >  </a
+      ><a name="663" class="Symbol"
+      >:</a
+      ><a name="664"
+      > </a
+      ><a name="665" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="669"
+      > </a
+      ><a name="670" class="Symbol"
+      >&#8594;</a
+      ><a name="671"
+      > </a
+      ><a name="672" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="676"
+      > </a
+      ><a name="677" class="Symbol"
+      >&#8594;</a
+      ><a name="678"
+      > </a
+      ><a name="679" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="683"
+      >
+
+</a
+      ><a name="685" class="Keyword"
+      >module</a
+      ><a name="691"
+      > </a
+      ><a name="692" href="IntuitionisticLogic.html#692" class="Module"
+      >Implicit</a
+      ><a name="700"
+      > </a
+      ><a name="701" class="Keyword"
+      >where</a
+      ><a name="706"
+      >
+
+  </a
+      ><a name="710" class="Keyword"
+      >infix</a
+      ><a name="715"
+      >  </a
+      ><a name="717" class="Number"
+      >4</a
+      ><a name="718"
+      >  _&#8866;_
+
+  </a
+      ><a name="727" class="Keyword"
+      >data</a
+      ><a name="731"
+      > </a
+      ><a name="732" href="IntuitionisticLogic.html#732" class="Datatype Operator"
+      >_&#8866;_</a
+      ><a name="735"
+      > </a
+      ><a name="736" class="Symbol"
+      >:</a
+      ><a name="737"
+      > </a
+      ><a name="738" class="Symbol"
+      >&#8704;</a
+      ><a name="739"
+      > </a
+      ><a name="740" class="Symbol"
+      >{</a
+      ><a name="741" href="IntuitionisticLogic.html#741" class="Bound"
+      >k</a
+      ><a name="742" class="Symbol"
+      >}</a
+      ><a name="743"
+      > </a
+      ><a name="744" class="Symbol"
+      >(</a
+      ><a name="745" href="IntuitionisticLogic.html#745" class="Bound"
+      >&#915;</a
+      ><a name="746"
+      > </a
+      ><a name="747" class="Symbol"
+      >:</a
+      ><a name="748"
+      > </a
+      ><a name="749" href="Data.Vec.html#604" class="Datatype"
+      >Vec</a
+      ><a name="752"
+      > </a
+      ><a name="753" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="757"
+      > </a
+      ><a name="758" href="IntuitionisticLogic.html#741" class="Bound"
+      >k</a
+      ><a name="759" class="Symbol"
+      >)</a
+      ><a name="760"
+      > </a
+      ><a name="761" class="Symbol"
+      >(</a
+      ><a name="762" href="IntuitionisticLogic.html#762" class="Bound"
+      >A</a
+      ><a name="763"
+      > </a
+      ><a name="764" class="Symbol"
+      >:</a
+      ><a name="765"
+      > </a
+      ><a name="766" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="770" class="Symbol"
+      >)</a
+      ><a name="771"
+      > </a
+      ><a name="772" class="Symbol"
+      >&#8594;</a
+      ><a name="773"
+      > </a
+      ><a name="774" class="PrimitiveType"
+      >Set</a
+      ><a name="777"
+      > </a
+      ><a name="778" class="Keyword"
+      >where</a
+      ><a name="783"
+      >
+    </a
+      ><a name="788" href="IntuitionisticLogic.html#788" class="InductiveConstructor"
+      >var</a
+      ><a name="791"
+      >   </a
+      ><a name="794" class="Symbol"
+      >:</a
+      ><a name="795"
+      > </a
+      ><a name="796" class="Symbol"
+      >&#8704;</a
+      ><a name="797"
+      > </a
+      ><a name="798" class="Symbol"
+      >{</a
+      ><a name="799" href="IntuitionisticLogic.html#799" class="Bound"
+      >k</a
+      ><a name="800" class="Symbol"
+      >}</a
+      ><a name="801"
+      > </a
+      ><a name="802" class="Symbol"
+      >{</a
+      ><a name="803" href="IntuitionisticLogic.html#803" class="Bound"
+      >&#915;</a
+      ><a name="804"
+      > </a
+      ><a name="805" class="Symbol"
+      >:</a
+      ><a name="806"
+      > </a
+      ><a name="807" href="Data.Vec.html#604" class="Datatype"
+      >Vec</a
+      ><a name="810"
+      > </a
+      ><a name="811" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="815"
+      > </a
+      ><a name="816" href="IntuitionisticLogic.html#799" class="Bound"
+      >k</a
+      ><a name="817" class="Symbol"
+      >}</a
+      ><a name="818"
+      > </a
+      ><a name="819" class="Symbol"
+      >(</a
+      ><a name="820" href="IntuitionisticLogic.html#820" class="Bound"
+      >x</a
+      ><a name="821"
+      > </a
+      ><a name="822" class="Symbol"
+      >:</a
+      ><a name="823"
+      > </a
+      ><a name="824" href="Data.Fin.html#775" class="Datatype"
+      >Fin</a
+      ><a name="827"
+      > </a
+      ><a name="828" href="IntuitionisticLogic.html#799" class="Bound"
+      >k</a
+      ><a name="829" class="Symbol"
+      >)</a
+      ><a name="830"
+      > </a
+      ><a name="831" class="Symbol"
+      >&#8594;</a
+      ><a name="832"
+      > </a
+      ><a name="833" href="IntuitionisticLogic.html#803" class="Bound"
+      >&#915;</a
+      ><a name="834"
+      > </a
+      ><a name="835" href="IntuitionisticLogic.html#732" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="836"
+      > </a
+      ><a name="837" href="Data.Vec.html#6126" class="Function"
+      >Vec.lookup</a
+      ><a name="847"
+      > </a
+      ><a name="848" href="IntuitionisticLogic.html#820" class="Bound"
+      >x</a
+      ><a name="849"
+      > </a
+      ><a name="850" href="IntuitionisticLogic.html#803" class="Bound"
+      >&#915;</a
+      ><a name="851"
+      >
+    </a
+      ><a name="856" href="IntuitionisticLogic.html#856" class="InductiveConstructor"
+      >abs</a
+      ><a name="859"
+      >   </a
+      ><a name="862" class="Symbol"
+      >:</a
+      ><a name="863"
+      > </a
+      ><a name="864" class="Symbol"
+      >&#8704;</a
+      ><a name="865"
+      > </a
+      ><a name="866" class="Symbol"
+      >{</a
+      ><a name="867" href="IntuitionisticLogic.html#867" class="Bound"
+      >A</a
+      ><a name="868"
+      > </a
+      ><a name="869" href="IntuitionisticLogic.html#869" class="Bound"
+      >B</a
+      ><a name="870" class="Symbol"
+      >}</a
+      ><a name="871"
+      > </a
+      ><a name="872" class="Symbol"
+      >{</a
+      ><a name="873" href="IntuitionisticLogic.html#873" class="Bound"
+      >k</a
+      ><a name="874" class="Symbol"
+      >}</a
+      ><a name="875"
+      > </a
+      ><a name="876" class="Symbol"
+      >{</a
+      ><a name="877" href="IntuitionisticLogic.html#877" class="Bound"
+      >&#915;</a
+      ><a name="878"
+      > </a
+      ><a name="879" class="Symbol"
+      >:</a
+      ><a name="880"
+      > </a
+      ><a name="881" href="Data.Vec.html#604" class="Datatype"
+      >Vec</a
+      ><a name="884"
+      > </a
+      ><a name="885" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="889"
+      > </a
+      ><a name="890" href="IntuitionisticLogic.html#873" class="Bound"
+      >k</a
+      ><a name="891" class="Symbol"
+      >}</a
+      ><a name="892"
+      > </a
+      ><a name="893" class="Symbol"
+      >&#8594;</a
+      ><a name="894"
+      > </a
+      ><a name="895" href="IntuitionisticLogic.html#867" class="Bound"
+      >A</a
+      ><a name="896"
+      > </a
+      ><a name="897" href="Data.Vec.html#663" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="898"
+      > </a
+      ><a name="899" href="IntuitionisticLogic.html#877" class="Bound"
+      >&#915;</a
+      ><a name="900"
+      > </a
+      ><a name="901" href="IntuitionisticLogic.html#732" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="902"
+      > </a
+      ><a name="903" href="IntuitionisticLogic.html#869" class="Bound"
+      >B</a
+      ><a name="904"
+      > </a
+      ><a name="905" class="Symbol"
+      >&#8594;</a
+      ><a name="906"
+      > </a
+      ><a name="907" href="IntuitionisticLogic.html#877" class="Bound"
+      >&#915;</a
+      ><a name="908"
+      > </a
+      ><a name="909" href="IntuitionisticLogic.html#732" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="910"
+      > </a
+      ><a name="911" href="IntuitionisticLogic.html#867" class="Bound"
+      >A</a
+      ><a name="912"
+      > </a
+      ><a name="913" href="IntuitionisticLogic.html#658" class="InductiveConstructor Operator"
+      >&#8658;</a
+      ><a name="914"
+      > </a
+      ><a name="915" href="IntuitionisticLogic.html#869" class="Bound"
+      >B</a
+      ><a name="916"
+      >
+    </a
+      ><a name="921" href="IntuitionisticLogic.html#921" class="InductiveConstructor"
+      >app</a
+      ><a name="924"
+      >   </a
+      ><a name="927" class="Symbol"
+      >:</a
+      ><a name="928"
+      > </a
+      ><a name="929" class="Symbol"
+      >&#8704;</a
+      ><a name="930"
+      > </a
+      ><a name="931" class="Symbol"
+      >{</a
+      ><a name="932" href="IntuitionisticLogic.html#932" class="Bound"
+      >A</a
+      ><a name="933"
+      > </a
+      ><a name="934" href="IntuitionisticLogic.html#934" class="Bound"
+      >B</a
+      ><a name="935" class="Symbol"
+      >}</a
+      ><a name="936"
+      > </a
+      ><a name="937" class="Symbol"
+      >{</a
+      ><a name="938" href="IntuitionisticLogic.html#938" class="Bound"
+      >k</a
+      ><a name="939" class="Symbol"
+      >}</a
+      ><a name="940"
+      > </a
+      ><a name="941" class="Symbol"
+      >{</a
+      ><a name="942" href="IntuitionisticLogic.html#942" class="Bound"
+      >&#915;</a
+      ><a name="943"
+      > </a
+      ><a name="944" class="Symbol"
+      >:</a
+      ><a name="945"
+      > </a
+      ><a name="946" href="Data.Vec.html#604" class="Datatype"
+      >Vec</a
+      ><a name="949"
+      > </a
+      ><a name="950" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="954"
+      > </a
+      ><a name="955" href="IntuitionisticLogic.html#938" class="Bound"
+      >k</a
+      ><a name="956" class="Symbol"
+      >}</a
+      ><a name="957"
+      > </a
+      ><a name="958" class="Symbol"
+      >&#8594;</a
+      ><a name="959"
+      > </a
+      ><a name="960" href="IntuitionisticLogic.html#942" class="Bound"
+      >&#915;</a
+      ><a name="961"
+      > </a
+      ><a name="962" href="IntuitionisticLogic.html#732" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="963"
+      > </a
+      ><a name="964" href="IntuitionisticLogic.html#932" class="Bound"
+      >A</a
+      ><a name="965"
+      > </a
+      ><a name="966" href="IntuitionisticLogic.html#658" class="InductiveConstructor Operator"
+      >&#8658;</a
+      ><a name="967"
+      > </a
+      ><a name="968" href="IntuitionisticLogic.html#934" class="Bound"
+      >B</a
+      ><a name="969"
+      > </a
+      ><a name="970" class="Symbol"
+      >&#8594;</a
+      ><a name="971"
+      > </a
+      ><a name="972" href="IntuitionisticLogic.html#942" class="Bound"
+      >&#915;</a
+      ><a name="973"
+      > </a
+      ><a name="974" href="IntuitionisticLogic.html#732" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="975"
+      > </a
+      ><a name="976" href="IntuitionisticLogic.html#932" class="Bound"
+      >A</a
+      ><a name="977"
+      > </a
+      ><a name="978" class="Symbol"
+      >&#8594;</a
+      ><a name="979"
+      > </a
+      ><a name="980" href="IntuitionisticLogic.html#942" class="Bound"
+      >&#915;</a
+      ><a name="981"
+      > </a
+      ><a name="982" href="IntuitionisticLogic.html#732" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="983"
+      > </a
+      ><a name="984" href="IntuitionisticLogic.html#934" class="Bound"
+      >B</a
+      ><a name="985"
+      >
+    </a
+      ><a name="990" href="IntuitionisticLogic.html#990" class="InductiveConstructor"
+      >pair</a
+      ><a name="994"
+      >  </a
+      ><a name="996" class="Symbol"
+      >:</a
+      ><a name="997"
+      > </a
+      ><a name="998" class="Symbol"
+      >&#8704;</a
+      ><a name="999"
+      > </a
+      ><a name="1000" class="Symbol"
+      >{</a
+      ><a name="1001" href="IntuitionisticLogic.html#1001" class="Bound"
+      >A</a
+      ><a name="1002"
+      > </a
+      ><a name="1003" href="IntuitionisticLogic.html#1003" class="Bound"
+      >B</a
+      ><a name="1004" class="Symbol"
+      >}</a
+      ><a name="1005"
+      > </a
+      ><a name="1006" class="Symbol"
+      >{</a
+      ><a name="1007" href="IntuitionisticLogic.html#1007" class="Bound"
+      >k</a
+      ><a name="1008" class="Symbol"
+      >}</a
+      ><a name="1009"
+      > </a
+      ><a name="1010" class="Symbol"
+      >{</a
+      ><a name="1011" href="IntuitionisticLogic.html#1011" class="Bound"
+      >&#915;</a
+      ><a name="1012"
+      > </a
+      ><a name="1013" class="Symbol"
+      >:</a
+      ><a name="1014"
+      > </a
+      ><a name="1015" href="Data.Vec.html#604" class="Datatype"
+      >Vec</a
+      ><a name="1018"
+      > </a
+      ><a name="1019" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="1023"
+      > </a
+      ><a name="1024" href="IntuitionisticLogic.html#1007" class="Bound"
+      >k</a
+      ><a name="1025" class="Symbol"
+      >}</a
+      ><a name="1026"
+      > </a
+      ><a name="1027" class="Symbol"
+      >&#8594;</a
+      ><a name="1028"
+      > </a
+      ><a name="1029" href="IntuitionisticLogic.html#1011" class="Bound"
+      >&#915;</a
+      ><a name="1030"
+      > </a
+      ><a name="1031" href="IntuitionisticLogic.html#732" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1032"
+      > </a
+      ><a name="1033" href="IntuitionisticLogic.html#1001" class="Bound"
+      >A</a
+      ><a name="1034"
+      > </a
+      ><a name="1035" class="Symbol"
+      >&#8594;</a
+      ><a name="1036"
+      > </a
+      ><a name="1037" href="IntuitionisticLogic.html#1011" class="Bound"
+      >&#915;</a
+      ><a name="1038"
+      > </a
+      ><a name="1039" href="IntuitionisticLogic.html#732" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1040"
+      > </a
+      ><a name="1041" href="IntuitionisticLogic.html#1003" class="Bound"
+      >B</a
+      ><a name="1042"
+      > </a
+      ><a name="1043" class="Symbol"
+      >&#8594;</a
+      ><a name="1044"
+      > </a
+      ><a name="1045" href="IntuitionisticLogic.html#1011" class="Bound"
+      >&#915;</a
+      ><a name="1046"
+      > </a
+      ><a name="1047" href="IntuitionisticLogic.html#732" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1048"
+      > </a
+      ><a name="1049" href="IntuitionisticLogic.html#1001" class="Bound"
+      >A</a
+      ><a name="1050"
+      > </a
+      ><a name="1051" href="IntuitionisticLogic.html#629" class="InductiveConstructor Operator"
+      >&#8855;</a
+      ><a name="1052"
+      > </a
+      ><a name="1053" href="IntuitionisticLogic.html#1003" class="Bound"
+      >B</a
+      ><a name="1054"
+      >
+    </a
+      ><a name="1059" href="IntuitionisticLogic.html#1059" class="InductiveConstructor"
+      >case</a
+      ><a name="1063"
+      >  </a
+      ><a name="1065" class="Symbol"
+      >:</a
+      ><a name="1066"
+      > </a
+      ><a name="1067" class="Symbol"
+      >&#8704;</a
+      ><a name="1068"
+      > </a
+      ><a name="1069" class="Symbol"
+      >{</a
+      ><a name="1070" href="IntuitionisticLogic.html#1070" class="Bound"
+      >A</a
+      ><a name="1071"
+      > </a
+      ><a name="1072" href="IntuitionisticLogic.html#1072" class="Bound"
+      >B</a
+      ><a name="1073"
+      > </a
+      ><a name="1074" href="IntuitionisticLogic.html#1074" class="Bound"
+      >C</a
+      ><a name="1075" class="Symbol"
+      >}</a
+      ><a name="1076"
+      > </a
+      ><a name="1077" class="Symbol"
+      >{</a
+      ><a name="1078" href="IntuitionisticLogic.html#1078" class="Bound"
+      >k</a
+      ><a name="1079" class="Symbol"
+      >}</a
+      ><a name="1080"
+      > </a
+      ><a name="1081" class="Symbol"
+      >{</a
+      ><a name="1082" href="IntuitionisticLogic.html#1082" class="Bound"
+      >&#915;</a
+      ><a name="1083"
+      > </a
+      ><a name="1084" class="Symbol"
+      >:</a
+      ><a name="1085"
+      > </a
+      ><a name="1086" href="Data.Vec.html#604" class="Datatype"
+      >Vec</a
+      ><a name="1089"
+      > </a
+      ><a name="1090" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="1094"
+      > </a
+      ><a name="1095" href="IntuitionisticLogic.html#1078" class="Bound"
+      >k</a
+      ><a name="1096" class="Symbol"
+      >}</a
+      ><a name="1097"
+      > </a
+      ><a name="1098" class="Symbol"
+      >&#8594;</a
+      ><a name="1099"
+      > </a
+      ><a name="1100" href="IntuitionisticLogic.html#1082" class="Bound"
+      >&#915;</a
+      ><a name="1101"
+      > </a
+      ><a name="1102" href="IntuitionisticLogic.html#732" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1103"
+      > </a
+      ><a name="1104" href="IntuitionisticLogic.html#1070" class="Bound"
+      >A</a
+      ><a name="1105"
+      > </a
+      ><a name="1106" href="IntuitionisticLogic.html#629" class="InductiveConstructor Operator"
+      >&#8855;</a
+      ><a name="1107"
+      > </a
+      ><a name="1108" href="IntuitionisticLogic.html#1072" class="Bound"
+      >B</a
+      ><a name="1109"
+      > </a
+      ><a name="1110" class="Symbol"
+      >&#8594;</a
+      ><a name="1111"
+      > </a
+      ><a name="1112" href="IntuitionisticLogic.html#1070" class="Bound"
+      >A</a
+      ><a name="1113"
+      > </a
+      ><a name="1114" href="Data.Vec.html#663" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1115"
+      > </a
+      ><a name="1116" href="IntuitionisticLogic.html#1072" class="Bound"
+      >B</a
+      ><a name="1117"
+      > </a
+      ><a name="1118" href="Data.Vec.html#663" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1119"
+      > </a
+      ><a name="1120" href="IntuitionisticLogic.html#1082" class="Bound"
+      >&#915;</a
+      ><a name="1121"
+      > </a
+      ><a name="1122" href="IntuitionisticLogic.html#732" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1123"
+      > </a
+      ><a name="1124" href="IntuitionisticLogic.html#1074" class="Bound"
+      >C</a
+      ><a name="1125"
+      > </a
+      ><a name="1126" class="Symbol"
+      >&#8594;</a
+      ><a name="1127"
+      > </a
+      ><a name="1128" href="IntuitionisticLogic.html#1082" class="Bound"
+      >&#915;</a
+      ><a name="1129"
+      > </a
+      ><a name="1130" href="IntuitionisticLogic.html#732" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1131"
+      > </a
+      ><a name="1132" href="IntuitionisticLogic.html#1074" class="Bound"
+      >C</a
+      ><a name="1133"
+      >
+
+  </a
+      ><a name="1137" href="IntuitionisticLogic.html#1137" class="Function"
+      >swap</a
+      ><a name="1141"
+      > </a
+      ><a name="1142" class="Symbol"
+      >:</a
+      ><a name="1143"
+      > </a
+      ><a name="1144" class="Symbol"
+      >&#8704;</a
+      ><a name="1145"
+      > </a
+      ><a name="1146" class="Symbol"
+      >{</a
+      ><a name="1147" href="IntuitionisticLogic.html#1147" class="Bound"
+      >A</a
+      ><a name="1148"
+      > </a
+      ><a name="1149" href="IntuitionisticLogic.html#1149" class="Bound"
+      >B</a
+      ><a name="1150" class="Symbol"
+      >}</a
+      ><a name="1151"
+      > </a
+      ><a name="1152" class="Symbol"
+      >{</a
+      ><a name="1153" href="IntuitionisticLogic.html#1153" class="Bound"
+      >k</a
+      ><a name="1154" class="Symbol"
+      >}</a
+      ><a name="1155"
+      > </a
+      ><a name="1156" class="Symbol"
+      >{</a
+      ><a name="1157" href="IntuitionisticLogic.html#1157" class="Bound"
+      >&#915;</a
+      ><a name="1158"
+      > </a
+      ><a name="1159" class="Symbol"
+      >:</a
+      ><a name="1160"
+      > </a
+      ><a name="1161" href="Data.Vec.html#604" class="Datatype"
+      >Vec</a
+      ><a name="1164"
+      > </a
+      ><a name="1165" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="1169"
+      > </a
+      ><a name="1170" href="IntuitionisticLogic.html#1153" class="Bound"
+      >k</a
+      ><a name="1171" class="Symbol"
+      >}</a
+      ><a name="1172"
+      > </a
+      ><a name="1173" class="Symbol"
+      >&#8594;</a
+      ><a name="1174"
+      > </a
+      ><a name="1175" href="IntuitionisticLogic.html#1157" class="Bound"
+      >&#915;</a
+      ><a name="1176"
+      > </a
+      ><a name="1177" href="IntuitionisticLogic.html#732" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1178"
+      > </a
+      ><a name="1179" href="IntuitionisticLogic.html#1147" class="Bound"
+      >A</a
+      ><a name="1180"
+      > </a
+      ><a name="1181" href="IntuitionisticLogic.html#629" class="InductiveConstructor Operator"
+      >&#8855;</a
+      ><a name="1182"
+      > </a
+      ><a name="1183" href="IntuitionisticLogic.html#1149" class="Bound"
+      >B</a
+      ><a name="1184"
+      > </a
+      ><a name="1185" href="IntuitionisticLogic.html#658" class="InductiveConstructor Operator"
+      >&#8658;</a
+      ><a name="1186"
+      > </a
+      ><a name="1187" href="IntuitionisticLogic.html#1149" class="Bound"
+      >B</a
+      ><a name="1188"
+      > </a
+      ><a name="1189" href="IntuitionisticLogic.html#629" class="InductiveConstructor Operator"
+      >&#8855;</a
+      ><a name="1190"
+      > </a
+      ><a name="1191" href="IntuitionisticLogic.html#1147" class="Bound"
+      >A</a
+      ><a name="1192"
+      >
+  </a
+      ><a name="1195" href="IntuitionisticLogic.html#1137" class="Function"
+      >swap</a
+      ><a name="1199"
+      > </a
+      ><a name="1200" class="Symbol"
+      >=</a
+      ><a name="1201"
+      > </a
+      ><a name="1202" href="IntuitionisticLogic.html#856" class="InductiveConstructor"
+      >abs</a
+      ><a name="1205"
+      > </a
+      ><a name="1206" class="Symbol"
+      >(</a
+      ><a name="1207" href="IntuitionisticLogic.html#1059" class="InductiveConstructor"
+      >case</a
+      ><a name="1211"
+      > </a
+      ><a name="1212" class="Symbol"
+      >(</a
+      ><a name="1213" href="IntuitionisticLogic.html#788" class="InductiveConstructor"
+      >var</a
+      ><a name="1216"
+      > </a
+      ><a name="1217" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="1221" class="Symbol"
+      >)</a
+      ><a name="1222"
+      > </a
+      ><a name="1223" class="Symbol"
+      >(</a
+      ><a name="1224" href="IntuitionisticLogic.html#990" class="InductiveConstructor"
+      >pair</a
+      ><a name="1228"
+      > </a
+      ><a name="1229" class="Symbol"
+      >(</a
+      ><a name="1230" href="IntuitionisticLogic.html#788" class="InductiveConstructor"
+      >var</a
+      ><a name="1233"
+      > </a
+      ><a name="1234" class="Symbol"
+      >(</a
+      ><a name="1235" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="1238"
+      > </a
+      ><a name="1239" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="1243" class="Symbol"
+      >))</a
+      ><a name="1245"
+      > </a
+      ><a name="1246" class="Symbol"
+      >(</a
+      ><a name="1247" href="IntuitionisticLogic.html#788" class="InductiveConstructor"
+      >var</a
+      ><a name="1250"
+      > </a
+      ><a name="1251" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="1255" class="Symbol"
+      >)))</a
+      ><a name="1258"
+      >
+
+  </a
+      ><a name="1262" href="IntuitionisticLogic.html#1262" class="Function"
+      >Vec-exch</a
+      ><a name="1270"
+      > </a
+      ><a name="1271" class="Symbol"
+      >:</a
+      ><a name="1272"
+      > </a
+      ><a name="1273" class="Symbol"
+      >&#8704;</a
+      ><a name="1274"
+      > </a
+      ><a name="1275" class="Symbol"
+      >{</a
+      ><a name="1276" href="IntuitionisticLogic.html#1276" class="Bound"
+      >k</a
+      ><a name="1277" class="Symbol"
+      >}</a
+      ><a name="1278"
+      > </a
+      ><a name="1279" class="Symbol"
+      >(</a
+      ><a name="1280" href="IntuitionisticLogic.html#1280" class="Bound"
+      >i</a
+      ><a name="1281"
+      > </a
+      ><a name="1282" class="Symbol"
+      >:</a
+      ><a name="1283"
+      > </a
+      ><a name="1284" href="Data.Fin.html#775" class="Datatype"
+      >Fin</a
+      ><a name="1287"
+      > </a
+      ><a name="1288" href="IntuitionisticLogic.html#1276" class="Bound"
+      >k</a
+      ><a name="1289" class="Symbol"
+      >)</a
+      ><a name="1290"
+      > </a
+      ><a name="1291" class="Symbol"
+      >&#8594;</a
+      ><a name="1292"
+      > </a
+      ><a name="1293" href="Data.Vec.html#604" class="Datatype"
+      >Vec</a
+      ><a name="1296"
+      > </a
+      ><a name="1297" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="1301"
+      > </a
+      ><a name="1302" class="Symbol"
+      >(</a
+      ><a name="1303" href="Data.Nat.html#710" class="InductiveConstructor"
+      >suc</a
+      ><a name="1306"
+      > </a
+      ><a name="1307" href="IntuitionisticLogic.html#1276" class="Bound"
+      >k</a
+      ><a name="1308" class="Symbol"
+      >)</a
+      ><a name="1309"
+      > </a
+      ><a name="1310" class="Symbol"
+      >&#8594;</a
+      ><a name="1311"
+      > </a
+      ><a name="1312" href="Data.Vec.html#604" class="Datatype"
+      >Vec</a
+      ><a name="1315"
+      > </a
+      ><a name="1316" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="1320"
+      > </a
+      ><a name="1321" class="Symbol"
+      >(</a
+      ><a name="1322" href="Data.Nat.html#710" class="InductiveConstructor"
+      >suc</a
+      ><a name="1325"
+      > </a
+      ><a name="1326" href="IntuitionisticLogic.html#1276" class="Bound"
+      >k</a
+      ><a name="1327" class="Symbol"
+      >)</a
+      ><a name="1328"
+      >
+  </a
+      ><a name="1331" href="IntuitionisticLogic.html#1262" class="Function"
+      >Vec-exch</a
+      ><a name="1339"
+      >  </a
+      ><a name="1341" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="1345"
+      >    </a
+      ><a name="1349" class="Symbol"
+      >(</a
+      ><a name="1350" href="IntuitionisticLogic.html#1350" class="Bound"
+      >A</a
+      ><a name="1351"
+      > </a
+      ><a name="1352" href="Data.Vec.html#663" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1353"
+      > </a
+      ><a name="1354" href="IntuitionisticLogic.html#1354" class="Bound"
+      >B</a
+      ><a name="1355"
+      > </a
+      ><a name="1356" href="Data.Vec.html#663" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1357"
+      > </a
+      ><a name="1358" href="IntuitionisticLogic.html#1358" class="Bound"
+      >&#915;</a
+      ><a name="1359" class="Symbol"
+      >)</a
+      ><a name="1360"
+      >  </a
+      ><a name="1362" class="Symbol"
+      >=</a
+      ><a name="1363"
+      > </a
+      ><a name="1364" href="IntuitionisticLogic.html#1354" class="Bound"
+      >B</a
+      ><a name="1365"
+      > </a
+      ><a name="1366" href="Data.Vec.html#663" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1367"
+      > </a
+      ><a name="1368" href="IntuitionisticLogic.html#1350" class="Bound"
+      >A</a
+      ><a name="1369"
+      > </a
+      ><a name="1370" href="Data.Vec.html#663" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1371"
+      > </a
+      ><a name="1372" href="IntuitionisticLogic.html#1358" class="Bound"
+      >&#915;</a
+      ><a name="1373"
+      >
+  </a
+      ><a name="1376" href="IntuitionisticLogic.html#1262" class="Function"
+      >Vec-exch</a
+      ><a name="1384"
+      > </a
+      ><a name="1385" class="Symbol"
+      >(</a
+      ><a name="1386" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="1389"
+      > </a
+      ><a name="1390" href="IntuitionisticLogic.html#1390" class="Bound"
+      >i</a
+      ><a name="1391" class="Symbol"
+      >)</a
+      ><a name="1392"
+      >  </a
+      ><a name="1394" class="Symbol"
+      >(</a
+      ><a name="1395" href="IntuitionisticLogic.html#1395" class="Bound"
+      >A</a
+      ><a name="1396"
+      > </a
+      ><a name="1397" href="Data.Vec.html#663" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1398"
+      > </a
+      ><a name="1399" href="IntuitionisticLogic.html#1399" class="Bound"
+      >&#915;</a
+      ><a name="1400" class="Symbol"
+      >)</a
+      ><a name="1401"
+      >      </a
+      ><a name="1407" class="Symbol"
+      >=</a
+      ><a name="1408"
+      > </a
+      ><a name="1409" href="IntuitionisticLogic.html#1395" class="Bound"
+      >A</a
+      ><a name="1410"
+      > </a
+      ><a name="1411" href="Data.Vec.html#663" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1412"
+      > </a
+      ><a name="1413" class="Symbol"
+      >(</a
+      ><a name="1414" href="IntuitionisticLogic.html#1262" class="Function"
+      >Vec-exch</a
+      ><a name="1422"
+      > </a
+      ><a name="1423" href="IntuitionisticLogic.html#1390" class="Bound"
+      >i</a
+      ><a name="1424"
+      > </a
+      ><a name="1425" href="IntuitionisticLogic.html#1399" class="Bound"
+      >&#915;</a
+      ><a name="1426" class="Symbol"
+      >)</a
+      ><a name="1427"
+      >
+
+  </a
+      ><a name="1431" href="IntuitionisticLogic.html#1431" class="Function"
+      >lemma-var</a
+      ><a name="1440"
+      > </a
+      ><a name="1441" class="Symbol"
+      >:</a
+      ><a name="1442"
+      > </a
+      ><a name="1443" class="Symbol"
+      >&#8704;</a
+      ><a name="1444"
+      > </a
+      ><a name="1445" class="Symbol"
+      >{</a
+      ><a name="1446" href="IntuitionisticLogic.html#1446" class="Bound"
+      >k</a
+      ><a name="1447" class="Symbol"
+      >}</a
+      ><a name="1448"
+      > </a
+      ><a name="1449" class="Symbol"
+      >{</a
+      ><a name="1450" href="IntuitionisticLogic.html#1450" class="Bound"
+      >&#915;</a
+      ><a name="1451"
+      > </a
+      ><a name="1452" class="Symbol"
+      >:</a
+      ><a name="1453"
+      > </a
+      ><a name="1454" href="Data.Vec.html#604" class="Datatype"
+      >Vec</a
+      ><a name="1457"
+      > </a
+      ><a name="1458" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="1462"
+      > </a
+      ><a name="1463" class="Symbol"
+      >(</a
+      ><a name="1464" href="Data.Nat.html#710" class="InductiveConstructor"
+      >suc</a
+      ><a name="1467"
+      > </a
+      ><a name="1468" href="IntuitionisticLogic.html#1446" class="Bound"
+      >k</a
+      ><a name="1469" class="Symbol"
+      >)}</a
+      ><a name="1471"
+      > </a
+      ><a name="1472" class="Symbol"
+      >&#8594;</a
+      ><a name="1473"
+      > </a
+      ><a name="1474" class="Symbol"
+      >&#8704;</a
+      ><a name="1475"
+      > </a
+      ><a name="1476" href="IntuitionisticLogic.html#1476" class="Bound"
+      >i</a
+      ><a name="1477"
+      > </a
+      ><a name="1478" href="IntuitionisticLogic.html#1478" class="Bound"
+      >x</a
+      ><a name="1479"
+      > </a
+      ><a name="1480" class="Symbol"
+      >&#8594;</a
+      ><a name="1481"
+      > </a
+      ><a name="1482" href="Data.Product.html#805" class="Function"
+      >&#8707;</a
+      ><a name="1483"
+      > </a
+      ><a name="1484" class="Symbol"
+      >&#955;</a
+      ><a name="1485"
+      > </a
+      ><a name="1486" href="IntuitionisticLogic.html#1486" class="Bound"
+      >y</a
+      ><a name="1487"
+      > </a
+      ><a name="1488" class="Symbol"
+      >&#8594;</a
+      ><a name="1489"
+      > </a
+      ><a name="1490" href="Data.Vec.html#6126" class="Function"
+      >Vec.lookup</a
+      ><a name="1500"
+      > </a
+      ><a name="1501" href="IntuitionisticLogic.html#1478" class="Bound"
+      >x</a
+      ><a name="1502"
+      > </a
+      ><a name="1503" href="IntuitionisticLogic.html#1450" class="Bound"
+      >&#915;</a
+      ><a name="1504"
+      > </a
+      ><a name="1505" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1506"
+      > </a
+      ><a name="1507" href="Data.Vec.html#6126" class="Function"
+      >Vec.lookup</a
+      ><a name="1517"
+      > </a
+      ><a name="1518" href="IntuitionisticLogic.html#1486" class="Bound"
+      >y</a
+      ><a name="1519"
+      > </a
+      ><a name="1520" class="Symbol"
+      >(</a
+      ><a name="1521" href="IntuitionisticLogic.html#1262" class="Function"
+      >Vec-exch</a
+      ><a name="1529"
+      > </a
+      ><a name="1530" href="IntuitionisticLogic.html#1476" class="Bound"
+      >i</a
+      ><a name="1531"
+      > </a
+      ><a name="1532" href="IntuitionisticLogic.html#1450" class="Bound"
+      >&#915;</a
+      ><a name="1533" class="Symbol"
+      >)</a
+      ><a name="1534"
+      >
+  </a
+      ><a name="1537" href="IntuitionisticLogic.html#1431" class="Function"
+      >lemma-var</a
+      ><a name="1546"
+      > </a
+      ><a name="1547" class="Symbol"
+      >{</a
+      ><a name="1548"
+      >&#915; </a
+      ><a name="1550" class="Symbol"
+      >=</a
+      ><a name="1551"
+      > </a
+      ><a name="1552" href="IntuitionisticLogic.html#1552" class="Bound"
+      >A</a
+      ><a name="1553"
+      > </a
+      ><a name="1554" href="Data.Vec.html#663" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1555"
+      > </a
+      ><a name="1556" href="IntuitionisticLogic.html#1556" class="Bound"
+      >B</a
+      ><a name="1557"
+      > </a
+      ><a name="1558" href="Data.Vec.html#663" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1559"
+      > </a
+      ><a name="1560" href="IntuitionisticLogic.html#1560" class="Bound"
+      >&#915;</a
+      ><a name="1561" class="Symbol"
+      >}</a
+      ><a name="1562"
+      > </a
+      ><a name="1563" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="1567"
+      >     </a
+      ><a name="1572" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="1576"
+      >           </a
+      ><a name="1587" class="Symbol"
+      >=</a
+      ><a name="1588"
+      > </a
+      ><a name="1589" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="1592"
+      > </a
+      ><a name="1593" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="1597"
+      > </a
+      ><a name="1598" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1599"
+      > </a
+      ><a name="1600" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="1604"
+      >
+  </a
+      ><a name="1607" href="IntuitionisticLogic.html#1431" class="Function"
+      >lemma-var</a
+      ><a name="1616"
+      > </a
+      ><a name="1617" class="Symbol"
+      >{</a
+      ><a name="1618"
+      >&#915; </a
+      ><a name="1620" class="Symbol"
+      >=</a
+      ><a name="1621"
+      > </a
+      ><a name="1622" href="IntuitionisticLogic.html#1622" class="Bound"
+      >A</a
+      ><a name="1623"
+      > </a
+      ><a name="1624" href="Data.Vec.html#663" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1625"
+      > </a
+      ><a name="1626" href="IntuitionisticLogic.html#1626" class="Bound"
+      >B</a
+      ><a name="1627"
+      > </a
+      ><a name="1628" href="Data.Vec.html#663" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1629"
+      > </a
+      ><a name="1630" href="IntuitionisticLogic.html#1630" class="Bound"
+      >&#915;</a
+      ><a name="1631" class="Symbol"
+      >}</a
+      ><a name="1632"
+      > </a
+      ><a name="1633" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="1637"
+      >     </a
+      ><a name="1642" class="Symbol"
+      >(</a
+      ><a name="1643" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="1646"
+      > </a
+      ><a name="1647" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="1651" class="Symbol"
+      >)</a
+      ><a name="1652"
+      >     </a
+      ><a name="1657" class="Symbol"
+      >=</a
+      ><a name="1658"
+      > </a
+      ><a name="1659" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="1663"
+      > </a
+      ><a name="1664" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1665"
+      > </a
+      ><a name="1666" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="1670"
+      >
+  </a
+      ><a name="1673" href="IntuitionisticLogic.html#1431" class="Function"
+      >lemma-var</a
+      ><a name="1682"
+      > </a
+      ><a name="1683" class="Symbol"
+      >{</a
+      ><a name="1684"
+      >&#915; </a
+      ><a name="1686" class="Symbol"
+      >=</a
+      ><a name="1687"
+      > </a
+      ><a name="1688" href="IntuitionisticLogic.html#1688" class="Bound"
+      >A</a
+      ><a name="1689"
+      > </a
+      ><a name="1690" href="Data.Vec.html#663" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1691"
+      > </a
+      ><a name="1692" href="IntuitionisticLogic.html#1692" class="Bound"
+      >B</a
+      ><a name="1693"
+      > </a
+      ><a name="1694" href="Data.Vec.html#663" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1695"
+      > </a
+      ><a name="1696" href="IntuitionisticLogic.html#1696" class="Bound"
+      >&#915;</a
+      ><a name="1697" class="Symbol"
+      >}</a
+      ><a name="1698"
+      > </a
+      ><a name="1699" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="1703"
+      >     </a
+      ><a name="1708" class="Symbol"
+      >(</a
+      ><a name="1709" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="1712"
+      > </a
+      ><a name="1713" class="Symbol"
+      >(</a
+      ><a name="1714" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="1717"
+      > </a
+      ><a name="1718" href="IntuitionisticLogic.html#1718" class="Bound"
+      >x</a
+      ><a name="1719" class="Symbol"
+      >))</a
+      ><a name="1721"
+      >  </a
+      ><a name="1723" class="Symbol"
+      >=</a
+      ><a name="1724"
+      > </a
+      ><a name="1725" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="1728"
+      > </a
+      ><a name="1729" class="Symbol"
+      >(</a
+      ><a name="1730" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="1733"
+      > </a
+      ><a name="1734" href="IntuitionisticLogic.html#1718" class="Bound"
+      >x</a
+      ><a name="1735" class="Symbol"
+      >)</a
+      ><a name="1736"
+      > </a
+      ><a name="1737" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1738"
+      > </a
+      ><a name="1739" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="1743"
+      >
+  </a
+      ><a name="1746" href="IntuitionisticLogic.html#1431" class="Function"
+      >lemma-var</a
+      ><a name="1755"
+      > </a
+      ><a name="1756" class="Symbol"
+      >{</a
+      ><a name="1757"
+      >&#915; </a
+      ><a name="1759" class="Symbol"
+      >=</a
+      ><a name="1760"
+      > </a
+      ><a name="1761" href="IntuitionisticLogic.html#1761" class="Bound"
+      >A</a
+      ><a name="1762"
+      > </a
+      ><a name="1763" href="Data.Vec.html#663" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1764"
+      > </a
+      ><a name="1765" href="IntuitionisticLogic.html#1765" class="Bound"
+      >&#915;</a
+      ><a name="1766" class="Symbol"
+      >}</a
+      ><a name="1767"
+      > </a
+      ><a name="1768" class="Symbol"
+      >(</a
+      ><a name="1769" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="1772"
+      > </a
+      ><a name="1773" href="IntuitionisticLogic.html#1773" class="Bound"
+      >i</a
+      ><a name="1774" class="Symbol"
+      >)</a
+      ><a name="1775"
+      >  </a
+      ><a name="1777" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="1781"
+      >           </a
+      ><a name="1792" class="Symbol"
+      >=</a
+      ><a name="1793"
+      > </a
+      ><a name="1794" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="1798"
+      > </a
+      ><a name="1799" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1800"
+      > </a
+      ><a name="1801" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="1805"
+      >
+  </a
+      ><a name="1808" href="IntuitionisticLogic.html#1431" class="Function"
+      >lemma-var</a
+      ><a name="1817"
+      > </a
+      ><a name="1818" class="Symbol"
+      >{</a
+      ><a name="1819"
+      >&#915; </a
+      ><a name="1821" class="Symbol"
+      >=</a
+      ><a name="1822"
+      > </a
+      ><a name="1823" href="IntuitionisticLogic.html#1823" class="Bound"
+      >A</a
+      ><a name="1824"
+      > </a
+      ><a name="1825" href="Data.Vec.html#663" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1826"
+      > </a
+      ><a name="1827" href="IntuitionisticLogic.html#1827" class="Bound"
+      >&#915;</a
+      ><a name="1828" class="Symbol"
+      >}</a
+      ><a name="1829"
+      > </a
+      ><a name="1830" class="Symbol"
+      >(</a
+      ><a name="1831" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="1834"
+      > </a
+      ><a name="1835" href="IntuitionisticLogic.html#1835" class="Bound"
+      >i</a
+      ><a name="1836" class="Symbol"
+      >)</a
+      ><a name="1837"
+      >  </a
+      ><a name="1839" class="Symbol"
+      >(</a
+      ><a name="1840" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="1843"
+      > </a
+      ><a name="1844" href="IntuitionisticLogic.html#1844" class="Bound"
+      >x</a
+      ><a name="1845" class="Symbol"
+      >)</a
+      ><a name="1846"
+      >        </a
+      ><a name="1854" class="Symbol"
+      >=</a
+      ><a name="1855"
+      > </a
+      ><a name="1856" href="Data.Product.html#1854" class="Function"
+      >Product.map</a
+      ><a name="1867"
+      > </a
+      ><a name="1868" class="InductiveConstructor"
+      >suc</a
+      ><a name="1871"
+      > </a
+      ><a name="1872" href="Function.html#1006" class="Function"
+      >id</a
+      ><a name="1874"
+      > </a
+      ><a name="1875" class="Symbol"
+      >(</a
+      ><a name="1876" href="IntuitionisticLogic.html#1431" class="Function"
+      >lemma-var</a
+      ><a name="1885"
+      > </a
+      ><a name="1886" class="Symbol"
+      >{</a
+      ><a name="1887"
+      >&#915; </a
+      ><a name="1889" class="Symbol"
+      >=</a
+      ><a name="1890"
+      > </a
+      ><a name="1891" href="IntuitionisticLogic.html#1827" class="Bound"
+      >&#915;</a
+      ><a name="1892" class="Symbol"
+      >}</a
+      ><a name="1893"
+      > </a
+      ><a name="1894" href="IntuitionisticLogic.html#1835" class="Bound"
+      >i</a
+      ><a name="1895"
+      > </a
+      ><a name="1896" href="IntuitionisticLogic.html#1844" class="Bound"
+      >x</a
+      ><a name="1897" class="Symbol"
+      >)</a
+      ><a name="1898"
+      >
+
+  </a
+      ><a name="1902" href="IntuitionisticLogic.html#1902" class="Function"
+      >exch</a
+      ><a name="1906"
+      > </a
+      ><a name="1907" class="Symbol"
+      >:</a
+      ><a name="1908"
+      > </a
+      ><a name="1909" class="Symbol"
+      >&#8704;</a
+      ><a name="1910"
+      > </a
+      ><a name="1911" class="Symbol"
+      >{</a
+      ><a name="1912" href="IntuitionisticLogic.html#1912" class="Bound"
+      >k</a
+      ><a name="1913" class="Symbol"
+      >}</a
+      ><a name="1914"
+      > </a
+      ><a name="1915" class="Symbol"
+      >{</a
+      ><a name="1916" href="IntuitionisticLogic.html#1916" class="Bound"
+      >&#915;</a
+      ><a name="1917"
+      > </a
+      ><a name="1918" class="Symbol"
+      >:</a
+      ><a name="1919"
+      > </a
+      ><a name="1920" href="Data.Vec.html#604" class="Datatype"
+      >Vec</a
+      ><a name="1923"
+      > </a
+      ><a name="1924" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="1928"
+      > </a
+      ><a name="1929" class="Symbol"
+      >(</a
+      ><a name="1930" href="Data.Nat.html#710" class="InductiveConstructor"
+      >suc</a
+      ><a name="1933"
+      > </a
+      ><a name="1934" href="IntuitionisticLogic.html#1912" class="Bound"
+      >k</a
+      ><a name="1935" class="Symbol"
+      >)}</a
+      ><a name="1937"
+      > </a
+      ><a name="1938" class="Symbol"
+      >{</a
+      ><a name="1939" href="IntuitionisticLogic.html#1939" class="Bound"
+      >A</a
+      ><a name="1940" class="Symbol"
+      >}</a
+      ><a name="1941"
+      > </a
+      ><a name="1942" class="Symbol"
+      >&#8594;</a
+      ><a name="1943"
+      > </a
+      ><a name="1944" class="Symbol"
+      >&#8704;</a
+      ><a name="1945"
+      > </a
+      ><a name="1946" href="IntuitionisticLogic.html#1946" class="Bound"
+      >i</a
+      ><a name="1947"
+      > </a
+      ><a name="1948" class="Symbol"
+      >&#8594;</a
+      ><a name="1949"
+      > </a
+      ><a name="1950" href="IntuitionisticLogic.html#1916" class="Bound"
+      >&#915;</a
+      ><a name="1951"
+      > </a
+      ><a name="1952" href="IntuitionisticLogic.html#732" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1953"
+      > </a
+      ><a name="1954" href="IntuitionisticLogic.html#1939" class="Bound"
+      >A</a
+      ><a name="1955"
+      > </a
+      ><a name="1956" class="Symbol"
+      >&#8594;</a
+      ><a name="1957"
+      > </a
+      ><a name="1958" href="IntuitionisticLogic.html#1262" class="Function"
+      >Vec-exch</a
+      ><a name="1966"
+      > </a
+      ><a name="1967" href="IntuitionisticLogic.html#1946" class="Bound"
+      >i</a
+      ><a name="1968"
+      > </a
+      ><a name="1969" href="IntuitionisticLogic.html#1916" class="Bound"
+      >&#915;</a
+      ><a name="1970"
+      > </a
+      ><a name="1971" href="IntuitionisticLogic.html#732" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1972"
+      > </a
+      ><a name="1973" href="IntuitionisticLogic.html#1939" class="Bound"
+      >A</a
+      ><a name="1974"
+      >
+  </a
+      ><a name="1977" href="IntuitionisticLogic.html#1902" class="Function"
+      >exch</a
+      ><a name="1981"
+      > </a
+      ><a name="1982" class="Symbol"
+      >{</a
+      ><a name="1983"
+      >&#915; </a
+      ><a name="1985" class="Symbol"
+      >=</a
+      ><a name="1986"
+      > </a
+      ><a name="1987" href="IntuitionisticLogic.html#1987" class="Bound"
+      >&#915;</a
+      ><a name="1988" class="Symbol"
+      >}</a
+      ><a name="1989"
+      > </a
+      ><a name="1990" href="IntuitionisticLogic.html#1990" class="Bound"
+      >i</a
+      ><a name="1991"
+      > </a
+      ><a name="1992" class="Symbol"
+      >(</a
+      ><a name="1993" href="IntuitionisticLogic.html#788" class="InductiveConstructor"
+      >var</a
+      ><a name="1996"
+      > </a
+      ><a name="1997" href="IntuitionisticLogic.html#1997" class="Bound"
+      >x</a
+      ><a name="1998" class="Symbol"
+      >)</a
+      ><a name="1999"
+      > </a
+      ><a name="2000" class="Keyword"
+      >with</a
+      ><a name="2004"
+      > </a
+      ><a name="2005" href="IntuitionisticLogic.html#1431" class="Function"
+      >lemma-var</a
+      ><a name="2014"
+      > </a
+      ><a name="2015" class="Symbol"
+      >{</a
+      ><a name="2016"
+      >&#915; </a
+      ><a name="2018" class="Symbol"
+      >=</a
+      ><a name="2019"
+      > </a
+      ><a name="2020" href="IntuitionisticLogic.html#1987" class="Bound"
+      >&#915;</a
+      ><a name="2021" class="Symbol"
+      >}</a
+      ><a name="2022"
+      > </a
+      ><a name="2023" href="IntuitionisticLogic.html#1990" class="Bound"
+      >i</a
+      ><a name="2024"
+      > </a
+      ><a name="2025" href="IntuitionisticLogic.html#1997" class="Bound"
+      >x</a
+      ><a name="2026"
+      >
+  </a
+      ><a name="2029" href="IntuitionisticLogic.html#1902" class="Function"
+      >exch</a
+      ><a name="2033"
+      > </a
+      ><a name="2034" class="Symbol"
+      >{</a
+      ><a name="2035"
+      >&#915; </a
+      ><a name="2037" class="Symbol"
+      >=</a
+      ><a name="2038"
+      > </a
+      ><a name="2039" href="IntuitionisticLogic.html#2039" class="Bound"
+      >&#915;</a
+      ><a name="2040" class="Symbol"
+      >}</a
+      ><a name="2041"
+      > </a
+      ><a name="2042" href="IntuitionisticLogic.html#2042" class="Bound"
+      >i</a
+      ><a name="2043"
+      > </a
+      ><a name="2044" class="Symbol"
+      >(</a
+      ><a name="2045" href="IntuitionisticLogic.html#788" class="InductiveConstructor"
+      >var</a
+      ><a name="2048"
+      > </a
+      ><a name="2049" href="IntuitionisticLogic.html#2049" class="Bound"
+      >x</a
+      ><a name="2050" class="Symbol"
+      >)</a
+      ><a name="2051"
+      > </a
+      ><a name="2052" class="Symbol"
+      >|</a
+      ><a name="2053"
+      > </a
+      ><a name="2054" href="IntuitionisticLogic.html#2054" class="Bound"
+      >y</a
+      ><a name="2055"
+      > </a
+      ><a name="2056" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2057"
+      > </a
+      ><a name="2058" href="IntuitionisticLogic.html#2058" class="Bound"
+      >p</a
+      ><a name="2059"
+      > </a
+      ><a name="2060" class="Keyword"
+      >rewrite</a
+      ><a name="2067"
+      > </a
+      ><a name="2068" href="IntuitionisticLogic.html#2058" class="Bound"
+      >p</a
+      ><a name="2069"
+      >  </a
+      ><a name="2071" class="Symbol"
+      >=</a
+      ><a name="2072"
+      > </a
+      ><a name="2073" href="IntuitionisticLogic.html#788" class="InductiveConstructor"
+      >var</a
+      ><a name="2076"
+      > </a
+      ><a name="2077" href="IntuitionisticLogic.html#2054" class="Bound"
+      >y</a
+      ><a name="2078"
+      >
+  </a
+      ><a name="2081" href="IntuitionisticLogic.html#1902" class="Function"
+      >exch</a
+      ><a name="2085"
+      > </a
+      ><a name="2086" href="IntuitionisticLogic.html#2086" class="Bound"
+      >i</a
+      ><a name="2087"
+      > </a
+      ><a name="2088" class="Symbol"
+      >(</a
+      ><a name="2089" href="IntuitionisticLogic.html#856" class="InductiveConstructor"
+      >abs</a
+      ><a name="2092"
+      > </a
+      ><a name="2093" href="IntuitionisticLogic.html#2093" class="Bound"
+      >t</a
+      ><a name="2094" class="Symbol"
+      >)</a
+      ><a name="2095"
+      >     </a
+      ><a name="2100" class="Symbol"
+      >=</a
+      ><a name="2101"
+      > </a
+      ><a name="2102" href="IntuitionisticLogic.html#856" class="InductiveConstructor"
+      >abs</a
+      ><a name="2105"
+      > </a
+      ><a name="2106" class="Symbol"
+      >(</a
+      ><a name="2107" href="IntuitionisticLogic.html#1902" class="Function"
+      >exch</a
+      ><a name="2111"
+      > </a
+      ><a name="2112" class="Symbol"
+      >(</a
+      ><a name="2113" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="2116"
+      > </a
+      ><a name="2117" href="IntuitionisticLogic.html#2086" class="Bound"
+      >i</a
+      ><a name="2118" class="Symbol"
+      >)</a
+      ><a name="2119"
+      > </a
+      ><a name="2120" href="IntuitionisticLogic.html#2093" class="Bound"
+      >t</a
+      ><a name="2121" class="Symbol"
+      >)</a
+      ><a name="2122"
+      >
+  </a
+      ><a name="2125" href="IntuitionisticLogic.html#1902" class="Function"
+      >exch</a
+      ><a name="2129"
+      > </a
+      ><a name="2130" href="IntuitionisticLogic.html#2130" class="Bound"
+      >i</a
+      ><a name="2131"
+      > </a
+      ><a name="2132" class="Symbol"
+      >(</a
+      ><a name="2133" href="IntuitionisticLogic.html#921" class="InductiveConstructor"
+      >app</a
+      ><a name="2136"
+      > </a
+      ><a name="2137" href="IntuitionisticLogic.html#2137" class="Bound"
+      >s</a
+      ><a name="2138"
+      > </a
+      ><a name="2139" href="IntuitionisticLogic.html#2139" class="Bound"
+      >t</a
+      ><a name="2140" class="Symbol"
+      >)</a
+      ><a name="2141"
+      >   </a
+      ><a name="2144" class="Symbol"
+      >=</a
+      ><a name="2145"
+      > </a
+      ><a name="2146" href="IntuitionisticLogic.html#921" class="InductiveConstructor"
+      >app</a
+      ><a name="2149"
+      > </a
+      ><a name="2150" class="Symbol"
+      >(</a
+      ><a name="2151" href="IntuitionisticLogic.html#1902" class="Function"
+      >exch</a
+      ><a name="2155"
+      > </a
+      ><a name="2156" href="IntuitionisticLogic.html#2130" class="Bound"
+      >i</a
+      ><a name="2157"
+      > </a
+      ><a name="2158" href="IntuitionisticLogic.html#2137" class="Bound"
+      >s</a
+      ><a name="2159" class="Symbol"
+      >)</a
+      ><a name="2160"
+      > </a
+      ><a name="2161" class="Symbol"
+      >(</a
+      ><a name="2162" href="IntuitionisticLogic.html#1902" class="Function"
+      >exch</a
+      ><a name="2166"
+      > </a
+      ><a name="2167" href="IntuitionisticLogic.html#2130" class="Bound"
+      >i</a
+      ><a name="2168"
+      > </a
+      ><a name="2169" href="IntuitionisticLogic.html#2139" class="Bound"
+      >t</a
+      ><a name="2170" class="Symbol"
+      >)</a
+      ><a name="2171"
+      >
+  </a
+      ><a name="2174" href="IntuitionisticLogic.html#1902" class="Function"
+      >exch</a
+      ><a name="2178"
+      > </a
+      ><a name="2179" href="IntuitionisticLogic.html#2179" class="Bound"
+      >i</a
+      ><a name="2180"
+      > </a
+      ><a name="2181" class="Symbol"
+      >(</a
+      ><a name="2182" href="IntuitionisticLogic.html#990" class="InductiveConstructor"
+      >pair</a
+      ><a name="2186"
+      > </a
+      ><a name="2187" href="IntuitionisticLogic.html#2187" class="Bound"
+      >s</a
+      ><a name="2188"
+      > </a
+      ><a name="2189" href="IntuitionisticLogic.html#2189" class="Bound"
+      >t</a
+      ><a name="2190" class="Symbol"
+      >)</a
+      ><a name="2191"
+      >  </a
+      ><a name="2193" class="Symbol"
+      >=</a
+      ><a name="2194"
+      > </a
+      ><a name="2195" href="IntuitionisticLogic.html#990" class="InductiveConstructor"
+      >pair</a
+      ><a name="2199"
+      > </a
+      ><a name="2200" class="Symbol"
+      >(</a
+      ><a name="2201" href="IntuitionisticLogic.html#1902" class="Function"
+      >exch</a
+      ><a name="2205"
+      > </a
+      ><a name="2206" href="IntuitionisticLogic.html#2179" class="Bound"
+      >i</a
+      ><a name="2207"
+      > </a
+      ><a name="2208" href="IntuitionisticLogic.html#2187" class="Bound"
+      >s</a
+      ><a name="2209" class="Symbol"
+      >)</a
+      ><a name="2210"
+      > </a
+      ><a name="2211" class="Symbol"
+      >(</a
+      ><a name="2212" href="IntuitionisticLogic.html#1902" class="Function"
+      >exch</a
+      ><a name="2216"
+      > </a
+      ><a name="2217" href="IntuitionisticLogic.html#2179" class="Bound"
+      >i</a
+      ><a name="2218"
+      > </a
+      ><a name="2219" href="IntuitionisticLogic.html#2189" class="Bound"
+      >t</a
+      ><a name="2220" class="Symbol"
+      >)</a
+      ><a name="2221"
+      >
+  </a
+      ><a name="2224" href="IntuitionisticLogic.html#1902" class="Function"
+      >exch</a
+      ><a name="2228"
+      > </a
+      ><a name="2229" href="IntuitionisticLogic.html#2229" class="Bound"
+      >i</a
+      ><a name="2230"
+      > </a
+      ><a name="2231" class="Symbol"
+      >(</a
+      ><a name="2232" href="IntuitionisticLogic.html#1059" class="InductiveConstructor"
+      >case</a
+      ><a name="2236"
+      > </a
+      ><a name="2237" href="IntuitionisticLogic.html#2237" class="Bound"
+      >s</a
+      ><a name="2238"
+      > </a
+      ><a name="2239" href="IntuitionisticLogic.html#2239" class="Bound"
+      >t</a
+      ><a name="2240" class="Symbol"
+      >)</a
+      ><a name="2241"
+      >  </a
+      ><a name="2243" class="Symbol"
+      >=</a
+      ><a name="2244"
+      > </a
+      ><a name="2245" href="IntuitionisticLogic.html#1059" class="InductiveConstructor"
+      >case</a
+      ><a name="2249"
+      > </a
+      ><a name="2250" class="Symbol"
+      >(</a
+      ><a name="2251" href="IntuitionisticLogic.html#1902" class="Function"
+      >exch</a
+      ><a name="2255"
+      > </a
+      ><a name="2256" href="IntuitionisticLogic.html#2229" class="Bound"
+      >i</a
+      ><a name="2257"
+      > </a
+      ><a name="2258" href="IntuitionisticLogic.html#2237" class="Bound"
+      >s</a
+      ><a name="2259" class="Symbol"
+      >)</a
+      ><a name="2260"
+      > </a
+      ><a name="2261" class="Symbol"
+      >(</a
+      ><a name="2262" href="IntuitionisticLogic.html#1902" class="Function"
+      >exch</a
+      ><a name="2266"
+      > </a
+      ><a name="2267" class="Symbol"
+      >(</a
+      ><a name="2268" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="2271"
+      > </a
+      ><a name="2272" class="Symbol"
+      >(</a
+      ><a name="2273" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="2276"
+      > </a
+      ><a name="2277" href="IntuitionisticLogic.html#2229" class="Bound"
+      >i</a
+      ><a name="2278" class="Symbol"
+      >))</a
+      ><a name="2280"
+      > </a
+      ><a name="2281" href="IntuitionisticLogic.html#2239" class="Bound"
+      >t</a
+      ><a name="2282" class="Symbol"
+      >)</a
+      ><a name="2283"
+      >
+
+</a
+      ><a name="2285" class="Keyword"
+      >module</a
+      ><a name="2291"
+      > </a
+      ><a name="2292" href="IntuitionisticLogic.html#2292" class="Module"
+      >Explicit</a
+      ><a name="2300"
+      > </a
+      ><a name="2301" class="Keyword"
+      >where</a
+      ><a name="2306"
+      >
+
+  </a
+      ><a name="2310" class="Keyword"
+      >infix</a
+      ><a name="2315"
+      >  </a
+      ><a name="2317" class="Number"
+      >4</a
+      ><a name="2318"
+      >  _&#8866;_
+
+  </a
+      ><a name="2327" class="Keyword"
+      >data</a
+      ><a name="2331"
+      > </a
+      ><a name="2332" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >_&#8866;_</a
+      ><a name="2335"
+      > </a
+      ><a name="2336" class="Symbol"
+      >:</a
+      ><a name="2337"
+      > </a
+      ><a name="2338" class="Symbol"
+      >&#8704;</a
+      ><a name="2339"
+      > </a
+      ><a name="2340" class="Symbol"
+      >(</a
+      ><a name="2341" href="IntuitionisticLogic.html#2341" class="Bound"
+      >X</a
+      ><a name="2342"
+      > </a
+      ><a name="2343" class="Symbol"
+      >:</a
+      ><a name="2344"
+      > </a
+      ><a name="2345" href="Data.List.html#659" class="Datatype"
+      >List</a
+      ><a name="2349"
+      > </a
+      ><a name="2350" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="2354" class="Symbol"
+      >)</a
+      ><a name="2355"
+      > </a
+      ><a name="2356" class="Symbol"
+      >(</a
+      ><a name="2357" href="IntuitionisticLogic.html#2357" class="Bound"
+      >A</a
+      ><a name="2358"
+      > </a
+      ><a name="2359" class="Symbol"
+      >:</a
+      ><a name="2360"
+      > </a
+      ><a name="2361" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="2365" class="Symbol"
+      >)</a
+      ><a name="2366"
+      > </a
+      ><a name="2367" class="Symbol"
+      >&#8594;</a
+      ><a name="2368"
+      > </a
+      ><a name="2369" class="PrimitiveType"
+      >Set</a
+      ><a name="2372"
+      > </a
+      ><a name="2373" class="Keyword"
+      >where</a
+      ><a name="2378"
+      >
+    </a
+      ><a name="2383" href="IntuitionisticLogic.html#2383" class="InductiveConstructor"
+      >var</a
+      ><a name="2386"
+      >   </a
+      ><a name="2389" class="Symbol"
+      >:</a
+      ><a name="2390"
+      > </a
+      ><a name="2391" class="Symbol"
+      >&#8704;</a
+      ><a name="2392"
+      > </a
+      ><a name="2393" class="Symbol"
+      >{</a
+      ><a name="2394" href="IntuitionisticLogic.html#2394" class="Bound"
+      >A</a
+      ><a name="2395" class="Symbol"
+      >}</a
+      ><a name="2396"
+      > </a
+      ><a name="2397" class="Symbol"
+      >&#8594;</a
+      ><a name="2398"
+      > </a
+      ><a name="2399" href="IntuitionisticLogic.html#2394" class="Bound"
+      >A</a
+      ><a name="2400"
+      > </a
+      ><a name="2401" href="Data.List.html#711" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2402"
+      > </a
+      ><a name="2403" href="Data.List.html#696" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="2404"
+      > </a
+      ><a name="2405" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2406"
+      > </a
+      ><a name="2407" href="IntuitionisticLogic.html#2394" class="Bound"
+      >A</a
+      ><a name="2408"
+      >
+    </a
+      ><a name="2413" href="IntuitionisticLogic.html#2413" class="InductiveConstructor"
+      >abs</a
+      ><a name="2416"
+      >   </a
+      ><a name="2419" class="Symbol"
+      >:</a
+      ><a name="2420"
+      > </a
+      ><a name="2421" class="Symbol"
+      >&#8704;</a
+      ><a name="2422"
+      > </a
+      ><a name="2423" class="Symbol"
+      >{</a
+      ><a name="2424" href="IntuitionisticLogic.html#2424" class="Bound"
+      >X</a
+      ><a name="2425"
+      > </a
+      ><a name="2426" href="IntuitionisticLogic.html#2426" class="Bound"
+      >A</a
+      ><a name="2427"
+      > </a
+      ><a name="2428" href="IntuitionisticLogic.html#2428" class="Bound"
+      >B</a
+      ><a name="2429" class="Symbol"
+      >}</a
+      ><a name="2430"
+      > </a
+      ><a name="2431" class="Symbol"
+      >&#8594;</a
+      ><a name="2432"
+      > </a
+      ><a name="2433" href="IntuitionisticLogic.html#2426" class="Bound"
+      >A</a
+      ><a name="2434"
+      > </a
+      ><a name="2435" href="Data.List.html#711" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2436"
+      > </a
+      ><a name="2437" href="IntuitionisticLogic.html#2424" class="Bound"
+      >X</a
+      ><a name="2438"
+      > </a
+      ><a name="2439" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2440"
+      > </a
+      ><a name="2441" href="IntuitionisticLogic.html#2428" class="Bound"
+      >B</a
+      ><a name="2442"
+      > </a
+      ><a name="2443" class="Symbol"
+      >&#8594;</a
+      ><a name="2444"
+      > </a
+      ><a name="2445" href="IntuitionisticLogic.html#2424" class="Bound"
+      >X</a
+      ><a name="2446"
+      > </a
+      ><a name="2447" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2448"
+      > </a
+      ><a name="2449" href="IntuitionisticLogic.html#2426" class="Bound"
+      >A</a
+      ><a name="2450"
+      > </a
+      ><a name="2451" href="IntuitionisticLogic.html#658" class="InductiveConstructor Operator"
+      >&#8658;</a
+      ><a name="2452"
+      > </a
+      ><a name="2453" href="IntuitionisticLogic.html#2428" class="Bound"
+      >B</a
+      ><a name="2454"
+      >
+    </a
+      ><a name="2459" href="IntuitionisticLogic.html#2459" class="InductiveConstructor"
+      >app</a
+      ><a name="2462"
+      >   </a
+      ><a name="2465" class="Symbol"
+      >:</a
+      ><a name="2466"
+      > </a
+      ><a name="2467" class="Symbol"
+      >&#8704;</a
+      ><a name="2468"
+      > </a
+      ><a name="2469" class="Symbol"
+      >{</a
+      ><a name="2470" href="IntuitionisticLogic.html#2470" class="Bound"
+      >X</a
+      ><a name="2471"
+      > </a
+      ><a name="2472" href="IntuitionisticLogic.html#2472" class="Bound"
+      >Y</a
+      ><a name="2473"
+      > </a
+      ><a name="2474" href="IntuitionisticLogic.html#2474" class="Bound"
+      >A</a
+      ><a name="2475"
+      > </a
+      ><a name="2476" href="IntuitionisticLogic.html#2476" class="Bound"
+      >B</a
+      ><a name="2477" class="Symbol"
+      >}</a
+      ><a name="2478"
+      > </a
+      ><a name="2479" class="Symbol"
+      >&#8594;</a
+      ><a name="2480"
+      > </a
+      ><a name="2481" href="IntuitionisticLogic.html#2470" class="Bound"
+      >X</a
+      ><a name="2482"
+      > </a
+      ><a name="2483" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2484"
+      > </a
+      ><a name="2485" href="IntuitionisticLogic.html#2474" class="Bound"
+      >A</a
+      ><a name="2486"
+      > </a
+      ><a name="2487" href="IntuitionisticLogic.html#658" class="InductiveConstructor Operator"
+      >&#8658;</a
+      ><a name="2488"
+      > </a
+      ><a name="2489" href="IntuitionisticLogic.html#2476" class="Bound"
+      >B</a
+      ><a name="2490"
+      > </a
+      ><a name="2491" class="Symbol"
+      >&#8594;</a
+      ><a name="2492"
+      > </a
+      ><a name="2493" href="IntuitionisticLogic.html#2472" class="Bound"
+      >Y</a
+      ><a name="2494"
+      > </a
+      ><a name="2495" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2496"
+      > </a
+      ><a name="2497" href="IntuitionisticLogic.html#2474" class="Bound"
+      >A</a
+      ><a name="2498"
+      > </a
+      ><a name="2499" class="Symbol"
+      >&#8594;</a
+      ><a name="2500"
+      > </a
+      ><a name="2501" href="IntuitionisticLogic.html#2470" class="Bound"
+      >X</a
+      ><a name="2502"
+      > </a
+      ><a name="2503" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="2505"
+      > </a
+      ><a name="2506" href="IntuitionisticLogic.html#2472" class="Bound"
+      >Y</a
+      ><a name="2507"
+      > </a
+      ><a name="2508" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2509"
+      > </a
+      ><a name="2510" href="IntuitionisticLogic.html#2476" class="Bound"
+      >B</a
+      ><a name="2511"
+      >
+    </a
+      ><a name="2516" href="IntuitionisticLogic.html#2516" class="InductiveConstructor"
+      >pair</a
+      ><a name="2520"
+      >  </a
+      ><a name="2522" class="Symbol"
+      >:</a
+      ><a name="2523"
+      > </a
+      ><a name="2524" class="Symbol"
+      >&#8704;</a
+      ><a name="2525"
+      > </a
+      ><a name="2526" class="Symbol"
+      >{</a
+      ><a name="2527" href="IntuitionisticLogic.html#2527" class="Bound"
+      >X</a
+      ><a name="2528"
+      > </a
+      ><a name="2529" href="IntuitionisticLogic.html#2529" class="Bound"
+      >Y</a
+      ><a name="2530"
+      > </a
+      ><a name="2531" href="IntuitionisticLogic.html#2531" class="Bound"
+      >A</a
+      ><a name="2532"
+      > </a
+      ><a name="2533" href="IntuitionisticLogic.html#2533" class="Bound"
+      >B</a
+      ><a name="2534" class="Symbol"
+      >}</a
+      ><a name="2535"
+      > </a
+      ><a name="2536" class="Symbol"
+      >&#8594;</a
+      ><a name="2537"
+      > </a
+      ><a name="2538" href="IntuitionisticLogic.html#2527" class="Bound"
+      >X</a
+      ><a name="2539"
+      > </a
+      ><a name="2540" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2541"
+      > </a
+      ><a name="2542" href="IntuitionisticLogic.html#2531" class="Bound"
+      >A</a
+      ><a name="2543"
+      > </a
+      ><a name="2544" class="Symbol"
+      >&#8594;</a
+      ><a name="2545"
+      > </a
+      ><a name="2546" href="IntuitionisticLogic.html#2529" class="Bound"
+      >Y</a
+      ><a name="2547"
+      > </a
+      ><a name="2548" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2549"
+      > </a
+      ><a name="2550" href="IntuitionisticLogic.html#2533" class="Bound"
+      >B</a
+      ><a name="2551"
+      > </a
+      ><a name="2552" class="Symbol"
+      >&#8594;</a
+      ><a name="2553"
+      > </a
+      ><a name="2554" href="IntuitionisticLogic.html#2527" class="Bound"
+      >X</a
+      ><a name="2555"
+      > </a
+      ><a name="2556" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="2558"
+      > </a
+      ><a name="2559" href="IntuitionisticLogic.html#2529" class="Bound"
+      >Y</a
+      ><a name="2560"
+      > </a
+      ><a name="2561" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2562"
+      > </a
+      ><a name="2563" href="IntuitionisticLogic.html#2531" class="Bound"
+      >A</a
+      ><a name="2564"
+      > </a
+      ><a name="2565" href="IntuitionisticLogic.html#629" class="InductiveConstructor Operator"
+      >&#8855;</a
+      ><a name="2566"
+      > </a
+      ><a name="2567" href="IntuitionisticLogic.html#2533" class="Bound"
+      >B</a
+      ><a name="2568"
+      >
+    </a
+      ><a name="2573" href="IntuitionisticLogic.html#2573" class="InductiveConstructor"
+      >case</a
+      ><a name="2577"
+      >  </a
+      ><a name="2579" class="Symbol"
+      >:</a
+      ><a name="2580"
+      > </a
+      ><a name="2581" class="Symbol"
+      >&#8704;</a
+      ><a name="2582"
+      > </a
+      ><a name="2583" class="Symbol"
+      >{</a
+      ><a name="2584" href="IntuitionisticLogic.html#2584" class="Bound"
+      >X</a
+      ><a name="2585"
+      > </a
+      ><a name="2586" href="IntuitionisticLogic.html#2586" class="Bound"
+      >Y</a
+      ><a name="2587"
+      > </a
+      ><a name="2588" href="IntuitionisticLogic.html#2588" class="Bound"
+      >A</a
+      ><a name="2589"
+      > </a
+      ><a name="2590" href="IntuitionisticLogic.html#2590" class="Bound"
+      >B</a
+      ><a name="2591"
+      > </a
+      ><a name="2592" href="IntuitionisticLogic.html#2592" class="Bound"
+      >C</a
+      ><a name="2593" class="Symbol"
+      >}</a
+      ><a name="2594"
+      > </a
+      ><a name="2595" class="Symbol"
+      >&#8594;</a
+      ><a name="2596"
+      > </a
+      ><a name="2597" href="IntuitionisticLogic.html#2584" class="Bound"
+      >X</a
+      ><a name="2598"
+      > </a
+      ><a name="2599" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2600"
+      > </a
+      ><a name="2601" href="IntuitionisticLogic.html#2588" class="Bound"
+      >A</a
+      ><a name="2602"
+      > </a
+      ><a name="2603" href="IntuitionisticLogic.html#629" class="InductiveConstructor Operator"
+      >&#8855;</a
+      ><a name="2604"
+      > </a
+      ><a name="2605" href="IntuitionisticLogic.html#2590" class="Bound"
+      >B</a
+      ><a name="2606"
+      > </a
+      ><a name="2607" class="Symbol"
+      >&#8594;</a
+      ><a name="2608"
+      > </a
+      ><a name="2609" href="IntuitionisticLogic.html#2588" class="Bound"
+      >A</a
+      ><a name="2610"
+      > </a
+      ><a name="2611" href="Data.List.html#711" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2612"
+      > </a
+      ><a name="2613" href="IntuitionisticLogic.html#2590" class="Bound"
+      >B</a
+      ><a name="2614"
+      > </a
+      ><a name="2615" href="Data.List.html#711" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2616"
+      > </a
+      ><a name="2617" href="IntuitionisticLogic.html#2586" class="Bound"
+      >Y</a
+      ><a name="2618"
+      > </a
+      ><a name="2619" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2620"
+      > </a
+      ><a name="2621" href="IntuitionisticLogic.html#2592" class="Bound"
+      >C</a
+      ><a name="2622"
+      > </a
+      ><a name="2623" class="Symbol"
+      >&#8594;</a
+      ><a name="2624"
+      > </a
+      ><a name="2625" href="IntuitionisticLogic.html#2584" class="Bound"
+      >X</a
+      ><a name="2626"
+      > </a
+      ><a name="2627" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="2629"
+      > </a
+      ><a name="2630" href="IntuitionisticLogic.html#2586" class="Bound"
+      >Y</a
+      ><a name="2631"
+      > </a
+      ><a name="2632" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2633"
+      > </a
+      ><a name="2634" href="IntuitionisticLogic.html#2592" class="Bound"
+      >C</a
+      ><a name="2635"
+      >
+    </a
+      ><a name="2640" href="IntuitionisticLogic.html#2640" class="InductiveConstructor"
+      >weak</a
+      ><a name="2644"
+      >  </a
+      ><a name="2646" class="Symbol"
+      >:</a
+      ><a name="2647"
+      > </a
+      ><a name="2648" class="Symbol"
+      >&#8704;</a
+      ><a name="2649"
+      > </a
+      ><a name="2650" class="Symbol"
+      >{</a
+      ><a name="2651" href="IntuitionisticLogic.html#2651" class="Bound"
+      >X</a
+      ><a name="2652"
+      > </a
+      ><a name="2653" href="IntuitionisticLogic.html#2653" class="Bound"
+      >Y</a
+      ><a name="2654"
+      > </a
+      ><a name="2655" href="IntuitionisticLogic.html#2655" class="Bound"
+      >A</a
+      ><a name="2656" class="Symbol"
+      >}</a
+      ><a name="2657"
+      > </a
+      ><a name="2658" class="Symbol"
+      >&#8594;</a
+      ><a name="2659"
+      > </a
+      ><a name="2660" href="IntuitionisticLogic.html#2651" class="Bound"
+      >X</a
+      ><a name="2661"
+      > </a
+      ><a name="2662" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2663"
+      > </a
+      ><a name="2664" href="IntuitionisticLogic.html#2655" class="Bound"
+      >A</a
+      ><a name="2665"
+      > </a
+      ><a name="2666" class="Symbol"
+      >&#8594;</a
+      ><a name="2667"
+      > </a
+      ><a name="2668" href="IntuitionisticLogic.html#2651" class="Bound"
+      >X</a
+      ><a name="2669"
+      > </a
+      ><a name="2670" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="2672"
+      > </a
+      ><a name="2673" href="IntuitionisticLogic.html#2653" class="Bound"
+      >Y</a
+      ><a name="2674"
+      > </a
+      ><a name="2675" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2676"
+      > </a
+      ><a name="2677" href="IntuitionisticLogic.html#2655" class="Bound"
+      >A</a
+      ><a name="2678"
+      >
+    </a
+      ><a name="2683" href="IntuitionisticLogic.html#2683" class="InductiveConstructor"
+      >cont</a
+      ><a name="2687"
+      >  </a
+      ><a name="2689" class="Symbol"
+      >:</a
+      ><a name="2690"
+      > </a
+      ><a name="2691" class="Symbol"
+      >&#8704;</a
+      ><a name="2692"
+      > </a
+      ><a name="2693" class="Symbol"
+      >{</a
+      ><a name="2694" href="IntuitionisticLogic.html#2694" class="Bound"
+      >X</a
+      ><a name="2695"
+      > </a
+      ><a name="2696" href="IntuitionisticLogic.html#2696" class="Bound"
+      >A</a
+      ><a name="2697"
+      > </a
+      ><a name="2698" href="IntuitionisticLogic.html#2698" class="Bound"
+      >B</a
+      ><a name="2699" class="Symbol"
+      >}</a
+      ><a name="2700"
+      > </a
+      ><a name="2701" class="Symbol"
+      >&#8594;</a
+      ><a name="2702"
+      > </a
+      ><a name="2703" href="IntuitionisticLogic.html#2696" class="Bound"
+      >A</a
+      ><a name="2704"
+      > </a
+      ><a name="2705" href="Data.List.html#711" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2706"
+      > </a
+      ><a name="2707" href="IntuitionisticLogic.html#2696" class="Bound"
+      >A</a
+      ><a name="2708"
+      > </a
+      ><a name="2709" href="Data.List.html#711" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2710"
+      > </a
+      ><a name="2711" href="IntuitionisticLogic.html#2694" class="Bound"
+      >X</a
+      ><a name="2712"
+      > </a
+      ><a name="2713" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2714"
+      > </a
+      ><a name="2715" href="IntuitionisticLogic.html#2698" class="Bound"
+      >B</a
+      ><a name="2716"
+      > </a
+      ><a name="2717" class="Symbol"
+      >&#8594;</a
+      ><a name="2718"
+      > </a
+      ><a name="2719" href="IntuitionisticLogic.html#2696" class="Bound"
+      >A</a
+      ><a name="2720"
+      > </a
+      ><a name="2721" href="Data.List.html#711" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2722"
+      > </a
+      ><a name="2723" href="IntuitionisticLogic.html#2694" class="Bound"
+      >X</a
+      ><a name="2724"
+      > </a
+      ><a name="2725" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2726"
+      > </a
+      ><a name="2727" href="IntuitionisticLogic.html#2698" class="Bound"
+      >B</a
+      ><a name="2728"
+      >
+    </a
+      ><a name="2733" href="IntuitionisticLogic.html#2733" class="InductiveConstructor"
+      >exch</a
+      ><a name="2737"
+      >  </a
+      ><a name="2739" class="Symbol"
+      >:</a
+      ><a name="2740"
+      > </a
+      ><a name="2741" class="Symbol"
+      >&#8704;</a
+      ><a name="2742"
+      > </a
+      ><a name="2743" class="Symbol"
+      >{</a
+      ><a name="2744" href="IntuitionisticLogic.html#2744" class="Bound"
+      >X</a
+      ><a name="2745"
+      > </a
+      ><a name="2746" href="IntuitionisticLogic.html#2746" class="Bound"
+      >Y</a
+      ><a name="2747"
+      > </a
+      ><a name="2748" href="IntuitionisticLogic.html#2748" class="Bound"
+      >Z</a
+      ><a name="2749"
+      > </a
+      ><a name="2750" href="IntuitionisticLogic.html#2750" class="Bound"
+      >W</a
+      ><a name="2751"
+      > </a
+      ><a name="2752" href="IntuitionisticLogic.html#2752" class="Bound"
+      >A</a
+      ><a name="2753" class="Symbol"
+      >}</a
+      ><a name="2754"
+      > </a
+      ><a name="2755" class="Symbol"
+      >&#8594;</a
+      ><a name="2756"
+      >  </a
+      ><a name="2758" class="Symbol"
+      >(</a
+      ><a name="2759" href="IntuitionisticLogic.html#2744" class="Bound"
+      >X</a
+      ><a name="2760"
+      > </a
+      ><a name="2761" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="2763"
+      > </a
+      ><a name="2764" href="IntuitionisticLogic.html#2748" class="Bound"
+      >Z</a
+      ><a name="2765" class="Symbol"
+      >)</a
+      ><a name="2766"
+      > </a
+      ><a name="2767" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="2769"
+      > </a
+      ><a name="2770" class="Symbol"
+      >(</a
+      ><a name="2771" href="IntuitionisticLogic.html#2746" class="Bound"
+      >Y</a
+      ><a name="2772"
+      > </a
+      ><a name="2773" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="2775"
+      > </a
+      ><a name="2776" href="IntuitionisticLogic.html#2750" class="Bound"
+      >W</a
+      ><a name="2777" class="Symbol"
+      >)</a
+      ><a name="2778"
+      > </a
+      ><a name="2779" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2780"
+      > </a
+      ><a name="2781" href="IntuitionisticLogic.html#2752" class="Bound"
+      >A</a
+      ><a name="2782"
+      >
+          </a
+      ><a name="2793" class="Symbol"
+      >&#8594;</a
+      ><a name="2794"
+      >  </a
+      ><a name="2796" class="Symbol"
+      >(</a
+      ><a name="2797" href="IntuitionisticLogic.html#2744" class="Bound"
+      >X</a
+      ><a name="2798"
+      > </a
+      ><a name="2799" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="2801"
+      > </a
+      ><a name="2802" href="IntuitionisticLogic.html#2746" class="Bound"
+      >Y</a
+      ><a name="2803" class="Symbol"
+      >)</a
+      ><a name="2804"
+      > </a
+      ><a name="2805" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="2807"
+      > </a
+      ><a name="2808" class="Symbol"
+      >(</a
+      ><a name="2809" href="IntuitionisticLogic.html#2748" class="Bound"
+      >Z</a
+      ><a name="2810"
+      > </a
+      ><a name="2811" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="2813"
+      > </a
+      ><a name="2814" href="IntuitionisticLogic.html#2750" class="Bound"
+      >W</a
+      ><a name="2815" class="Symbol"
+      >)</a
+      ><a name="2816"
+      > </a
+      ><a name="2817" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2818"
+      > </a
+      ><a name="2819" href="IntuitionisticLogic.html#2752" class="Bound"
+      >A</a
+      ><a name="2820"
+      >
+
+  </a
+      ><a name="2824" href="IntuitionisticLogic.html#2824" class="Function"
+      >exch&#8320;</a
+      ><a name="2829"
+      > </a
+      ><a name="2830" class="Symbol"
+      >:</a
+      ><a name="2831"
+      > </a
+      ><a name="2832" class="Symbol"
+      >&#8704;</a
+      ><a name="2833"
+      > </a
+      ><a name="2834" class="Symbol"
+      >{</a
+      ><a name="2835" href="IntuitionisticLogic.html#2835" class="Bound"
+      >X</a
+      ><a name="2836"
+      > </a
+      ><a name="2837" href="IntuitionisticLogic.html#2837" class="Bound"
+      >A</a
+      ><a name="2838"
+      > </a
+      ><a name="2839" href="IntuitionisticLogic.html#2839" class="Bound"
+      >B</a
+      ><a name="2840"
+      > </a
+      ><a name="2841" href="IntuitionisticLogic.html#2841" class="Bound"
+      >C</a
+      ><a name="2842" class="Symbol"
+      >}</a
+      ><a name="2843"
+      > </a
+      ><a name="2844" class="Symbol"
+      >&#8594;</a
+      ><a name="2845"
+      > </a
+      ><a name="2846" href="IntuitionisticLogic.html#2839" class="Bound"
+      >B</a
+      ><a name="2847"
+      > </a
+      ><a name="2848" href="Data.List.html#711" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2849"
+      > </a
+      ><a name="2850" href="IntuitionisticLogic.html#2837" class="Bound"
+      >A</a
+      ><a name="2851"
+      > </a
+      ><a name="2852" href="Data.List.html#711" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2853"
+      > </a
+      ><a name="2854" href="IntuitionisticLogic.html#2835" class="Bound"
+      >X</a
+      ><a name="2855"
+      > </a
+      ><a name="2856" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2857"
+      > </a
+      ><a name="2858" href="IntuitionisticLogic.html#2841" class="Bound"
+      >C</a
+      ><a name="2859"
+      > </a
+      ><a name="2860" class="Symbol"
+      >&#8594;</a
+      ><a name="2861"
+      > </a
+      ><a name="2862" href="IntuitionisticLogic.html#2837" class="Bound"
+      >A</a
+      ><a name="2863"
+      > </a
+      ><a name="2864" href="Data.List.html#711" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2865"
+      > </a
+      ><a name="2866" href="IntuitionisticLogic.html#2839" class="Bound"
+      >B</a
+      ><a name="2867"
+      > </a
+      ><a name="2868" href="Data.List.html#711" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2869"
+      > </a
+      ><a name="2870" href="IntuitionisticLogic.html#2835" class="Bound"
+      >X</a
+      ><a name="2871"
+      > </a
+      ><a name="2872" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2873"
+      > </a
+      ><a name="2874" href="IntuitionisticLogic.html#2841" class="Bound"
+      >C</a
+      ><a name="2875"
+      >
+  </a
+      ><a name="2878" href="IntuitionisticLogic.html#2824" class="Function"
+      >exch&#8320;</a
+      ><a name="2883"
+      > </a
+      ><a name="2884" class="Symbol"
+      >{</a
+      ><a name="2885" href="IntuitionisticLogic.html#2885" class="Bound"
+      >X</a
+      ><a name="2886" class="Symbol"
+      >}</a
+      ><a name="2887"
+      > </a
+      ><a name="2888" class="Symbol"
+      >{</a
+      ><a name="2889" href="IntuitionisticLogic.html#2889" class="Bound"
+      >A</a
+      ><a name="2890" class="Symbol"
+      >}</a
+      ><a name="2891"
+      > </a
+      ><a name="2892" class="Symbol"
+      >{</a
+      ><a name="2893" href="IntuitionisticLogic.html#2893" class="Bound"
+      >B</a
+      ><a name="2894" class="Symbol"
+      >}</a
+      ><a name="2895"
+      > </a
+      ><a name="2896" class="Symbol"
+      >=</a
+      ><a name="2897"
+      > </a
+      ><a name="2898" href="IntuitionisticLogic.html#2733" class="InductiveConstructor"
+      >exch</a
+      ><a name="2902"
+      > </a
+      ><a name="2903" class="Symbol"
+      >{</a
+      ><a name="2904" href="Data.List.html#696" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="2905" class="Symbol"
+      >}</a
+      ><a name="2906"
+      > </a
+      ><a name="2907" class="Symbol"
+      >{</a
+      ><a name="2908" href="IntuitionisticLogic.html#2889" class="Bound"
+      >A</a
+      ><a name="2909"
+      > </a
+      ><a name="2910" href="Data.List.html#711" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2911"
+      > </a
+      ><a name="2912" href="Data.List.html#696" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="2913" class="Symbol"
+      >}</a
+      ><a name="2914"
+      > </a
+      ><a name="2915" class="Symbol"
+      >{</a
+      ><a name="2916" href="IntuitionisticLogic.html#2893" class="Bound"
+      >B</a
+      ><a name="2917"
+      > </a
+      ><a name="2918" href="Data.List.html#711" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2919"
+      > </a
+      ><a name="2920" href="Data.List.html#696" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="2921" class="Symbol"
+      >}</a
+      ><a name="2922"
+      > </a
+      ><a name="2923" class="Symbol"
+      >{</a
+      ><a name="2924" href="IntuitionisticLogic.html#2885" class="Bound"
+      >X</a
+      ><a name="2925" class="Symbol"
+      >}</a
+      ><a name="2926"
+      >
+
+  </a
+      ><a name="2930" href="IntuitionisticLogic.html#2930" class="Function"
+      >swap</a
+      ><a name="2934"
+      > </a
+      ><a name="2935" class="Symbol"
+      >:</a
+      ><a name="2936"
+      > </a
+      ><a name="2937" class="Symbol"
+      >&#8704;</a
+      ><a name="2938"
+      > </a
+      ><a name="2939" class="Symbol"
+      >{</a
+      ><a name="2940" href="IntuitionisticLogic.html#2940" class="Bound"
+      >X</a
+      ><a name="2941"
+      > </a
+      ><a name="2942" href="IntuitionisticLogic.html#2942" class="Bound"
+      >A</a
+      ><a name="2943"
+      > </a
+      ><a name="2944" href="IntuitionisticLogic.html#2944" class="Bound"
+      >B</a
+      ><a name="2945" class="Symbol"
+      >}</a
+      ><a name="2946"
+      > </a
+      ><a name="2947" class="Symbol"
+      >&#8594;</a
+      ><a name="2948"
+      > </a
+      ><a name="2949" href="IntuitionisticLogic.html#2940" class="Bound"
+      >X</a
+      ><a name="2950"
+      > </a
+      ><a name="2951" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2952"
+      > </a
+      ><a name="2953" href="IntuitionisticLogic.html#2942" class="Bound"
+      >A</a
+      ><a name="2954"
+      > </a
+      ><a name="2955" href="IntuitionisticLogic.html#629" class="InductiveConstructor Operator"
+      >&#8855;</a
+      ><a name="2956"
+      > </a
+      ><a name="2957" href="IntuitionisticLogic.html#2944" class="Bound"
+      >B</a
+      ><a name="2958"
+      > </a
+      ><a name="2959" href="IntuitionisticLogic.html#658" class="InductiveConstructor Operator"
+      >&#8658;</a
+      ><a name="2960"
+      > </a
+      ><a name="2961" href="IntuitionisticLogic.html#2944" class="Bound"
+      >B</a
+      ><a name="2962"
+      > </a
+      ><a name="2963" href="IntuitionisticLogic.html#629" class="InductiveConstructor Operator"
+      >&#8855;</a
+      ><a name="2964"
+      > </a
+      ><a name="2965" href="IntuitionisticLogic.html#2942" class="Bound"
+      >A</a
+      ><a name="2966"
+      >
+  </a
+      ><a name="2969" href="IntuitionisticLogic.html#2930" class="Function"
+      >swap</a
+      ><a name="2973"
+      > </a
+      ><a name="2974" class="Symbol"
+      >{</a
+      ><a name="2975" href="IntuitionisticLogic.html#2975" class="Bound"
+      >X</a
+      ><a name="2976" class="Symbol"
+      >}</a
+      ><a name="2977"
+      > </a
+      ><a name="2978" class="Symbol"
+      >{</a
+      ><a name="2979" href="IntuitionisticLogic.html#2979" class="Bound"
+      >A</a
+      ><a name="2980" class="Symbol"
+      >}</a
+      ><a name="2981"
+      > </a
+      ><a name="2982" class="Symbol"
+      >{</a
+      ><a name="2983" href="IntuitionisticLogic.html#2983" class="Bound"
+      >B</a
+      ><a name="2984" class="Symbol"
+      >}</a
+      ><a name="2985"
+      > </a
+      ><a name="2986" class="Symbol"
+      >=</a
+      ><a name="2987"
+      > </a
+      ><a name="2988" href="IntuitionisticLogic.html#2413" class="InductiveConstructor"
+      >abs</a
+      ><a name="2991"
+      > </a
+      ><a name="2992" class="Symbol"
+      >(</a
+      ><a name="2993" href="IntuitionisticLogic.html#2573" class="InductiveConstructor"
+      >case</a
+      ><a name="2997"
+      > </a
+      ><a name="2998" href="IntuitionisticLogic.html#2383" class="InductiveConstructor"
+      >var</a
+      ><a name="3001"
+      > </a
+      ><a name="3002" class="Symbol"
+      >(</a
+      ><a name="3003" href="IntuitionisticLogic.html#2824" class="Function"
+      >exch&#8320;</a
+      ><a name="3008"
+      > </a
+      ><a name="3009" class="Symbol"
+      >(</a
+      ><a name="3010" href="IntuitionisticLogic.html#2516" class="InductiveConstructor"
+      >pair</a
+      ><a name="3014"
+      > </a
+      ><a name="3015" href="IntuitionisticLogic.html#2383" class="InductiveConstructor"
+      >var</a
+      ><a name="3018"
+      > </a
+      ><a name="3019" class="Symbol"
+      >(</a
+      ><a name="3020" href="IntuitionisticLogic.html#2640" class="InductiveConstructor"
+      >weak</a
+      ><a name="3024"
+      > </a
+      ><a name="3025" class="Symbol"
+      >{</a
+      ><a name="3026" href="IntuitionisticLogic.html#2979" class="Bound"
+      >A</a
+      ><a name="3027"
+      > </a
+      ><a name="3028" href="Data.List.html#711" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3029"
+      > </a
+      ><a name="3030" href="Data.List.html#696" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="3031" class="Symbol"
+      >}</a
+      ><a name="3032"
+      > </a
+      ><a name="3033" class="Symbol"
+      >{</a
+      ><a name="3034" href="IntuitionisticLogic.html#2975" class="Bound"
+      >X</a
+      ><a name="3035" class="Symbol"
+      >}</a
+      ><a name="3036"
+      > </a
+      ><a name="3037" href="IntuitionisticLogic.html#2383" class="InductiveConstructor"
+      >var</a
+      ><a name="3040" class="Symbol"
+      >))))</a
+      ><a name="3044"
+      >
+
+  </a
+      ><a name="3048" class="Keyword"
+      >record</a
+      ><a name="3054"
+      > </a
+      ><a name="3055" href="IntuitionisticLogic.html#3055" class="Record"
+      >Reify</a
+      ><a name="3060"
+      > </a
+      ><a name="3061" class="Symbol"
+      >{</a
+      ><a name="3062" href="IntuitionisticLogic.html#3062" class="Bound"
+      >a</a
+      ><a name="3063"
+      > </a
+      ><a name="3064" href="IntuitionisticLogic.html#3064" class="Bound"
+      >b</a
+      ><a name="3065"
+      > </a
+      ><a name="3066" class="Symbol"
+      >:</a
+      ><a name="3067"
+      > </a
+      ><a name="3068" href="Level.html#257" class="Postulate"
+      >Level</a
+      ><a name="3073" class="Symbol"
+      >}</a
+      ><a name="3074"
+      > </a
+      ><a name="3075" class="Symbol"
+      >(</a
+      ><a name="3076" href="IntuitionisticLogic.html#3076" class="Bound"
+      >A</a
+      ><a name="3077"
+      > </a
+      ><a name="3078" class="Symbol"
+      >:</a
+      ><a name="3079"
+      > </a
+      ><a name="3080" class="PrimitiveType"
+      >Set</a
+      ><a name="3083"
+      > </a
+      ><a name="3084" href="IntuitionisticLogic.html#3062" class="Bound"
+      >a</a
+      ><a name="3085" class="Symbol"
+      >)</a
+      ><a name="3086"
+      > </a
+      ><a name="3087" class="Symbol"
+      >(</a
+      ><a name="3088" href="IntuitionisticLogic.html#3088" class="Bound"
+      >B</a
+      ><a name="3089"
+      > </a
+      ><a name="3090" class="Symbol"
+      >:</a
+      ><a name="3091"
+      > </a
+      ><a name="3092" class="PrimitiveType"
+      >Set</a
+      ><a name="3095"
+      > </a
+      ><a name="3096" href="IntuitionisticLogic.html#3064" class="Bound"
+      >b</a
+      ><a name="3097" class="Symbol"
+      >)</a
+      ><a name="3098"
+      > </a
+      ><a name="3099" class="Symbol"
+      >:</a
+      ><a name="3100"
+      > </a
+      ><a name="3101" class="PrimitiveType"
+      >Set</a
+      ><a name="3104"
+      > </a
+      ><a name="3105" class="Symbol"
+      >(</a
+      ><a name="3106" href="IntuitionisticLogic.html#3062" class="Bound"
+      >a</a
+      ><a name="3107"
+      > </a
+      ><a name="3108" href="Level.html#311" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="3109"
+      > </a
+      ><a name="3110" href="IntuitionisticLogic.html#3064" class="Bound"
+      >b</a
+      ><a name="3111" class="Symbol"
+      >)</a
+      ><a name="3112"
+      > </a
+      ><a name="3113" class="Keyword"
+      >where</a
+      ><a name="3118"
+      >
+    </a
+      ><a name="3123" class="Keyword"
+      >field</a
+      ><a name="3128"
+      >
+      </a
+      ><a name="3135" href="IntuitionisticLogic.html#3135" class="Field Operator"
+      >&#10214;_&#10215;</a
+      ><a name="3138"
+      > </a
+      ><a name="3139" class="Symbol"
+      >:</a
+      ><a name="3140"
+      > </a
+      ><a name="3141" href="IntuitionisticLogic.html#3076" class="Bound"
+      >A</a
+      ><a name="3142"
+      > </a
+      ><a name="3143" class="Symbol"
+      >&#8594;</a
+      ><a name="3144"
+      > </a
+      ><a name="3145" href="IntuitionisticLogic.html#3088" class="Bound"
+      >B</a
+      ><a name="3146"
+      >
+
+  </a
+      ><a name="3150" href="IntuitionisticLogic.html#3150" class="Function"
+      >ReifyType</a
+      ><a name="3159"
+      > </a
+      ><a name="3160" class="Symbol"
+      >:</a
+      ><a name="3161"
+      > </a
+      ><a name="3162" href="IntuitionisticLogic.html#3055" class="Record"
+      >Reify</a
+      ><a name="3167"
+      > </a
+      ><a name="3168" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="3172"
+      > </a
+      ><a name="3173" class="PrimitiveType"
+      >Set</a
+      ><a name="3176"
+      >
+  </a
+      ><a name="3179" href="IntuitionisticLogic.html#3150" class="Function"
+      >ReifyType</a
+      ><a name="3188"
+      > </a
+      ><a name="3189" class="Symbol"
+      >=</a
+      ><a name="3190"
+      > </a
+      ><a name="3191" class="Keyword"
+      >record</a
+      ><a name="3197"
+      > </a
+      ><a name="3198" class="Symbol"
+      >{</a
+      ><a name="3199"
+      > </a
+      ><a name="3200" class="Field Operator"
+      >&#10214;_&#10215;</a
+      ><a name="3203"
+      > </a
+      ><a name="3204" class="Symbol"
+      >=</a
+      ><a name="3205"
+      > </a
+      ><a name="3206" href="IntuitionisticLogic.html#3227" class="Function Operator"
+      >&#10214;_&#10215;</a
+      ><a name="3209"
+      > </a
+      ><a name="3210" class="Symbol"
+      >}</a
+      ><a name="3211"
+      >
+    </a
+      ><a name="3216" class="Keyword"
+      >where</a
+      ><a name="3221"
+      >
+
+    </a
+      ><a name="3227" href="IntuitionisticLogic.html#3227" class="Function Operator"
+      >&#10214;_&#10215;</a
+      ><a name="3230"
+      > </a
+      ><a name="3231" class="Symbol"
+      >:</a
+      ><a name="3232"
+      > </a
+      ><a name="3233" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="3237"
+      > </a
+      ><a name="3238" class="Symbol"
+      >&#8594;</a
+      ><a name="3239"
+      > </a
+      ><a name="3240" class="PrimitiveType"
+      >Set</a
+      ><a name="3243"
+      >
+    </a
+      ><a name="3248" href="IntuitionisticLogic.html#3227" class="Function Operator"
+      >&#10214;</a
+      ><a name="3249"
+      > </a
+      ><a name="3250" href="IntuitionisticLogic.html#604" class="InductiveConstructor"
+      >el</a
+      ><a name="3252"
+      > </a
+      ><a name="3253" href="IntuitionisticLogic.html#3253" class="Bound"
+      >A</a
+      ><a name="3254"
+      >    </a
+      ><a name="3258" href="IntuitionisticLogic.html#3227" class="Function Operator"
+      >&#10215;</a
+      ><a name="3259"
+      > </a
+      ><a name="3260" class="Symbol"
+      >=</a
+      ><a name="3261"
+      > </a
+      ><a name="3262" href="IntuitionisticLogic.html#528" class="Bound Operator"
+      >&#10214;</a
+      ><a name="3263"
+      > </a
+      ><a name="3264" href="IntuitionisticLogic.html#3253" class="Bound"
+      >A</a
+      ><a name="3265"
+      > </a
+      ><a name="3266" href="IntuitionisticLogic.html#528" class="Bound Operator"
+      >&#10215;&#7489;</a
+      ><a name="3268"
+      >
+    </a
+      ><a name="3273" href="IntuitionisticLogic.html#3227" class="Function Operator"
+      >&#10214;</a
+      ><a name="3274"
+      > </a
+      ><a name="3275" href="IntuitionisticLogic.html#3275" class="Bound"
+      >A</a
+      ><a name="3276"
+      > </a
+      ><a name="3277" href="IntuitionisticLogic.html#629" class="InductiveConstructor Operator"
+      >&#8855;</a
+      ><a name="3278"
+      > </a
+      ><a name="3279" href="IntuitionisticLogic.html#3279" class="Bound"
+      >B</a
+      ><a name="3280"
+      >   </a
+      ><a name="3283" href="IntuitionisticLogic.html#3227" class="Function Operator"
+      >&#10215;</a
+      ><a name="3284"
+      > </a
+      ><a name="3285" class="Symbol"
+      >=</a
+      ><a name="3286"
+      > </a
+      ><a name="3287" href="IntuitionisticLogic.html#3227" class="Function Operator"
+      >&#10214;</a
+      ><a name="3288"
+      > </a
+      ><a name="3289" href="IntuitionisticLogic.html#3275" class="Bound"
+      >A</a
+      ><a name="3290"
+      > </a
+      ><a name="3291" href="IntuitionisticLogic.html#3227" class="Function Operator"
+      >&#10215;</a
+      ><a name="3292"
+      > </a
+      ><a name="3293" href="Data.Product.html#1055" class="Function Operator"
+      >&#215;</a
+      ><a name="3294"
+      > </a
+      ><a name="3295" href="IntuitionisticLogic.html#3227" class="Function Operator"
+      >&#10214;</a
+      ><a name="3296"
+      > </a
+      ><a name="3297" href="IntuitionisticLogic.html#3279" class="Bound"
+      >B</a
+      ><a name="3298"
+      > </a
+      ><a name="3299" href="IntuitionisticLogic.html#3227" class="Function Operator"
+      >&#10215;</a
+      ><a name="3300"
+      >
+    </a
+      ><a name="3305" href="IntuitionisticLogic.html#3227" class="Function Operator"
+      >&#10214;</a
+      ><a name="3306"
+      > </a
+      ><a name="3307" href="IntuitionisticLogic.html#3307" class="Bound"
+      >A</a
+      ><a name="3308"
+      > </a
+      ><a name="3309" href="IntuitionisticLogic.html#658" class="InductiveConstructor Operator"
+      >&#8658;</a
+      ><a name="3310"
+      > </a
+      ><a name="3311" href="IntuitionisticLogic.html#3311" class="Bound"
+      >B</a
+      ><a name="3312"
+      >  </a
+      ><a name="3314" href="IntuitionisticLogic.html#3227" class="Function Operator"
+      >&#10215;</a
+      ><a name="3315"
+      > </a
+      ><a name="3316" class="Symbol"
+      >=</a
+      ><a name="3317"
+      > </a
+      ><a name="3318" href="IntuitionisticLogic.html#3227" class="Function Operator"
+      >&#10214;</a
+      ><a name="3319"
+      > </a
+      ><a name="3320" href="IntuitionisticLogic.html#3307" class="Bound"
+      >A</a
+      ><a name="3321"
+      > </a
+      ><a name="3322" href="IntuitionisticLogic.html#3227" class="Function Operator"
+      >&#10215;</a
+      ><a name="3323"
+      > </a
+      ><a name="3324" class="Symbol"
+      >&#8594;</a
+      ><a name="3325"
+      > </a
+      ><a name="3326" href="IntuitionisticLogic.html#3227" class="Function Operator"
+      >&#10214;</a
+      ><a name="3327"
+      > </a
+      ><a name="3328" href="IntuitionisticLogic.html#3311" class="Bound"
+      >B</a
+      ><a name="3329"
+      > </a
+      ><a name="3330" href="IntuitionisticLogic.html#3227" class="Function Operator"
+      >&#10215;</a
+      ><a name="3331"
+      >
+
+  </a
+      ><a name="3335" class="Keyword"
+      >data</a
+      ><a name="3339"
+      > </a
+      ><a name="3340" href="IntuitionisticLogic.html#3340" class="Datatype"
+      >Ctxt</a
+      ><a name="3344"
+      > </a
+      ><a name="3345" class="Symbol"
+      >:</a
+      ><a name="3346"
+      > </a
+      ><a name="3347" class="Symbol"
+      >&#8704;</a
+      ><a name="3348"
+      > </a
+      ><a name="3349" class="Symbol"
+      >(</a
+      ><a name="3350" href="IntuitionisticLogic.html#3350" class="Bound"
+      >X</a
+      ><a name="3351"
+      > </a
+      ><a name="3352" class="Symbol"
+      >:</a
+      ><a name="3353"
+      > </a
+      ><a name="3354" href="Data.List.html#659" class="Datatype"
+      >List</a
+      ><a name="3358"
+      > </a
+      ><a name="3359" class="PrimitiveType"
+      >Set</a
+      ><a name="3362" class="Symbol"
+      >)</a
+      ><a name="3363"
+      > </a
+      ><a name="3364" class="Symbol"
+      >&#8594;</a
+      ><a name="3365"
+      > </a
+      ><a name="3366" class="PrimitiveType"
+      >Set&#8321;</a
+      ><a name="3370"
+      > </a
+      ><a name="3371" class="Keyword"
+      >where</a
+      ><a name="3376"
+      >
+    </a
+      ><a name="3381" href="IntuitionisticLogic.html#3381" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="3382"
+      > </a
+      ><a name="3383" class="Symbol"
+      >:</a
+      ><a name="3384"
+      > </a
+      ><a name="3385" href="IntuitionisticLogic.html#3340" class="Datatype"
+      >Ctxt</a
+      ><a name="3389"
+      > </a
+      ><a name="3390" href="Data.List.html#696" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="3391"
+      >
+    </a
+      ><a name="3396" href="IntuitionisticLogic.html#3396" class="InductiveConstructor Operator"
+      >_,_</a
+      ><a name="3399"
+      > </a
+      ><a name="3400" class="Symbol"
+      >:</a
+      ><a name="3401"
+      > </a
+      ><a name="3402" class="Symbol"
+      >&#8704;</a
+      ><a name="3403"
+      > </a
+      ><a name="3404" class="Symbol"
+      >{</a
+      ><a name="3405" href="IntuitionisticLogic.html#3405" class="Bound"
+      >A</a
+      ><a name="3406"
+      > </a
+      ><a name="3407" href="IntuitionisticLogic.html#3407" class="Bound"
+      >X</a
+      ><a name="3408" class="Symbol"
+      >}</a
+      ><a name="3409"
+      > </a
+      ><a name="3410" class="Symbol"
+      >&#8594;</a
+      ><a name="3411"
+      > </a
+      ><a name="3412" href="IntuitionisticLogic.html#3405" class="Bound"
+      >A</a
+      ><a name="3413"
+      > </a
+      ><a name="3414" class="Symbol"
+      >&#8594;</a
+      ><a name="3415"
+      > </a
+      ><a name="3416" href="IntuitionisticLogic.html#3340" class="Datatype"
+      >Ctxt</a
+      ><a name="3420"
+      > </a
+      ><a name="3421" href="IntuitionisticLogic.html#3407" class="Bound"
+      >X</a
+      ><a name="3422"
+      > </a
+      ><a name="3423" class="Symbol"
+      >&#8594;</a
+      ><a name="3424"
+      > </a
+      ><a name="3425" href="IntuitionisticLogic.html#3340" class="Datatype"
+      >Ctxt</a
+      ><a name="3429"
+      > </a
+      ><a name="3430" class="Symbol"
+      >(</a
+      ><a name="3431" href="IntuitionisticLogic.html#3405" class="Bound"
+      >A</a
+      ><a name="3432"
+      > </a
+      ><a name="3433" href="Data.List.html#711" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3434"
+      > </a
+      ><a name="3435" href="IntuitionisticLogic.html#3407" class="Bound"
+      >X</a
+      ><a name="3436" class="Symbol"
+      >)</a
+      ><a name="3437"
+      >
+
+  </a
+      ><a name="3441" class="Keyword"
+      >private</a
+      ><a name="3448"
+      >
+    </a
+      ><a name="3453" class="Keyword"
+      >open</a
+      ><a name="3457"
+      > </a
+      ><a name="3458" href="IntuitionisticLogic.html#3055" class="Module"
+      >Reify</a
+      ><a name="3463"
+      > </a
+      ><a name="3464" class="Symbol"
+      >{{...}}</a
+      ><a name="3471"
+      > </a
+      ><a name="3472" class="Keyword"
+      >using</a
+      ><a name="3477"
+      > </a
+      ><a name="3478" class="Symbol"
+      >(</a
+      ><a name="3479"
+      >&#10214;_&#10215;</a
+      ><a name="3482" class="Symbol"
+      >)</a
+      ><a name="3483"
+      >
+
+  </a
+      ><a name="3487" href="IntuitionisticLogic.html#3487" class="Function"
+      >ReifyCtxt</a
+      ><a name="3496"
+      > </a
+      ><a name="3497" class="Symbol"
+      >:</a
+      ><a name="3498"
+      > </a
+      ><a name="3499" href="IntuitionisticLogic.html#3055" class="Record"
+      >Reify</a
+      ><a name="3504"
+      > </a
+      ><a name="3505" class="Symbol"
+      >(</a
+      ><a name="3506" href="Data.List.html#659" class="Datatype"
+      >List</a
+      ><a name="3510"
+      > </a
+      ><a name="3511" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="3515" class="Symbol"
+      >)</a
+      ><a name="3516"
+      > </a
+      ><a name="3517" class="Symbol"
+      >(</a
+      ><a name="3518" href="Data.List.html#659" class="Datatype"
+      >List</a
+      ><a name="3522"
+      > </a
+      ><a name="3523" class="PrimitiveType"
+      >Set</a
+      ><a name="3526" class="Symbol"
+      >)</a
+      ><a name="3527"
+      >
+  </a
+      ><a name="3530" href="IntuitionisticLogic.html#3487" class="Function"
+      >ReifyCtxt</a
+      ><a name="3539"
+      > </a
+      ><a name="3540" class="Symbol"
+      >=</a
+      ><a name="3541"
+      > </a
+      ><a name="3542" class="Keyword"
+      >record</a
+      ><a name="3548"
+      > </a
+      ><a name="3549" class="Symbol"
+      >{</a
+      ><a name="3550"
+      > </a
+      ><a name="3551" class="Field Operator"
+      >&#10214;_&#10215;</a
+      ><a name="3554"
+      > </a
+      ><a name="3555" class="Symbol"
+      >=</a
+      ><a name="3556"
+      > </a
+      ><a name="3557" href="Data.List.html#1385" class="Function"
+      >List.map</a
+      ><a name="3565"
+      > </a
+      ><a name="3566" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10214;_&#10215;</a
+      ><a name="3569"
+      > </a
+      ><a name="3570" class="Symbol"
+      >}</a
+      ><a name="3571"
+      >
+
+  </a
+      ><a name="3575" href="IntuitionisticLogic.html#3575" class="Function"
+      >Ctxt-insert</a
+      ><a name="3586"
+      > </a
+      ><a name="3587" class="Symbol"
+      >:</a
+      ><a name="3588"
+      > </a
+      ><a name="3589" class="Symbol"
+      >{</a
+      ><a name="3590" href="IntuitionisticLogic.html#3590" class="Bound"
+      >A</a
+      ><a name="3591"
+      > </a
+      ><a name="3592" class="Symbol"
+      >:</a
+      ><a name="3593"
+      > </a
+      ><a name="3594" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="3598" class="Symbol"
+      >}</a
+      ><a name="3599"
+      > </a
+      ><a name="3600" class="Symbol"
+      >{</a
+      ><a name="3601" href="IntuitionisticLogic.html#3601" class="Bound"
+      >X</a
+      ><a name="3602"
+      > </a
+      ><a name="3603" href="IntuitionisticLogic.html#3603" class="Bound"
+      >Y</a
+      ><a name="3604"
+      > </a
+      ><a name="3605" class="Symbol"
+      >:</a
+      ><a name="3606"
+      > </a
+      ><a name="3607" href="Data.List.html#659" class="Datatype"
+      >List</a
+      ><a name="3611"
+      > </a
+      ><a name="3612" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="3616" class="Symbol"
+      >}</a
+      ><a name="3617"
+      > </a
+      ><a name="3618" class="Symbol"
+      >&#8594;</a
+      ><a name="3619"
+      > </a
+      ><a name="3620" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10214;</a
+      ><a name="3621"
+      > </a
+      ><a name="3622" href="IntuitionisticLogic.html#3590" class="Bound"
+      >A</a
+      ><a name="3623"
+      > </a
+      ><a name="3624" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10215;</a
+      ><a name="3625"
+      > </a
+      ><a name="3626" class="Symbol"
+      >&#8594;</a
+      ><a name="3627"
+      > </a
+      ><a name="3628" href="IntuitionisticLogic.html#3340" class="Datatype"
+      >Ctxt</a
+      ><a name="3632"
+      > </a
+      ><a name="3633" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10214;</a
+      ><a name="3634"
+      > </a
+      ><a name="3635" href="IntuitionisticLogic.html#3601" class="Bound"
+      >X</a
+      ><a name="3636"
+      > </a
+      ><a name="3637" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="3639"
+      > </a
+      ><a name="3640" href="IntuitionisticLogic.html#3603" class="Bound"
+      >Y</a
+      ><a name="3641"
+      > </a
+      ><a name="3642" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10215;</a
+      ><a name="3643"
+      > </a
+      ><a name="3644" class="Symbol"
+      >&#8594;</a
+      ><a name="3645"
+      > </a
+      ><a name="3646" href="IntuitionisticLogic.html#3340" class="Datatype"
+      >Ctxt</a
+      ><a name="3650"
+      > </a
+      ><a name="3651" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10214;</a
+      ><a name="3652"
+      > </a
+      ><a name="3653" href="IntuitionisticLogic.html#3601" class="Bound"
+      >X</a
+      ><a name="3654"
+      > </a
+      ><a name="3655" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="3657"
+      > </a
+      ><a name="3658" class="Symbol"
+      >(</a
+      ><a name="3659" href="IntuitionisticLogic.html#3590" class="Bound"
+      >A</a
+      ><a name="3660"
+      > </a
+      ><a name="3661" href="Data.List.html#711" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3662"
+      > </a
+      ><a name="3663" href="IntuitionisticLogic.html#3603" class="Bound"
+      >Y</a
+      ><a name="3664" class="Symbol"
+      >)</a
+      ><a name="3665"
+      > </a
+      ><a name="3666" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10215;</a
+      ><a name="3667"
+      >
+  </a
+      ><a name="3670" href="IntuitionisticLogic.html#3575" class="Function"
+      >Ctxt-insert</a
+      ><a name="3681"
+      > </a
+      ><a name="3682" class="Symbol"
+      >{</a
+      ><a name="3683" href="IntuitionisticLogic.html#3683" class="Bound"
+      >A</a
+      ><a name="3684" class="Symbol"
+      >}</a
+      ><a name="3685"
+      > </a
+      ><a name="3686" class="Symbol"
+      >{</a
+      ><a name="3687" href="Data.List.html#696" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="3688" class="Symbol"
+      >}</a
+      ><a name="3689"
+      > </a
+      ><a name="3690" class="Symbol"
+      >{</a
+      ><a name="3691" href="IntuitionisticLogic.html#3691" class="Bound"
+      >Y</a
+      ><a name="3692" class="Symbol"
+      >}</a
+      ><a name="3693"
+      > </a
+      ><a name="3694" href="IntuitionisticLogic.html#3694" class="Bound"
+      >A&#8242;</a
+      ><a name="3696"
+      > </a
+      ><a name="3697" href="IntuitionisticLogic.html#3697" class="Bound"
+      >E</a
+      ><a name="3698"
+      > </a
+      ><a name="3699" class="Symbol"
+      >=</a
+      ><a name="3700"
+      > </a
+      ><a name="3701" href="IntuitionisticLogic.html#3694" class="Bound"
+      >A&#8242;</a
+      ><a name="3703"
+      > </a
+      ><a name="3704" href="IntuitionisticLogic.html#3396" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3705"
+      > </a
+      ><a name="3706" href="IntuitionisticLogic.html#3697" class="Bound"
+      >E</a
+      ><a name="3707"
+      >
+  </a
+      ><a name="3710" href="IntuitionisticLogic.html#3575" class="Function"
+      >Ctxt-insert</a
+      ><a name="3721"
+      > </a
+      ><a name="3722" class="Symbol"
+      >{</a
+      ><a name="3723" href="IntuitionisticLogic.html#3723" class="Bound"
+      >A</a
+      ><a name="3724" class="Symbol"
+      >}</a
+      ><a name="3725"
+      > </a
+      ><a name="3726" class="Symbol"
+      >{</a
+      ><a name="3727" href="IntuitionisticLogic.html#3727" class="Bound"
+      >B</a
+      ><a name="3728"
+      > </a
+      ><a name="3729" href="Data.List.html#711" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3730"
+      > </a
+      ><a name="3731" href="IntuitionisticLogic.html#3731" class="Bound"
+      >X</a
+      ><a name="3732" class="Symbol"
+      >}</a
+      ><a name="3733"
+      > </a
+      ><a name="3734" class="Symbol"
+      >{</a
+      ><a name="3735" href="IntuitionisticLogic.html#3735" class="Bound"
+      >Y</a
+      ><a name="3736" class="Symbol"
+      >}</a
+      ><a name="3737"
+      > </a
+      ><a name="3738" href="IntuitionisticLogic.html#3738" class="Bound"
+      >A&#8242;</a
+      ><a name="3740"
+      > </a
+      ><a name="3741" class="Symbol"
+      >(</a
+      ><a name="3742" href="IntuitionisticLogic.html#3742" class="Bound"
+      >B&#8242;</a
+      ><a name="3744"
+      > </a
+      ><a name="3745" href="IntuitionisticLogic.html#3396" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3746"
+      > </a
+      ><a name="3747" href="IntuitionisticLogic.html#3747" class="Bound"
+      >E</a
+      ><a name="3748" class="Symbol"
+      >)</a
+      ><a name="3749"
+      > </a
+      ><a name="3750" class="Symbol"
+      >=</a
+      ><a name="3751"
+      > </a
+      ><a name="3752" href="IntuitionisticLogic.html#3742" class="Bound"
+      >B&#8242;</a
+      ><a name="3754"
+      > </a
+      ><a name="3755" href="IntuitionisticLogic.html#3396" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3756"
+      > </a
+      ><a name="3757" href="IntuitionisticLogic.html#3575" class="Function"
+      >Ctxt-insert</a
+      ><a name="3768"
+      > </a
+      ><a name="3769" class="Symbol"
+      >{</a
+      ><a name="3770" href="IntuitionisticLogic.html#3723" class="Bound"
+      >A</a
+      ><a name="3771" class="Symbol"
+      >}</a
+      ><a name="3772"
+      > </a
+      ><a name="3773" class="Symbol"
+      >{</a
+      ><a name="3774" href="IntuitionisticLogic.html#3731" class="Bound"
+      >X</a
+      ><a name="3775" class="Symbol"
+      >}</a
+      ><a name="3776"
+      > </a
+      ><a name="3777" class="Symbol"
+      >{</a
+      ><a name="3778" href="IntuitionisticLogic.html#3735" class="Bound"
+      >Y</a
+      ><a name="3779" class="Symbol"
+      >}</a
+      ><a name="3780"
+      > </a
+      ><a name="3781" href="IntuitionisticLogic.html#3738" class="Bound"
+      >A&#8242;</a
+      ><a name="3783"
+      > </a
+      ><a name="3784" href="IntuitionisticLogic.html#3747" class="Bound"
+      >E</a
+      ><a name="3785"
+      >
+
+  </a
+      ><a name="3789" href="IntuitionisticLogic.html#3789" class="Function"
+      >Ctxt-exch</a
+      ><a name="3798"
+      > </a
+      ><a name="3799" class="Symbol"
+      >:</a
+      ><a name="3800"
+      > </a
+      ><a name="3801" class="Symbol"
+      >{</a
+      ><a name="3802" href="IntuitionisticLogic.html#3802" class="Bound"
+      >X</a
+      ><a name="3803"
+      > </a
+      ><a name="3804" href="IntuitionisticLogic.html#3804" class="Bound"
+      >Y</a
+      ><a name="3805"
+      > </a
+      ><a name="3806" href="IntuitionisticLogic.html#3806" class="Bound"
+      >Z</a
+      ><a name="3807"
+      > </a
+      ><a name="3808" href="IntuitionisticLogic.html#3808" class="Bound"
+      >W</a
+      ><a name="3809"
+      > </a
+      ><a name="3810" class="Symbol"
+      >:</a
+      ><a name="3811"
+      > </a
+      ><a name="3812" href="Data.List.html#659" class="Datatype"
+      >List</a
+      ><a name="3816"
+      > </a
+      ><a name="3817" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="3821" class="Symbol"
+      >}</a
+      ><a name="3822"
+      > </a
+      ><a name="3823" class="Symbol"
+      >&#8594;</a
+      ><a name="3824"
+      > </a
+      ><a name="3825" href="IntuitionisticLogic.html#3340" class="Datatype"
+      >Ctxt</a
+      ><a name="3829"
+      > </a
+      ><a name="3830" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10214;</a
+      ><a name="3831"
+      > </a
+      ><a name="3832" class="Symbol"
+      >(</a
+      ><a name="3833" href="IntuitionisticLogic.html#3802" class="Bound"
+      >X</a
+      ><a name="3834"
+      > </a
+      ><a name="3835" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="3837"
+      > </a
+      ><a name="3838" href="IntuitionisticLogic.html#3804" class="Bound"
+      >Y</a
+      ><a name="3839" class="Symbol"
+      >)</a
+      ><a name="3840"
+      > </a
+      ><a name="3841" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="3843"
+      > </a
+      ><a name="3844" class="Symbol"
+      >(</a
+      ><a name="3845" href="IntuitionisticLogic.html#3806" class="Bound"
+      >Z</a
+      ><a name="3846"
+      > </a
+      ><a name="3847" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="3849"
+      > </a
+      ><a name="3850" href="IntuitionisticLogic.html#3808" class="Bound"
+      >W</a
+      ><a name="3851" class="Symbol"
+      >)</a
+      ><a name="3852"
+      > </a
+      ><a name="3853" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10215;</a
+      ><a name="3854"
+      > </a
+      ><a name="3855" class="Symbol"
+      >&#8594;</a
+      ><a name="3856"
+      > </a
+      ><a name="3857" href="IntuitionisticLogic.html#3340" class="Datatype"
+      >Ctxt</a
+      ><a name="3861"
+      > </a
+      ><a name="3862" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10214;</a
+      ><a name="3863"
+      > </a
+      ><a name="3864" class="Symbol"
+      >(</a
+      ><a name="3865" href="IntuitionisticLogic.html#3802" class="Bound"
+      >X</a
+      ><a name="3866"
+      > </a
+      ><a name="3867" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="3869"
+      > </a
+      ><a name="3870" href="IntuitionisticLogic.html#3806" class="Bound"
+      >Z</a
+      ><a name="3871" class="Symbol"
+      >)</a
+      ><a name="3872"
+      > </a
+      ><a name="3873" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="3875"
+      > </a
+      ><a name="3876" class="Symbol"
+      >(</a
+      ><a name="3877" href="IntuitionisticLogic.html#3804" class="Bound"
+      >Y</a
+      ><a name="3878"
+      > </a
+      ><a name="3879" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="3881"
+      > </a
+      ><a name="3882" href="IntuitionisticLogic.html#3808" class="Bound"
+      >W</a
+      ><a name="3883" class="Symbol"
+      >)</a
+      ><a name="3884"
+      > </a
+      ><a name="3885" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10215;</a
+      ><a name="3886"
+      >
+  </a
+      ><a name="3889" href="IntuitionisticLogic.html#3789" class="Function"
+      >Ctxt-exch</a
+      ><a name="3898"
+      > </a
+      ><a name="3899" class="Symbol"
+      >{</a
+      ><a name="3900"
+      >X </a
+      ><a name="3902" class="Symbol"
+      >=</a
+      ><a name="3903"
+      > </a
+      ><a name="3904" href="Data.List.html#696" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="3905" class="Symbol"
+      >}</a
+      ><a name="3906"
+      > </a
+      ><a name="3907" class="Symbol"
+      >{</a
+      ><a name="3908"
+      >Y </a
+      ><a name="3910" class="Symbol"
+      >=</a
+      ><a name="3911"
+      > </a
+      ><a name="3912" href="Data.List.html#696" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="3913" class="Symbol"
+      >}</a
+      ><a name="3914"
+      > </a
+      ><a name="3915" class="Symbol"
+      >{</a
+      ><a name="3916" href="IntuitionisticLogic.html#3916" class="Bound"
+      >Z</a
+      ><a name="3917" class="Symbol"
+      >}</a
+      ><a name="3918"
+      > </a
+      ><a name="3919" class="Symbol"
+      >{</a
+      ><a name="3920" href="IntuitionisticLogic.html#3920" class="Bound"
+      >W</a
+      ><a name="3921" class="Symbol"
+      >}</a
+      ><a name="3922"
+      > </a
+      ><a name="3923" href="IntuitionisticLogic.html#3923" class="Bound"
+      >E</a
+      ><a name="3924"
+      > </a
+      ><a name="3925" class="Symbol"
+      >=</a
+      ><a name="3926"
+      > </a
+      ><a name="3927" href="IntuitionisticLogic.html#3923" class="Bound"
+      >E</a
+      ><a name="3928"
+      >
+  </a
+      ><a name="3931" href="IntuitionisticLogic.html#3789" class="Function"
+      >Ctxt-exch</a
+      ><a name="3940"
+      > </a
+      ><a name="3941" class="Symbol"
+      >{</a
+      ><a name="3942"
+      >X </a
+      ><a name="3944" class="Symbol"
+      >=</a
+      ><a name="3945"
+      > </a
+      ><a name="3946" href="Data.List.html#696" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="3947" class="Symbol"
+      >}</a
+      ><a name="3948"
+      > </a
+      ><a name="3949" class="Symbol"
+      >{</a
+      ><a name="3950"
+      >Y </a
+      ><a name="3952" class="Symbol"
+      >=</a
+      ><a name="3953"
+      > </a
+      ><a name="3954" href="IntuitionisticLogic.html#3954" class="Bound"
+      >A</a
+      ><a name="3955"
+      > </a
+      ><a name="3956" href="Data.List.html#711" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3957"
+      > </a
+      ><a name="3958" href="IntuitionisticLogic.html#3958" class="Bound"
+      >Y</a
+      ><a name="3959" class="Symbol"
+      >}</a
+      ><a name="3960"
+      > </a
+      ><a name="3961" class="Symbol"
+      >{</a
+      ><a name="3962" href="IntuitionisticLogic.html#3962" class="Bound"
+      >Z</a
+      ><a name="3963" class="Symbol"
+      >}</a
+      ><a name="3964"
+      > </a
+      ><a name="3965" class="Symbol"
+      >{</a
+      ><a name="3966" href="IntuitionisticLogic.html#3966" class="Bound"
+      >W</a
+      ><a name="3967" class="Symbol"
+      >}</a
+      ><a name="3968"
+      > </a
+      ><a name="3969" class="Symbol"
+      >(</a
+      ><a name="3970" href="IntuitionisticLogic.html#3970" class="Bound"
+      >A&#8242;</a
+      ><a name="3972"
+      > </a
+      ><a name="3973" href="IntuitionisticLogic.html#3396" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3974"
+      > </a
+      ><a name="3975" href="IntuitionisticLogic.html#3975" class="Bound"
+      >E</a
+      ><a name="3976" class="Symbol"
+      >)</a
+      ><a name="3977"
+      > </a
+      ><a name="3978" class="Symbol"
+      >=</a
+      ><a name="3979"
+      > </a
+      ><a name="3980" href="IntuitionisticLogic.html#3575" class="Function"
+      >Ctxt-insert</a
+      ><a name="3991"
+      > </a
+      ><a name="3992" class="Symbol"
+      >{</a
+      ><a name="3993" href="IntuitionisticLogic.html#3954" class="Bound"
+      >A</a
+      ><a name="3994" class="Symbol"
+      >}</a
+      ><a name="3995"
+      > </a
+      ><a name="3996" class="Symbol"
+      >{</a
+      ><a name="3997" href="IntuitionisticLogic.html#3962" class="Bound"
+      >Z</a
+      ><a name="3998" class="Symbol"
+      >}</a
+      ><a name="3999"
+      > </a
+      ><a name="4000" class="Symbol"
+      >{</a
+      ><a name="4001" href="IntuitionisticLogic.html#3958" class="Bound"
+      >Y</a
+      ><a name="4002"
+      > </a
+      ><a name="4003" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="4005"
+      > </a
+      ><a name="4006" href="IntuitionisticLogic.html#3966" class="Bound"
+      >W</a
+      ><a name="4007" class="Symbol"
+      >}</a
+      ><a name="4008"
+      > </a
+      ><a name="4009" href="IntuitionisticLogic.html#3970" class="Bound"
+      >A&#8242;</a
+      ><a name="4011"
+      > </a
+      ><a name="4012" class="Symbol"
+      >(</a
+      ><a name="4013" href="IntuitionisticLogic.html#3789" class="Function"
+      >Ctxt-exch</a
+      ><a name="4022"
+      > </a
+      ><a name="4023" class="Symbol"
+      >{</a
+      ><a name="4024" href="Data.List.html#696" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="4025" class="Symbol"
+      >}</a
+      ><a name="4026"
+      > </a
+      ><a name="4027" class="Symbol"
+      >{</a
+      ><a name="4028" href="IntuitionisticLogic.html#3958" class="Bound"
+      >Y</a
+      ><a name="4029" class="Symbol"
+      >}</a
+      ><a name="4030"
+      > </a
+      ><a name="4031" class="Symbol"
+      >{</a
+      ><a name="4032" href="IntuitionisticLogic.html#3962" class="Bound"
+      >Z</a
+      ><a name="4033" class="Symbol"
+      >}</a
+      ><a name="4034"
+      > </a
+      ><a name="4035" class="Symbol"
+      >{</a
+      ><a name="4036" href="IntuitionisticLogic.html#3966" class="Bound"
+      >W</a
+      ><a name="4037" class="Symbol"
+      >}</a
+      ><a name="4038"
+      > </a
+      ><a name="4039" href="IntuitionisticLogic.html#3975" class="Bound"
+      >E</a
+      ><a name="4040" class="Symbol"
+      >)</a
+      ><a name="4041"
+      >
+  </a
+      ><a name="4044" href="IntuitionisticLogic.html#3789" class="Function"
+      >Ctxt-exch</a
+      ><a name="4053"
+      > </a
+      ><a name="4054" class="Symbol"
+      >{</a
+      ><a name="4055"
+      >X </a
+      ><a name="4057" class="Symbol"
+      >=</a
+      ><a name="4058"
+      > </a
+      ><a name="4059" href="IntuitionisticLogic.html#4059" class="Bound"
+      >A</a
+      ><a name="4060"
+      > </a
+      ><a name="4061" href="Data.List.html#711" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4062"
+      > </a
+      ><a name="4063" href="IntuitionisticLogic.html#4063" class="Bound"
+      >X</a
+      ><a name="4064" class="Symbol"
+      >}</a
+      ><a name="4065"
+      > </a
+      ><a name="4066" class="Symbol"
+      >{</a
+      ><a name="4067" href="IntuitionisticLogic.html#4067" class="Bound"
+      >Y</a
+      ><a name="4068" class="Symbol"
+      >}</a
+      ><a name="4069"
+      > </a
+      ><a name="4070" class="Symbol"
+      >{</a
+      ><a name="4071" href="IntuitionisticLogic.html#4071" class="Bound"
+      >Z</a
+      ><a name="4072" class="Symbol"
+      >}</a
+      ><a name="4073"
+      > </a
+      ><a name="4074" class="Symbol"
+      >{</a
+      ><a name="4075" href="IntuitionisticLogic.html#4075" class="Bound"
+      >W</a
+      ><a name="4076" class="Symbol"
+      >}</a
+      ><a name="4077"
+      > </a
+      ><a name="4078" class="Symbol"
+      >(</a
+      ><a name="4079" href="IntuitionisticLogic.html#4079" class="Bound"
+      >A&#8242;</a
+      ><a name="4081"
+      > </a
+      ><a name="4082" href="IntuitionisticLogic.html#3396" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4083"
+      > </a
+      ><a name="4084" href="IntuitionisticLogic.html#4084" class="Bound"
+      >E</a
+      ><a name="4085" class="Symbol"
+      >)</a
+      ><a name="4086"
+      > </a
+      ><a name="4087" class="Symbol"
+      >=</a
+      ><a name="4088"
+      > </a
+      ><a name="4089" href="IntuitionisticLogic.html#4079" class="Bound"
+      >A&#8242;</a
+      ><a name="4091"
+      > </a
+      ><a name="4092" href="IntuitionisticLogic.html#3396" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4093"
+      > </a
+      ><a name="4094" href="IntuitionisticLogic.html#3789" class="Function"
+      >Ctxt-exch</a
+      ><a name="4103"
+      > </a
+      ><a name="4104" class="Symbol"
+      >{</a
+      ><a name="4105" href="IntuitionisticLogic.html#4063" class="Bound"
+      >X</a
+      ><a name="4106" class="Symbol"
+      >}</a
+      ><a name="4107"
+      > </a
+      ><a name="4108" class="Symbol"
+      >{</a
+      ><a name="4109" href="IntuitionisticLogic.html#4067" class="Bound"
+      >Y</a
+      ><a name="4110" class="Symbol"
+      >}</a
+      ><a name="4111"
+      > </a
+      ><a name="4112" class="Symbol"
+      >{</a
+      ><a name="4113" href="IntuitionisticLogic.html#4071" class="Bound"
+      >Z</a
+      ><a name="4114" class="Symbol"
+      >}</a
+      ><a name="4115"
+      > </a
+      ><a name="4116" class="Symbol"
+      >{</a
+      ><a name="4117" href="IntuitionisticLogic.html#4075" class="Bound"
+      >W</a
+      ><a name="4118" class="Symbol"
+      >}</a
+      ><a name="4119"
+      > </a
+      ><a name="4120" href="IntuitionisticLogic.html#4084" class="Bound"
+      >E</a
+      ><a name="4121"
+      >
+
+  </a
+      ><a name="4125" href="IntuitionisticLogic.html#4125" class="Function"
+      >Ctxt-split</a
+      ><a name="4135"
+      > </a
+      ><a name="4136" class="Symbol"
+      >:</a
+      ><a name="4137"
+      > </a
+      ><a name="4138" class="Symbol"
+      >{</a
+      ><a name="4139" href="IntuitionisticLogic.html#4139" class="Bound"
+      >X</a
+      ><a name="4140"
+      > </a
+      ><a name="4141" href="IntuitionisticLogic.html#4141" class="Bound"
+      >Y</a
+      ><a name="4142"
+      > </a
+      ><a name="4143" class="Symbol"
+      >:</a
+      ><a name="4144"
+      > </a
+      ><a name="4145" href="Data.List.html#659" class="Datatype"
+      >List</a
+      ><a name="4149"
+      > </a
+      ><a name="4150" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="4154" class="Symbol"
+      >}</a
+      ><a name="4155"
+      > </a
+      ><a name="4156" class="Symbol"
+      >&#8594;</a
+      ><a name="4157"
+      > </a
+      ><a name="4158" href="IntuitionisticLogic.html#3340" class="Datatype"
+      >Ctxt</a
+      ><a name="4162"
+      > </a
+      ><a name="4163" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10214;</a
+      ><a name="4164"
+      > </a
+      ><a name="4165" href="IntuitionisticLogic.html#4139" class="Bound"
+      >X</a
+      ><a name="4166"
+      > </a
+      ><a name="4167" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="4169"
+      > </a
+      ><a name="4170" href="IntuitionisticLogic.html#4141" class="Bound"
+      >Y</a
+      ><a name="4171"
+      > </a
+      ><a name="4172" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10215;</a
+      ><a name="4173"
+      > </a
+      ><a name="4174" class="Symbol"
+      >&#8594;</a
+      ><a name="4175"
+      > </a
+      ><a name="4176" href="IntuitionisticLogic.html#3340" class="Datatype"
+      >Ctxt</a
+      ><a name="4180"
+      > </a
+      ><a name="4181" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10214;</a
+      ><a name="4182"
+      > </a
+      ><a name="4183" href="IntuitionisticLogic.html#4139" class="Bound"
+      >X</a
+      ><a name="4184"
+      > </a
+      ><a name="4185" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10215;</a
+      ><a name="4186"
+      > </a
+      ><a name="4187" href="Data.Product.html#1055" class="Function Operator"
+      >&#215;</a
+      ><a name="4188"
+      > </a
+      ><a name="4189" href="IntuitionisticLogic.html#3340" class="Datatype"
+      >Ctxt</a
+      ><a name="4193"
+      > </a
+      ><a name="4194" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10214;</a
+      ><a name="4195"
+      > </a
+      ><a name="4196" href="IntuitionisticLogic.html#4141" class="Bound"
+      >Y</a
+      ><a name="4197"
+      > </a
+      ><a name="4198" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10215;</a
+      ><a name="4199"
+      >
+  </a
+      ><a name="4202" href="IntuitionisticLogic.html#4125" class="Function"
+      >Ctxt-split</a
+      ><a name="4212"
+      > </a
+      ><a name="4213" class="Symbol"
+      >{</a
+      ><a name="4214" href="Data.List.html#696" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="4215" class="Symbol"
+      >}</a
+      ><a name="4216"
+      > </a
+      ><a name="4217" class="Symbol"
+      >{</a
+      ><a name="4218" href="IntuitionisticLogic.html#4218" class="Bound"
+      >Y</a
+      ><a name="4219" class="Symbol"
+      >}</a
+      ><a name="4220"
+      > </a
+      ><a name="4221" href="IntuitionisticLogic.html#4221" class="Bound"
+      >E</a
+      ><a name="4222"
+      > </a
+      ><a name="4223" class="Symbol"
+      >=</a
+      ><a name="4224"
+      > </a
+      ><a name="4225" href="IntuitionisticLogic.html#3381" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="4226"
+      > </a
+      ><a name="4227" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4228"
+      > </a
+      ><a name="4229" href="IntuitionisticLogic.html#4221" class="Bound"
+      >E</a
+      ><a name="4230"
+      >
+  </a
+      ><a name="4233" href="IntuitionisticLogic.html#4125" class="Function"
+      >Ctxt-split</a
+      ><a name="4243"
+      > </a
+      ><a name="4244" class="Symbol"
+      >{</a
+      ><a name="4245" href="IntuitionisticLogic.html#4245" class="Bound"
+      >A</a
+      ><a name="4246"
+      > </a
+      ><a name="4247" href="Data.List.html#711" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4248"
+      > </a
+      ><a name="4249" href="IntuitionisticLogic.html#4249" class="Bound"
+      >X</a
+      ><a name="4250" class="Symbol"
+      >}</a
+      ><a name="4251"
+      > </a
+      ><a name="4252" class="Symbol"
+      >{</a
+      ><a name="4253" href="IntuitionisticLogic.html#4253" class="Bound"
+      >Y</a
+      ><a name="4254" class="Symbol"
+      >}</a
+      ><a name="4255"
+      > </a
+      ><a name="4256" class="Symbol"
+      >(</a
+      ><a name="4257" href="IntuitionisticLogic.html#4257" class="Bound"
+      >A&#8242;</a
+      ><a name="4259"
+      > </a
+      ><a name="4260" href="IntuitionisticLogic.html#3396" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4261"
+      > </a
+      ><a name="4262" href="IntuitionisticLogic.html#4262" class="Bound"
+      >E</a
+      ><a name="4263" class="Symbol"
+      >)</a
+      ><a name="4264"
+      > </a
+      ><a name="4265" class="Keyword"
+      >with</a
+      ><a name="4269"
+      > </a
+      ><a name="4270" href="IntuitionisticLogic.html#4125" class="Function"
+      >Ctxt-split</a
+      ><a name="4280"
+      > </a
+      ><a name="4281" class="Symbol"
+      >{</a
+      ><a name="4282" href="IntuitionisticLogic.html#4249" class="Bound"
+      >X</a
+      ><a name="4283" class="Symbol"
+      >}</a
+      ><a name="4284"
+      > </a
+      ><a name="4285" class="Symbol"
+      >{</a
+      ><a name="4286" href="IntuitionisticLogic.html#4253" class="Bound"
+      >Y</a
+      ><a name="4287" class="Symbol"
+      >}</a
+      ><a name="4288"
+      > </a
+      ><a name="4289" href="IntuitionisticLogic.html#4262" class="Bound"
+      >E</a
+      ><a name="4290"
+      >
+  </a
+      ><a name="4293" class="Symbol"
+      >...</a
+      ><a name="4296"
+      > </a
+      ><a name="4297" class="Symbol"
+      >|</a
+      ><a name="4298"
+      > </a
+      ><a name="4299" href="IntuitionisticLogic.html#4299" class="Bound"
+      >E&#739;</a
+      ><a name="4301"
+      > </a
+      ><a name="4302" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4303"
+      > </a
+      ><a name="4304" href="IntuitionisticLogic.html#4304" class="Bound"
+      >E&#696;</a
+      ><a name="4306"
+      > </a
+      ><a name="4307" class="Symbol"
+      >=</a
+      ><a name="4308"
+      > </a
+      ><a name="4309" class="Symbol"
+      >((</a
+      ><a name="4311" href="IntuitionisticLogic.html#4257" class="Bound"
+      >A&#8242;</a
+      ><a name="4313"
+      > </a
+      ><a name="4314" href="IntuitionisticLogic.html#3396" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4315"
+      > </a
+      ><a name="4316" href="IntuitionisticLogic.html#4299" class="Bound"
+      >E&#739;</a
+      ><a name="4318" class="Symbol"
+      >)</a
+      ><a name="4319"
+      > </a
+      ><a name="4320" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4321"
+      > </a
+      ><a name="4322" href="IntuitionisticLogic.html#4304" class="Bound"
+      >E&#696;</a
+      ><a name="4324" class="Symbol"
+      >)</a
+      ><a name="4325"
+      >
+
+  </a
+      ><a name="4329" href="IntuitionisticLogic.html#4329" class="Function"
+      >reify</a
+      ><a name="4334"
+      > </a
+      ><a name="4335" class="Symbol"
+      >:</a
+      ><a name="4336"
+      > </a
+      ><a name="4337" class="Symbol"
+      >{</a
+      ><a name="4338" href="IntuitionisticLogic.html#4338" class="Bound"
+      >A</a
+      ><a name="4339"
+      > </a
+      ><a name="4340" class="Symbol"
+      >:</a
+      ><a name="4341"
+      > </a
+      ><a name="4342" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="4346" class="Symbol"
+      >}</a
+      ><a name="4347"
+      > </a
+      ><a name="4348" class="Symbol"
+      >{</a
+      ><a name="4349" href="IntuitionisticLogic.html#4349" class="Bound"
+      >X</a
+      ><a name="4350"
+      > </a
+      ><a name="4351" class="Symbol"
+      >:</a
+      ><a name="4352"
+      > </a
+      ><a name="4353" href="Data.List.html#659" class="Datatype"
+      >List</a
+      ><a name="4357"
+      > </a
+      ><a name="4358" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="4362" class="Symbol"
+      >}</a
+      ><a name="4363"
+      > </a
+      ><a name="4364" class="Symbol"
+      >&#8594;</a
+      ><a name="4365"
+      > </a
+      ><a name="4366" href="IntuitionisticLogic.html#4349" class="Bound"
+      >X</a
+      ><a name="4367"
+      > </a
+      ><a name="4368" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="4369"
+      > </a
+      ><a name="4370" href="IntuitionisticLogic.html#4338" class="Bound"
+      >A</a
+      ><a name="4371"
+      > </a
+      ><a name="4372" class="Symbol"
+      >&#8594;</a
+      ><a name="4373"
+      > </a
+      ><a name="4374" class="Symbol"
+      >(</a
+      ><a name="4375" href="IntuitionisticLogic.html#3340" class="Datatype"
+      >Ctxt</a
+      ><a name="4379"
+      > </a
+      ><a name="4380" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10214;</a
+      ><a name="4381"
+      > </a
+      ><a name="4382" href="IntuitionisticLogic.html#4349" class="Bound"
+      >X</a
+      ><a name="4383"
+      > </a
+      ><a name="4384" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10215;</a
+      ><a name="4385"
+      > </a
+      ><a name="4386" class="Symbol"
+      >&#8594;</a
+      ><a name="4387"
+      > </a
+      ><a name="4388" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10214;</a
+      ><a name="4389"
+      > </a
+      ><a name="4390" href="IntuitionisticLogic.html#4338" class="Bound"
+      >A</a
+      ><a name="4391"
+      > </a
+      ><a name="4392" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10215;</a
+      ><a name="4393" class="Symbol"
+      >)</a
+      ><a name="4394"
+      >
+  </a
+      ><a name="4397" href="IntuitionisticLogic.html#4329" class="Function"
+      >reify</a
+      ><a name="4402"
+      > </a
+      ><a name="4403" href="IntuitionisticLogic.html#2383" class="InductiveConstructor"
+      >var</a
+      ><a name="4406"
+      >         </a
+      ><a name="4415" class="Symbol"
+      >(</a
+      ><a name="4416" href="IntuitionisticLogic.html#4416" class="Bound"
+      >x</a
+      ><a name="4417"
+      > </a
+      ><a name="4418" href="IntuitionisticLogic.html#3396" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4419"
+      > </a
+      ><a name="4420" href="IntuitionisticLogic.html#3381" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="4421" class="Symbol"
+      >)</a
+      ><a name="4422"
+      >   </a
+      ><a name="4425" class="Symbol"
+      >=</a
+      ><a name="4426"
+      > </a
+      ><a name="4427" href="IntuitionisticLogic.html#4416" class="Bound"
+      >x</a
+      ><a name="4428"
+      >
+  </a
+      ><a name="4431" href="IntuitionisticLogic.html#4329" class="Function"
+      >reify</a
+      ><a name="4436"
+      > </a
+      ><a name="4437" class="Symbol"
+      >(</a
+      ><a name="4438" href="IntuitionisticLogic.html#2413" class="InductiveConstructor"
+      >abs</a
+      ><a name="4441"
+      > </a
+      ><a name="4442" href="IntuitionisticLogic.html#4442" class="Bound"
+      >t</a
+      ><a name="4443" class="Symbol"
+      >)</a
+      ><a name="4444"
+      >     </a
+      ><a name="4449" href="IntuitionisticLogic.html#4449" class="Bound"
+      >E</a
+      ><a name="4450"
+      >         </a
+      ><a name="4459" class="Symbol"
+      >=</a
+      ><a name="4460"
+      > </a
+      ><a name="4461" class="Symbol"
+      >&#955;</a
+      ><a name="4462"
+      > </a
+      ><a name="4463" href="IntuitionisticLogic.html#4463" class="Bound"
+      >x</a
+      ><a name="4464"
+      > </a
+      ><a name="4465" class="Symbol"
+      >&#8594;</a
+      ><a name="4466"
+      > </a
+      ><a name="4467" href="IntuitionisticLogic.html#4329" class="Function"
+      >reify</a
+      ><a name="4472"
+      > </a
+      ><a name="4473" href="IntuitionisticLogic.html#4442" class="Bound"
+      >t</a
+      ><a name="4474"
+      > </a
+      ><a name="4475" class="Symbol"
+      >(</a
+      ><a name="4476" href="IntuitionisticLogic.html#4463" class="Bound"
+      >x</a
+      ><a name="4477"
+      > </a
+      ><a name="4478" href="IntuitionisticLogic.html#3396" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4479"
+      > </a
+      ><a name="4480" href="IntuitionisticLogic.html#4449" class="Bound"
+      >E</a
+      ><a name="4481" class="Symbol"
+      >)</a
+      ><a name="4482"
+      >
+  </a
+      ><a name="4485" href="IntuitionisticLogic.html#4329" class="Function"
+      >reify</a
+      ><a name="4490"
+      > </a
+      ><a name="4491" class="Symbol"
+      >(</a
+      ><a name="4492" href="IntuitionisticLogic.html#2459" class="InductiveConstructor"
+      >app</a
+      ><a name="4495"
+      > </a
+      ><a name="4496" href="IntuitionisticLogic.html#4496" class="Bound"
+      >s</a
+      ><a name="4497"
+      > </a
+      ><a name="4498" href="IntuitionisticLogic.html#4498" class="Bound"
+      >t</a
+      ><a name="4499" class="Symbol"
+      >)</a
+      ><a name="4500"
+      >   </a
+      ><a name="4503" href="IntuitionisticLogic.html#4503" class="Bound"
+      >E</a
+      ><a name="4504"
+      >         </a
+      ><a name="4513" class="Keyword"
+      >with</a
+      ><a name="4517"
+      > </a
+      ><a name="4518" href="IntuitionisticLogic.html#4125" class="Function"
+      >Ctxt-split</a
+      ><a name="4528"
+      > </a
+      ><a name="4529" href="IntuitionisticLogic.html#4503" class="Bound"
+      >E</a
+      ><a name="4530"
+      >
+  </a
+      ><a name="4533" class="Symbol"
+      >...</a
+      ><a name="4536"
+      > </a
+      ><a name="4537" class="Symbol"
+      >|</a
+      ><a name="4538"
+      > </a
+      ><a name="4539" href="IntuitionisticLogic.html#4539" class="Bound"
+      >E&#738;</a
+      ><a name="4541"
+      > </a
+      ><a name="4542" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4543"
+      > </a
+      ><a name="4544" href="IntuitionisticLogic.html#4544" class="Bound"
+      >E&#7511;</a
+      ><a name="4546"
+      >               </a
+      ><a name="4561" class="Symbol"
+      >=</a
+      ><a name="4562"
+      > </a
+      ><a name="4563" class="Symbol"
+      >(</a
+      ><a name="4564" href="IntuitionisticLogic.html#4329" class="Function"
+      >reify</a
+      ><a name="4569"
+      > </a
+      ><a name="4570" href="IntuitionisticLogic.html#4496" class="Bound"
+      >s</a
+      ><a name="4571"
+      > </a
+      ><a name="4572" href="IntuitionisticLogic.html#4539" class="Bound"
+      >E&#738;</a
+      ><a name="4574" class="Symbol"
+      >)</a
+      ><a name="4575"
+      > </a
+      ><a name="4576" class="Symbol"
+      >(</a
+      ><a name="4577" href="IntuitionisticLogic.html#4329" class="Function"
+      >reify</a
+      ><a name="4582"
+      > </a
+      ><a name="4583" href="IntuitionisticLogic.html#4498" class="Bound"
+      >t</a
+      ><a name="4584"
+      > </a
+      ><a name="4585" href="IntuitionisticLogic.html#4544" class="Bound"
+      >E&#7511;</a
+      ><a name="4587" class="Symbol"
+      >)</a
+      ><a name="4588"
+      >
+  </a
+      ><a name="4591" href="IntuitionisticLogic.html#4329" class="Function"
+      >reify</a
+      ><a name="4596"
+      > </a
+      ><a name="4597" class="Symbol"
+      >(</a
+      ><a name="4598" href="IntuitionisticLogic.html#2516" class="InductiveConstructor"
+      >pair</a
+      ><a name="4602"
+      > </a
+      ><a name="4603" href="IntuitionisticLogic.html#4603" class="Bound"
+      >s</a
+      ><a name="4604"
+      > </a
+      ><a name="4605" href="IntuitionisticLogic.html#4605" class="Bound"
+      >t</a
+      ><a name="4606" class="Symbol"
+      >)</a
+      ><a name="4607"
+      >  </a
+      ><a name="4609" href="IntuitionisticLogic.html#4609" class="Bound"
+      >E</a
+      ><a name="4610"
+      >         </a
+      ><a name="4619" class="Keyword"
+      >with</a
+      ><a name="4623"
+      > </a
+      ><a name="4624" href="IntuitionisticLogic.html#4125" class="Function"
+      >Ctxt-split</a
+      ><a name="4634"
+      > </a
+      ><a name="4635" href="IntuitionisticLogic.html#4609" class="Bound"
+      >E</a
+      ><a name="4636"
+      >
+  </a
+      ><a name="4639" class="Symbol"
+      >...</a
+      ><a name="4642"
+      > </a
+      ><a name="4643" class="Symbol"
+      >|</a
+      ><a name="4644"
+      > </a
+      ><a name="4645" href="IntuitionisticLogic.html#4645" class="Bound"
+      >E&#738;</a
+      ><a name="4647"
+      > </a
+      ><a name="4648" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4649"
+      > </a
+      ><a name="4650" href="IntuitionisticLogic.html#4650" class="Bound"
+      >E&#7511;</a
+      ><a name="4652"
+      >               </a
+      ><a name="4667" class="Symbol"
+      >=</a
+      ><a name="4668"
+      > </a
+      ><a name="4669" class="Symbol"
+      >(</a
+      ><a name="4670" href="IntuitionisticLogic.html#4329" class="Function"
+      >reify</a
+      ><a name="4675"
+      > </a
+      ><a name="4676" href="IntuitionisticLogic.html#4603" class="Bound"
+      >s</a
+      ><a name="4677"
+      > </a
+      ><a name="4678" href="IntuitionisticLogic.html#4645" class="Bound"
+      >E&#738;</a
+      ><a name="4680"
+      > </a
+      ><a name="4681" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4682"
+      > </a
+      ><a name="4683" href="IntuitionisticLogic.html#4329" class="Function"
+      >reify</a
+      ><a name="4688"
+      > </a
+      ><a name="4689" href="IntuitionisticLogic.html#4605" class="Bound"
+      >t</a
+      ><a name="4690"
+      > </a
+      ><a name="4691" href="IntuitionisticLogic.html#4650" class="Bound"
+      >E&#7511;</a
+      ><a name="4693" class="Symbol"
+      >)</a
+      ><a name="4694"
+      >
+  </a
+      ><a name="4697" href="IntuitionisticLogic.html#4329" class="Function"
+      >reify</a
+      ><a name="4702"
+      > </a
+      ><a name="4703" class="Symbol"
+      >(</a
+      ><a name="4704" href="IntuitionisticLogic.html#2573" class="InductiveConstructor"
+      >case</a
+      ><a name="4708"
+      > </a
+      ><a name="4709" href="IntuitionisticLogic.html#4709" class="Bound"
+      >s</a
+      ><a name="4710"
+      > </a
+      ><a name="4711" href="IntuitionisticLogic.html#4711" class="Bound"
+      >t</a
+      ><a name="4712" class="Symbol"
+      >)</a
+      ><a name="4713"
+      >  </a
+      ><a name="4715" href="IntuitionisticLogic.html#4715" class="Bound"
+      >E</a
+      ><a name="4716"
+      >         </a
+      ><a name="4725" class="Keyword"
+      >with</a
+      ><a name="4729"
+      > </a
+      ><a name="4730" href="IntuitionisticLogic.html#4125" class="Function"
+      >Ctxt-split</a
+      ><a name="4740"
+      > </a
+      ><a name="4741" href="IntuitionisticLogic.html#4715" class="Bound"
+      >E</a
+      ><a name="4742"
+      >
+  </a
+      ><a name="4745" class="Symbol"
+      >...</a
+      ><a name="4748"
+      > </a
+      ><a name="4749" class="Symbol"
+      >|</a
+      ><a name="4750"
+      > </a
+      ><a name="4751" href="IntuitionisticLogic.html#4751" class="Bound"
+      >E&#738;</a
+      ><a name="4753"
+      > </a
+      ><a name="4754" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4755"
+      > </a
+      ><a name="4756" href="IntuitionisticLogic.html#4756" class="Bound"
+      >E&#7511;</a
+      ><a name="4758"
+      >               </a
+      ><a name="4773" class="Symbol"
+      >=</a
+      ><a name="4774"
+      > </a
+      ><a name="4775" href="Function.html#2755" class="Function Operator"
+      >case</a
+      ><a name="4779"
+      > </a
+      ><a name="4780" href="IntuitionisticLogic.html#4329" class="Function"
+      >reify</a
+      ><a name="4785"
+      > </a
+      ><a name="4786" href="IntuitionisticLogic.html#4709" class="Bound"
+      >s</a
+      ><a name="4787"
+      > </a
+      ><a name="4788" href="IntuitionisticLogic.html#4751" class="Bound"
+      >E&#738;</a
+      ><a name="4790"
+      > </a
+      ><a name="4791" href="Function.html#2755" class="Function Operator"
+      >of</a
+      ><a name="4793"
+      > </a
+      ><a name="4794" class="Symbol"
+      >&#955;{</a
+      ><a name="4796"
+      > </a
+      ><a name="4797" class="Symbol"
+      >(</a
+      ><a name="4798" href="IntuitionisticLogic.html#4798" class="Bound"
+      >x</a
+      ><a name="4799"
+      > </a
+      ><a name="4800" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4801"
+      > </a
+      ><a name="4802" href="IntuitionisticLogic.html#4802" class="Bound"
+      >y</a
+      ><a name="4803" class="Symbol"
+      >)</a
+      ><a name="4804"
+      > </a
+      ><a name="4805" class="Symbol"
+      >&#8594;</a
+      ><a name="4806"
+      > </a
+      ><a name="4807" href="IntuitionisticLogic.html#4329" class="Function"
+      >reify</a
+      ><a name="4812"
+      > </a
+      ><a name="4813" href="IntuitionisticLogic.html#4711" class="Bound"
+      >t</a
+      ><a name="4814"
+      > </a
+      ><a name="4815" class="Symbol"
+      >(</a
+      ><a name="4816" href="IntuitionisticLogic.html#4798" class="Bound"
+      >x</a
+      ><a name="4817"
+      > </a
+      ><a name="4818" href="IntuitionisticLogic.html#3396" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4819"
+      > </a
+      ><a name="4820" href="IntuitionisticLogic.html#4802" class="Bound"
+      >y</a
+      ><a name="4821"
+      > </a
+      ><a name="4822" href="IntuitionisticLogic.html#3396" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4823"
+      > </a
+      ><a name="4824" href="IntuitionisticLogic.html#4756" class="Bound"
+      >E&#7511;</a
+      ><a name="4826" class="Symbol"
+      >)}</a
+      ><a name="4828"
+      >
+  </a
+      ><a name="4831" href="IntuitionisticLogic.html#4329" class="Function"
+      >reify</a
+      ><a name="4836"
+      > </a
+      ><a name="4837" class="Symbol"
+      >(</a
+      ><a name="4838" href="IntuitionisticLogic.html#2640" class="InductiveConstructor"
+      >weak</a
+      ><a name="4842"
+      > </a
+      ><a name="4843" class="Symbol"
+      >{</a
+      ><a name="4844" href="IntuitionisticLogic.html#4844" class="Bound"
+      >X</a
+      ><a name="4845" class="Symbol"
+      >}</a
+      ><a name="4846"
+      > </a
+      ><a name="4847" href="IntuitionisticLogic.html#4847" class="Bound"
+      >s</a
+      ><a name="4848" class="Symbol"
+      >)</a
+      ><a name="4849"
+      >    </a
+      ><a name="4853" href="IntuitionisticLogic.html#4853" class="Bound"
+      >E</a
+      ><a name="4854"
+      >         </a
+      ><a name="4863" class="Keyword"
+      >with</a
+      ><a name="4867"
+      > </a
+      ><a name="4868" href="IntuitionisticLogic.html#4125" class="Function"
+      >Ctxt-split</a
+      ><a name="4878"
+      > </a
+      ><a name="4879" class="Symbol"
+      >{</a
+      ><a name="4880" href="IntuitionisticLogic.html#4844" class="Bound"
+      >X</a
+      ><a name="4881" class="Symbol"
+      >}</a
+      ><a name="4882"
+      > </a
+      ><a name="4883" href="IntuitionisticLogic.html#4853" class="Bound"
+      >E</a
+      ><a name="4884"
+      >
+  </a
+      ><a name="4887" class="Symbol"
+      >...</a
+      ><a name="4890"
+      > </a
+      ><a name="4891" class="Symbol"
+      >|</a
+      ><a name="4892"
+      > </a
+      ><a name="4893" href="IntuitionisticLogic.html#4893" class="Bound"
+      >E&#738;</a
+      ><a name="4895"
+      > </a
+      ><a name="4896" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4897"
+      > </a
+      ><a name="4898" href="IntuitionisticLogic.html#4898" class="Bound"
+      >E&#7511;</a
+      ><a name="4900"
+      >               </a
+      ><a name="4915" class="Symbol"
+      >=</a
+      ><a name="4916"
+      > </a
+      ><a name="4917" href="IntuitionisticLogic.html#4329" class="Function"
+      >reify</a
+      ><a name="4922"
+      > </a
+      ><a name="4923" href="IntuitionisticLogic.html#4847" class="Bound"
+      >s</a
+      ><a name="4924"
+      > </a
+      ><a name="4925" href="IntuitionisticLogic.html#4893" class="Bound"
+      >E&#738;</a
+      ><a name="4927"
+      >
+  </a
+      ><a name="4930" href="IntuitionisticLogic.html#4329" class="Function"
+      >reify</a
+      ><a name="4935"
+      > </a
+      ><a name="4936" class="Symbol"
+      >(</a
+      ><a name="4937" href="IntuitionisticLogic.html#2683" class="InductiveConstructor"
+      >cont</a
+      ><a name="4941"
+      > </a
+      ><a name="4942" href="IntuitionisticLogic.html#4942" class="Bound"
+      >t</a
+      ><a name="4943" class="Symbol"
+      >)</a
+      ><a name="4944"
+      >    </a
+      ><a name="4948" class="Symbol"
+      >(</a
+      ><a name="4949" href="IntuitionisticLogic.html#4949" class="Bound"
+      >x</a
+      ><a name="4950"
+      > </a
+      ><a name="4951" href="IntuitionisticLogic.html#3396" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4952"
+      > </a
+      ><a name="4953" href="IntuitionisticLogic.html#4953" class="Bound"
+      >E</a
+      ><a name="4954" class="Symbol"
+      >)</a
+      ><a name="4955"
+      >   </a
+      ><a name="4958" class="Symbol"
+      >=</a
+      ><a name="4959"
+      > </a
+      ><a name="4960" href="IntuitionisticLogic.html#4329" class="Function"
+      >reify</a
+      ><a name="4965"
+      > </a
+      ><a name="4966" href="IntuitionisticLogic.html#4942" class="Bound"
+      >t</a
+      ><a name="4967"
+      > </a
+      ><a name="4968" class="Symbol"
+      >(</a
+      ><a name="4969" href="IntuitionisticLogic.html#4949" class="Bound"
+      >x</a
+      ><a name="4970"
+      > </a
+      ><a name="4971" href="IntuitionisticLogic.html#3396" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4972"
+      > </a
+      ><a name="4973" href="IntuitionisticLogic.html#4949" class="Bound"
+      >x</a
+      ><a name="4974"
+      > </a
+      ><a name="4975" href="IntuitionisticLogic.html#3396" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4976"
+      > </a
+      ><a name="4977" href="IntuitionisticLogic.html#4953" class="Bound"
+      >E</a
+      ><a name="4978" class="Symbol"
+      >)</a
+      ><a name="4979"
+      >
+  </a
+      ><a name="4982" href="IntuitionisticLogic.html#4329" class="Function"
+      >reify</a
+      ><a name="4987"
+      > </a
+      ><a name="4988" class="Symbol"
+      >(</a
+      ><a name="4989" href="IntuitionisticLogic.html#2733" class="InductiveConstructor"
+      >exch</a
+      ><a name="4993"
+      > </a
+      ><a name="4994" class="Symbol"
+      >{</a
+      ><a name="4995" href="IntuitionisticLogic.html#4995" class="Bound"
+      >X</a
+      ><a name="4996" class="Symbol"
+      >}</a
+      ><a name="4997"
+      > </a
+      ><a name="4998" class="Symbol"
+      >{</a
+      ><a name="4999" href="IntuitionisticLogic.html#4999" class="Bound"
+      >Y</a
+      ><a name="5000" class="Symbol"
+      >}</a
+      ><a name="5001"
+      > </a
+      ><a name="5002" class="Symbol"
+      >{</a
+      ><a name="5003" href="IntuitionisticLogic.html#5003" class="Bound"
+      >Z</a
+      ><a name="5004" class="Symbol"
+      >}</a
+      ><a name="5005"
+      > </a
+      ><a name="5006" class="Symbol"
+      >{</a
+      ><a name="5007" href="IntuitionisticLogic.html#5007" class="Bound"
+      >W</a
+      ><a name="5008" class="Symbol"
+      >}</a
+      ><a name="5009"
+      > </a
+      ><a name="5010" href="IntuitionisticLogic.html#5010" class="Bound"
+      >t</a
+      ><a name="5011" class="Symbol"
+      >)</a
+      ><a name="5012"
+      >    </a
+      ><a name="5016" href="IntuitionisticLogic.html#5016" class="Bound"
+      >E</a
+      ><a name="5017"
+      >         </a
+      ><a name="5026" class="Symbol"
+      >=</a
+      ><a name="5027"
+      > </a
+      ><a name="5028" href="IntuitionisticLogic.html#4329" class="Function"
+      >reify</a
+      ><a name="5033"
+      > </a
+      ><a name="5034" href="IntuitionisticLogic.html#5010" class="Bound"
+      >t</a
+      ><a name="5035"
+      > </a
+      ><a name="5036" class="Symbol"
+      >(</a
+      ><a name="5037" href="IntuitionisticLogic.html#3789" class="Function"
+      >Ctxt-exch</a
+      ><a name="5046"
+      > </a
+      ><a name="5047" class="Symbol"
+      >{</a
+      ><a name="5048" href="IntuitionisticLogic.html#4995" class="Bound"
+      >X</a
+      ><a name="5049" class="Symbol"
+      >}</a
+      ><a name="5050"
+      > </a
+      ><a name="5051" class="Symbol"
+      >{</a
+      ><a name="5052" href="IntuitionisticLogic.html#4999" class="Bound"
+      >Y</a
+      ><a name="5053" class="Symbol"
+      >}</a
+      ><a name="5054"
+      > </a
+      ><a name="5055" class="Symbol"
+      >{</a
+      ><a name="5056" href="IntuitionisticLogic.html#5003" class="Bound"
+      >Z</a
+      ><a name="5057" class="Symbol"
+      >}</a
+      ><a name="5058"
+      > </a
+      ><a name="5059" class="Symbol"
+      >{</a
+      ><a name="5060" href="IntuitionisticLogic.html#5007" class="Bound"
+      >W</a
+      ><a name="5061" class="Symbol"
+      >}</a
+      ><a name="5062"
+      > </a
+      ><a name="5063" href="IntuitionisticLogic.html#5016" class="Bound"
+      >E</a
+      ><a name="5064" class="Symbol"
+      >)</a
+      ><a name="5065"
+      >
+
+  </a
+      ><a name="5069" href="IntuitionisticLogic.html#5069" class="Function Operator"
+      >[_]</a
+      ><a name="5072"
+      > </a
+      ><a name="5073" class="Symbol"
+      >:</a
+      ><a name="5074"
+      > </a
+      ><a name="5075" class="Symbol"
+      >{</a
+      ><a name="5076" href="IntuitionisticLogic.html#5076" class="Bound"
+      >A</a
+      ><a name="5077"
+      > </a
+      ><a name="5078" class="Symbol"
+      >:</a
+      ><a name="5079"
+      > </a
+      ><a name="5080" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="5084" class="Symbol"
+      >}</a
+      ><a name="5085"
+      > </a
+      ><a name="5086" class="Symbol"
+      >{</a
+      ><a name="5087" href="IntuitionisticLogic.html#5087" class="Bound"
+      >X</a
+      ><a name="5088"
+      > </a
+      ><a name="5089" class="Symbol"
+      >:</a
+      ><a name="5090"
+      > </a
+      ><a name="5091" href="Data.List.html#659" class="Datatype"
+      >List</a
+      ><a name="5095"
+      > </a
+      ><a name="5096" href="IntuitionisticLogic.html#585" class="Datatype"
+      >Type</a
+      ><a name="5100" class="Symbol"
+      >}</a
+      ><a name="5101"
+      > </a
+      ><a name="5102" class="Symbol"
+      >&#8594;</a
+      ><a name="5103"
+      > </a
+      ><a name="5104" href="IntuitionisticLogic.html#5087" class="Bound"
+      >X</a
+      ><a name="5105"
+      > </a
+      ><a name="5106" href="IntuitionisticLogic.html#2332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="5107"
+      > </a
+      ><a name="5108" href="IntuitionisticLogic.html#5076" class="Bound"
+      >A</a
+      ><a name="5109"
+      > </a
+      ><a name="5110" class="Symbol"
+      >&#8594;</a
+      ><a name="5111"
+      > </a
+      ><a name="5112" class="Symbol"
+      >(</a
+      ><a name="5113" href="IntuitionisticLogic.html#3340" class="Datatype"
+      >Ctxt</a
+      ><a name="5117"
+      > </a
+      ><a name="5118" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10214;</a
+      ><a name="5119"
+      > </a
+      ><a name="5120" href="IntuitionisticLogic.html#5087" class="Bound"
+      >X</a
+      ><a name="5121"
+      > </a
+      ><a name="5122" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10215;</a
+      ><a name="5123"
+      > </a
+      ><a name="5124" class="Symbol"
+      >&#8594;</a
+      ><a name="5125"
+      > </a
+      ><a name="5126" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10214;</a
+      ><a name="5127"
+      > </a
+      ><a name="5128" href="IntuitionisticLogic.html#5076" class="Bound"
+      >A</a
+      ><a name="5129"
+      > </a
+      ><a name="5130" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10215;</a
+      ><a name="5131" class="Symbol"
+      >)</a
+      ><a name="5132"
+      >
+  </a
+      ><a name="5135" href="IntuitionisticLogic.html#5069" class="Function Operator"
+      >[_]</a
+      ><a name="5138"
+      > </a
+      ><a name="5139" class="Symbol"
+      >=</a
+      ><a name="5140"
+      > </a
+      ><a name="5141" href="IntuitionisticLogic.html#4329" class="Function"
+      >reify</a
+      ><a name="5146"
+      >
+
+  </a
+      ><a name="5150" href="IntuitionisticLogic.html#5150" class="Function"
+      >swap&#8242;</a
+      ><a name="5155"
+      > </a
+      ><a name="5156" class="Symbol"
+      >:</a
+      ><a name="5157"
+      > </a
+      ><a name="5158" class="Symbol"
+      >&#8704;</a
+      ><a name="5159"
+      > </a
+      ><a name="5160" class="Symbol"
+      >{</a
+      ><a name="5161" href="IntuitionisticLogic.html#5161" class="Bound"
+      >A</a
+      ><a name="5162"
+      > </a
+      ><a name="5163" href="IntuitionisticLogic.html#5163" class="Bound"
+      >B</a
+      ><a name="5164" class="Symbol"
+      >}</a
+      ><a name="5165"
+      > </a
+      ><a name="5166" class="Symbol"
+      >&#8594;</a
+      ><a name="5167"
+      > </a
+      ><a name="5168" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10214;</a
+      ><a name="5169"
+      > </a
+      ><a name="5170" href="IntuitionisticLogic.html#5161" class="Bound"
+      >A</a
+      ><a name="5171"
+      > </a
+      ><a name="5172" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10215;</a
+      ><a name="5173"
+      > </a
+      ><a name="5174" href="Data.Product.html#1055" class="Function Operator"
+      >&#215;</a
+      ><a name="5175"
+      > </a
+      ><a name="5176" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10214;</a
+      ><a name="5177"
+      > </a
+      ><a name="5178" href="IntuitionisticLogic.html#5163" class="Bound"
+      >B</a
+      ><a name="5179"
+      > </a
+      ><a name="5180" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10215;</a
+      ><a name="5181"
+      > </a
+      ><a name="5182" class="Symbol"
+      >&#8594;</a
+      ><a name="5183"
+      > </a
+      ><a name="5184" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10214;</a
+      ><a name="5185"
+      > </a
+      ><a name="5186" href="IntuitionisticLogic.html#5163" class="Bound"
+      >B</a
+      ><a name="5187"
+      > </a
+      ><a name="5188" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10215;</a
+      ><a name="5189"
+      > </a
+      ><a name="5190" href="Data.Product.html#1055" class="Function Operator"
+      >&#215;</a
+      ><a name="5191"
+      > </a
+      ><a name="5192" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10214;</a
+      ><a name="5193"
+      > </a
+      ><a name="5194" href="IntuitionisticLogic.html#5161" class="Bound"
+      >A</a
+      ><a name="5195"
+      > </a
+      ><a name="5196" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10215;</a
+      ><a name="5197"
+      >
+  </a
+      ><a name="5200" href="IntuitionisticLogic.html#5150" class="Function"
+      >swap&#8242;</a
+      ><a name="5205"
+      > </a
+      ><a name="5206" class="Symbol"
+      >{</a
+      ><a name="5207" href="IntuitionisticLogic.html#5207" class="Bound"
+      >A</a
+      ><a name="5208" class="Symbol"
+      >}</a
+      ><a name="5209"
+      > </a
+      ><a name="5210" class="Symbol"
+      >{</a
+      ><a name="5211" href="IntuitionisticLogic.html#5211" class="Bound"
+      >B</a
+      ><a name="5212" class="Symbol"
+      >}</a
+      ><a name="5213"
+      > </a
+      ><a name="5214" class="Symbol"
+      >=</a
+      ><a name="5215"
+      > </a
+      ><a name="5216" href="IntuitionisticLogic.html#5069" class="Function Operator"
+      >[</a
+      ><a name="5217"
+      > </a
+      ><a name="5218" href="IntuitionisticLogic.html#2930" class="Function"
+      >swap</a
+      ><a name="5222"
+      > </a
+      ><a name="5223" class="Symbol"
+      >{</a
+      ><a name="5224" href="Data.List.html#696" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="5225" class="Symbol"
+      >}</a
+      ><a name="5226"
+      > </a
+      ><a name="5227" class="Symbol"
+      >{</a
+      ><a name="5228" href="IntuitionisticLogic.html#5207" class="Bound"
+      >A</a
+      ><a name="5229" class="Symbol"
+      >}</a
+      ><a name="5230"
+      > </a
+      ><a name="5231" class="Symbol"
+      >{</a
+      ><a name="5232" href="IntuitionisticLogic.html#5211" class="Bound"
+      >B</a
+      ><a name="5233" class="Symbol"
+      >}</a
+      ><a name="5234"
+      > </a
+      ><a name="5235" href="IntuitionisticLogic.html#5069" class="Function Operator"
+      >]</a
+      ><a name="5236"
+      > </a
+      ><a name="5237" href="IntuitionisticLogic.html#3381" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="5238"
+      >
+
+</a
+      ></pre
+    ></body
+  ></html
+>
