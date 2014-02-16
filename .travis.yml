@@ -1,7 +1,8 @@
 language : haskell
 install  :
   - git clone https://github.com/scottkosty/install-tl-ubuntu
-  - sudo ./install-tl-ubuntu/install-tl-ubuntu
+  - cd install-tl-ubuntu
+  - sudo ./install-tl-ubuntu
   - sudo tlmgr install stmaryrd mdframed
   - sudo apt-get install agda agda-stdlib
   - sudo apt-get install rake
