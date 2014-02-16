@@ -8,7 +8,7 @@ install :
 before_script :
   - pdflatex --version
   - agda --version
-  - lhs2TeX --verion
+  - lhs2TeX --version
   - rake --version
 script :
   - rake code

@@ -32,6 +32,9 @@ Some notes:
 
   - the paper is compiled using [lhs2TeX](http://www.andres-loeh.de/lhs2tex/);
 
-  - compilation of the paper and extraction of the code is facilitated
-    using a [rake](http://rake.rubyforge.org/) build script (call
-    `rake paper` and `rake code`).
+  - compilation of the paper and extraction of the code and html
+    documentation is facilitated using a [rake](http://rake.rubyforge.org/)
+    build script (call `rake paper`, `rake code` and `rake html`);
+
+  - see here for [an example](http://pepijnkokke.github.io/SubstructuralLogicsInAgda/html/paper.html)
+    in fancy clickable html.
