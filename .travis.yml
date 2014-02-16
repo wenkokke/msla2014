@@ -1,10 +1,16 @@
 language : haskell
-install  :
+install :
   - sudo apt-get install texlive
-  - sudo apt-get install agda agda-stdlib
+  - sudo cabal install agda
+  - sudo apt-get install agda-stdlib
   - sudo apt-get install rake
   - sudo cabal install lhs2TeX
   - export AGDA_HOME=/usr/lib/agda-stdlib
-script   :
+before_script :
+  - pdflatex --version
+  - agda --version
+  - lhs2TeX --verion
+  - rake --version
+script :
   - rake code
   - rake html

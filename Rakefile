@@ -27,7 +27,7 @@ PaperFiles = FileList[
 
 ### HTML ###
 
-task :publish => HtmlFiles do
+task 'gh-pages' => HtmlFiles do
   f_html = File.absolute_path( HtmlDir )
 
   Dir.mktmpdir do |tmp|
@@ -46,7 +46,7 @@ task :publish => HtmlFiles do
         system cmd
         fail unless $?.success?
 
-        cmd = "mv #{ f_html } ."
+        cmd = "cp -r #{ f_html } ."
         puts cmd
         system cmd
         fail unless $?.success?
