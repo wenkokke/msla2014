@@ -4,7 +4,7 @@ install  :
   - sudo apt-get install agda agda-stdlib
   - sudo apt-get install rake
   - sudo cabal install lhs2TeX
-  - export AGDA_HOME=/usr/local/share/agda-stdlib/src
+  - export AGDA_HOME=/usr/lib/agda-stdlib
 script   :
   - rake code
   - rake html

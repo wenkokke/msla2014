@@ -5,6 +5,7 @@ require 'tmpdir'
 LitDir = 'paper'
 LitFile = /#{LitDir}\/.*\.lagda/
 LitFiles = FileList[
+  'paper/paper.lagda'                 ,
   'paper/IntuitionisticLogic.lagda'   ,
   'paper/LinearLogic.lagda'           ,
   'paper/LambekGrishinCalculus.lagda' ]
@@ -22,6 +23,8 @@ PaperFiles = FileList[
   'paper/paper.bib'    ,
   'paper/preamble.tex' ]
 
+
+
 ### HTML ###
 
 task :publish => HtmlFiles do
@@ -34,34 +37,34 @@ task :publish => HtmlFiles do
       cmd = "git clone git@github.com:pepijnkokke/SubstructuralLogicsInAgda.git pages"
       puts cmd
       system cmd
-      fail cmd unless $?.success?
+      fail unless $?.success?
 
       # move into the repository
       Dir.chdir('pages') do
         cmd = "git checkout gh-pages"
         puts cmd
         system cmd
-        fail cmd unless $?.success?
+        fail unless $?.success?
 
         cmd = "mv #{ f_html } ."
         puts cmd
         system cmd
-        fail cmd unless $?.success?
+        fail unless $?.success?
 
         cmd = "git add html"
         puts cmd
         system cmd
-        fail cmd unless $?.success?
+        fail unless $?.success?
 
         cmd = "git commit -m 'automatically generated gh-pages branch'"
         puts cmd
         system cmd
-        fail cmd unless $?.success?
+        fail unless $?.success?
 
         cmd = "git push origin gh-pages"
         puts cmd
         system cmd
-        fail cmd unless $?.success?
+        fail unless $?.success?
       end
     end
   end
@@ -88,7 +91,10 @@ rule HtmlFile => [ proc { |fn| html2code(fn) } ] do |t|
   puts cmd
   system cmd
 
+  fail unless $?.success?
 end
+
+
 
 ### Code ###
 
@@ -124,10 +130,10 @@ rule CodeFile => [ proc { |fn| code2lit(fn) } ]  do |t|
 
     File.delete f_lhs
 
-    fail "error in lhs2TeX" unless $?.success?
-
+    fail unless $?.success?
   end
 end
+
 
 
 ### Paper ###
@@ -178,8 +184,7 @@ rule '.tex' => [ '.lagda' ] do |t|
 
     File.delete f_lhs
 
-    fail "error in lhs2TeX" unless $?.success?
-
+    fail unless $?.success?
   end
 end
 
