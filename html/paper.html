@@ -1,0 +1,1528 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >paper</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="paper.html#1" class="Module"
+      >paper</a
+      ><a name="13"
+      > </a
+      ><a name="14" class="Keyword"
+      >where</a
+      ><a name="19"
+      >
+
+</a
+      ><a name="21" class="Keyword"
+      >open</a
+      ><a name="25"
+      > </a
+      ><a name="26" class="Keyword"
+      >import</a
+      ><a name="32"
+      > </a
+      ><a name="33" href="Data.Bool.html#1" class="Module"
+      >Data.Bool</a
+      ><a name="42"
+      > </a
+      ><a name="43" class="Keyword"
+      >using</a
+      ><a name="48"
+      > </a
+      ><a name="49" class="Symbol"
+      >(</a
+      ><a name="50"
+      >Bool</a
+      ><a name="54" class="Symbol"
+      >;</a
+      ><a name="55"
+      > not</a
+      ><a name="59" class="Symbol"
+      >;</a
+      ><a name="60"
+      > _&#8744;_</a
+      ><a name="64" class="Symbol"
+      >;</a
+      ><a name="65"
+      > _&#8743;_</a
+      ><a name="69" class="Symbol"
+      >)</a
+      ><a name="70"
+      >
+</a
+      ><a name="71" class="Keyword"
+      >open</a
+      ><a name="75"
+      > </a
+      ><a name="76" class="Keyword"
+      >import</a
+      ><a name="82"
+      > </a
+      ><a name="83" href="Data.Nat.html#1" class="Module"
+      >Data.Nat</a
+      ><a name="91"
+      > </a
+      ><a name="92" class="Keyword"
+      >using</a
+      ><a name="97"
+      > </a
+      ><a name="98" class="Symbol"
+      >(</a
+      ><a name="99"
+      >&#8469;</a
+      ><a name="100" class="Symbol"
+      >)</a
+      ><a name="101"
+      >
+</a
+      ><a name="102" class="Keyword"
+      >open</a
+      ><a name="106"
+      > </a
+      ><a name="107" class="Keyword"
+      >import</a
+      ><a name="113"
+      > </a
+      ><a name="114" href="Data.Fin.html#1" class="Module"
+      >Data.Fin</a
+      ><a name="122"
+      > </a
+      ><a name="123" class="Keyword"
+      >using</a
+      ><a name="128"
+      > </a
+      ><a name="129" class="Symbol"
+      >(</a
+      ><a name="130"
+      >Fin</a
+      ><a name="133" class="Symbol"
+      >;</a
+      ><a name="134"
+      > suc</a
+      ><a name="138" class="Symbol"
+      >;</a
+      ><a name="139"
+      > zero</a
+      ><a name="144" class="Symbol"
+      >)</a
+      ><a name="145"
+      >
+</a
+      ><a name="146" class="Keyword"
+      >open</a
+      ><a name="150"
+      > </a
+      ><a name="151" class="Keyword"
+      >import</a
+      ><a name="157"
+      > </a
+      ><a name="158" href="Data.List.html#1" class="Module"
+      >Data.List</a
+      ><a name="167"
+      > </a
+      ><a name="168" class="Keyword"
+      >using</a
+      ><a name="173"
+      > </a
+      ><a name="174" class="Symbol"
+      >(</a
+      ><a name="175"
+      >List</a
+      ><a name="179" class="Symbol"
+      >;</a
+      ><a name="180"
+      > _++_</a
+      ><a name="185" class="Symbol"
+      >)</a
+      ><a name="186"
+      > </a
+      ><a name="187" class="Keyword"
+      >renaming</a
+      ><a name="195"
+      > </a
+      ><a name="196" class="Symbol"
+      >(</a
+      ><a name="197"
+      >_&#8759;_ </a
+      ><a name="201" class="Symbol"
+      >to</a
+      ><a name="203"
+      > _,_</a
+      ><a name="207" class="Symbol"
+      >;</a
+      ><a name="208"
+      > [] </a
+      ><a name="212" class="Symbol"
+      >to</a
+      ><a name="214"
+      > &#8709;</a
+      ><a name="216" class="Symbol"
+      >)</a
+      ><a name="217"
+      >
+</a
+      ><a name="218" class="Keyword"
+      >open</a
+      ><a name="222"
+      > </a
+      ><a name="223" class="Keyword"
+      >import</a
+      ><a name="229"
+      > </a
+      ><a name="230" href="Data.Product.html#1" class="Module"
+      >Data.Product</a
+      ><a name="242"
+      > </a
+      ><a name="243" class="Keyword"
+      >using</a
+      ><a name="248"
+      > </a
+      ><a name="249" class="Symbol"
+      >(</a
+      ><a name="250"
+      >_&#215;_</a
+      ><a name="253" class="Symbol"
+      >;</a
+      ><a name="254"
+      > _,_</a
+      ><a name="258" class="Symbol"
+      >)</a
+      ><a name="259"
+      >
+
+</a
+      ><a name="261" href="paper.html#261" class="Function Operator"
+      >_&#8835;_</a
+      ><a name="264"
+      > </a
+      ><a name="265" class="Symbol"
+      >:</a
+      ><a name="266"
+      > </a
+      ><a name="267" href="Data.Bool.html#603" class="Datatype"
+      >Bool</a
+      ><a name="271"
+      > </a
+      ><a name="272" class="Symbol"
+      >&#8594;</a
+      ><a name="273"
+      > </a
+      ><a name="274" href="Data.Bool.html#603" class="Datatype"
+      >Bool</a
+      ><a name="278"
+      > </a
+      ><a name="279" class="Symbol"
+      >&#8594;</a
+      ><a name="280"
+      > </a
+      ><a name="281" href="Data.Bool.html#603" class="Datatype"
+      >Bool</a
+      ><a name="285"
+      >
+</a
+      ><a name="286" href="paper.html#286" class="Bound"
+      >x</a
+      ><a name="287"
+      > </a
+      ><a name="288" href="paper.html#261" class="Function Operator"
+      >&#8835;</a
+      ><a name="289"
+      > </a
+      ><a name="290" href="paper.html#290" class="Bound"
+      >y</a
+      ><a name="291"
+      > </a
+      ><a name="292" class="Symbol"
+      >=</a
+      ><a name="293"
+      > </a
+      ><a name="294" class="Symbol"
+      >(</a
+      ><a name="295" href="Data.Bool.html#873" class="Function"
+      >not</a
+      ><a name="298"
+      > </a
+      ><a name="299" href="paper.html#286" class="Bound"
+      >x</a
+      ><a name="300" class="Symbol"
+      >)</a
+      ><a name="301"
+      > </a
+      ><a name="302" href="Data.Bool.html#1213" class="Function Operator"
+      >&#8744;</a
+      ><a name="303"
+      > </a
+      ><a name="304" href="paper.html#290" class="Bound"
+      >y</a
+      ><a name="305"
+      >
+
+</a
+      ><a name="307" class="Keyword"
+      >postulate</a
+      ><a name="316"
+      >
+  </a
+      ><a name="319" href="paper.html#319" class="Postulate"
+      >Entity</a
+      ><a name="325"
+      >   </a
+      ><a name="328" class="Symbol"
+      >:</a
+      ><a name="329"
+      > </a
+      ><a name="330" class="PrimitiveType"
+      >Set</a
+      ><a name="333"
+      >
+  </a
+      ><a name="336" href="paper.html#336" class="Postulate"
+      >FORALL</a
+      ><a name="342"
+      >   </a
+      ><a name="345" class="Symbol"
+      >:</a
+      ><a name="346"
+      > </a
+      ><a name="347" class="Symbol"
+      >(</a
+      ><a name="348" href="paper.html#319" class="Postulate"
+      >Entity</a
+      ><a name="354"
+      > </a
+      ><a name="355" class="Symbol"
+      >&#8594;</a
+      ><a name="356"
+      > </a
+      ><a name="357" href="Data.Bool.html#603" class="Datatype"
+      >Bool</a
+      ><a name="361" class="Symbol"
+      >)</a
+      ><a name="362"
+      > </a
+      ><a name="363" class="Symbol"
+      >&#8594;</a
+      ><a name="364"
+      > </a
+      ><a name="365" href="Data.Bool.html#603" class="Datatype"
+      >Bool</a
+      ><a name="369"
+      >
+  </a
+      ><a name="372" href="paper.html#372" class="Postulate"
+      >EXISTS</a
+      ><a name="378"
+      >   </a
+      ><a name="381" class="Symbol"
+      >:</a
+      ><a name="382"
+      > </a
+      ><a name="383" class="Symbol"
+      >(</a
+      ><a name="384" href="paper.html#319" class="Postulate"
+      >Entity</a
+      ><a name="390"
+      > </a
+      ><a name="391" class="Symbol"
+      >&#8594;</a
+      ><a name="392"
+      > </a
+      ><a name="393" href="Data.Bool.html#603" class="Datatype"
+      >Bool</a
+      ><a name="397" class="Symbol"
+      >)</a
+      ><a name="398"
+      > </a
+      ><a name="399" class="Symbol"
+      >&#8594;</a
+      ><a name="400"
+      > </a
+      ><a name="401" href="Data.Bool.html#603" class="Datatype"
+      >Bool</a
+      ><a name="405"
+      >
+  </a
+      ><a name="408" href="paper.html#408" class="Postulate"
+      >PERSON</a
+      ><a name="414"
+      >   </a
+      ><a name="417" class="Symbol"
+      >:</a
+      ><a name="418"
+      > </a
+      ><a name="419" href="paper.html#319" class="Postulate"
+      >Entity</a
+      ><a name="425"
+      > </a
+      ><a name="426" class="Symbol"
+      >&#8594;</a
+      ><a name="427"
+      > </a
+      ><a name="428" href="Data.Bool.html#603" class="Datatype"
+      >Bool</a
+      ><a name="432"
+      >
+  </a
+      ><a name="435" href="paper.html#435" class="Postulate"
+      >FIND</a
+      ><a name="439"
+      >     </a
+      ><a name="444" class="Symbol"
+      >:</a
+      ><a name="445"
+      > </a
+      ><a name="446" href="paper.html#319" class="Postulate"
+      >Entity</a
+      ><a name="452"
+      > </a
+      ><a name="453" class="Symbol"
+      >&#8594;</a
+      ><a name="454"
+      > </a
+      ><a name="455" href="paper.html#319" class="Postulate"
+      >Entity</a
+      ><a name="461"
+      > </a
+      ><a name="462" class="Symbol"
+      >&#8594;</a
+      ><a name="463"
+      > </a
+      ><a name="464" href="Data.Bool.html#603" class="Datatype"
+      >Bool</a
+      ><a name="468"
+      >
+  </a
+      ><a name="471" href="paper.html#471" class="Postulate"
+      >UNICORN</a
+      ><a name="478"
+      >  </a
+      ><a name="480" class="Symbol"
+      >:</a
+      ><a name="481"
+      > </a
+      ><a name="482" href="paper.html#319" class="Postulate"
+      >Entity</a
+      ><a name="488"
+      > </a
+      ><a name="489" class="Symbol"
+      >&#8594;</a
+      ><a name="490"
+      > </a
+      ><a name="491" href="Data.Bool.html#603" class="Datatype"
+      >Bool</a
+      ><a name="495"
+      >
+
+</a
+      ><a name="497" class="Keyword"
+      >data</a
+      ><a name="501"
+      > </a
+      ><a name="502" href="paper.html#502" class="Datatype"
+      >U</a
+      ><a name="503"
+      > </a
+      ><a name="504" class="Symbol"
+      >:</a
+      ><a name="505"
+      > </a
+      ><a name="506" class="PrimitiveType"
+      >Set</a
+      ><a name="509"
+      > </a
+      ><a name="510" class="Keyword"
+      >where</a
+      ><a name="515"
+      > </a
+      ><a name="516" href="paper.html#516" class="InductiveConstructor"
+      >S</a
+      ><a name="517"
+      > </a
+      ><a name="518" href="paper.html#518" class="InductiveConstructor"
+      >N</a
+      ><a name="519"
+      > </a
+      ><a name="520" href="paper.html#520" class="InductiveConstructor"
+      >NP</a
+      ><a name="522"
+      > </a
+      ><a name="523" class="Symbol"
+      >:</a
+      ><a name="524"
+      > </a
+      ><a name="525" href="paper.html#502" class="Datatype"
+      >U</a
+      ><a name="526"
+      >
+
+</a
+      ><a name="528" href="paper.html#528" class="Function Operator"
+      >&#10214;_&#10215;&#7489;</a
+      ><a name="532"
+      > </a
+      ><a name="533" class="Symbol"
+      >:</a
+      ><a name="534"
+      > </a
+      ><a name="535" href="paper.html#502" class="Datatype"
+      >U</a
+      ><a name="536"
+      > </a
+      ><a name="537" class="Symbol"
+      >&#8594;</a
+      ><a name="538"
+      > </a
+      ><a name="539" class="PrimitiveType"
+      >Set</a
+      ><a name="542"
+      >
+</a
+      ><a name="543" href="paper.html#528" class="Function Operator"
+      >&#10214;</a
+      ><a name="544"
+      > </a
+      ><a name="545" href="paper.html#516" class="InductiveConstructor"
+      >S</a
+      ><a name="546"
+      >   </a
+      ><a name="549" href="paper.html#528" class="Function Operator"
+      >&#10215;&#7489;</a
+      ><a name="551"
+      > </a
+      ><a name="552" class="Symbol"
+      >=</a
+      ><a name="553"
+      > </a
+      ><a name="554" href="Data.Bool.html#603" class="Datatype"
+      >Bool</a
+      ><a name="558"
+      >
+</a
+      ><a name="559" href="paper.html#528" class="Function Operator"
+      >&#10214;</a
+      ><a name="560"
+      > </a
+      ><a name="561" href="paper.html#518" class="InductiveConstructor"
+      >N</a
+      ><a name="562"
+      >   </a
+      ><a name="565" href="paper.html#528" class="Function Operator"
+      >&#10215;&#7489;</a
+      ><a name="567"
+      > </a
+      ><a name="568" class="Symbol"
+      >=</a
+      ><a name="569"
+      > </a
+      ><a name="570" href="paper.html#319" class="Postulate"
+      >Entity</a
+      ><a name="576"
+      > </a
+      ><a name="577" class="Symbol"
+      >&#8594;</a
+      ><a name="578"
+      > </a
+      ><a name="579" href="Data.Bool.html#603" class="Datatype"
+      >Bool</a
+      ><a name="583"
+      >
+</a
+      ><a name="584" href="paper.html#528" class="Function Operator"
+      >&#10214;</a
+      ><a name="585"
+      > </a
+      ><a name="586" href="paper.html#520" class="InductiveConstructor"
+      >NP</a
+      ><a name="588"
+      >  </a
+      ><a name="590" href="paper.html#528" class="Function Operator"
+      >&#10215;&#7489;</a
+      ><a name="592"
+      > </a
+      ><a name="593" class="Symbol"
+      >=</a
+      ><a name="594"
+      > </a
+      ><a name="595" href="paper.html#319" class="Postulate"
+      >Entity</a
+      ><a name="601"
+      >
+
+</a
+      ><a name="603" class="Keyword"
+      >import</a
+      ><a name="609"
+      > </a
+      ><a name="610" href="IntuitionisticLogic.html#1" class="Module"
+      >IntuitionisticLogic</a
+      ><a name="629"
+      > </a
+      ><a name="630" href="paper.html#502" class="Datatype"
+      >U</a
+      ><a name="631"
+      > </a
+      ><a name="632" href="paper.html#528" class="Function Operator"
+      >&#10214;_&#10215;&#7489;</a
+      ><a name="636"
+      > </a
+      ><a name="637" class="Symbol"
+      >as</a
+      ><a name="639"
+      > </a
+      ><a name="640" href="paper.html#640" class="Module"
+      >IL</a
+      ><a name="642"
+      >
+</a
+      ><a name="643" class="Keyword"
+      >open</a
+      ><a name="647"
+      > </a
+      ><a name="648" class="Keyword"
+      >import</a
+      ><a name="654"
+      > </a
+      ><a name="655" href="LinearLogic.html#1" class="Module"
+      >LinearLogic</a
+      ><a name="666"
+      > </a
+      ><a name="667" href="paper.html#502" class="Datatype"
+      >U</a
+      ><a name="668"
+      > </a
+      ><a name="669" href="paper.html#516" class="InductiveConstructor"
+      >S</a
+      ><a name="670"
+      > </a
+      ><a name="671" href="paper.html#528" class="Function Operator"
+      >&#10214;_&#10215;&#7489;</a
+      ><a name="675"
+      > </a
+      ><a name="676" class="Symbol"
+      >as</a
+      ><a name="678"
+      > </a
+      ><a name="679" href="paper.html#679" class="Module"
+      >LP</a
+      ><a name="681"
+      > </a
+      ><a name="682" class="Keyword"
+      >using</a
+      ><a name="687"
+      > </a
+      ><a name="688" class="Symbol"
+      >()</a
+      ><a name="690"
+      >
+</a
+      ><a name="691" class="Keyword"
+      >open</a
+      ><a name="695"
+      > </a
+      ><a name="696" class="Keyword"
+      >import</a
+      ><a name="702"
+      > </a
+      ><a name="703" href="LambekGrishinCalculus.html#1" class="Module"
+      >LambekGrishinCalculus</a
+      ><a name="724"
+      > </a
+      ><a name="725" href="paper.html#502" class="Datatype"
+      >U</a
+      ><a name="726"
+      > </a
+      ><a name="727" href="paper.html#516" class="InductiveConstructor"
+      >S</a
+      ><a name="728"
+      > </a
+      ><a name="729" href="paper.html#528" class="Function Operator"
+      >&#10214;_&#10215;&#7489;</a
+      ><a name="733"
+      > </a
+      ><a name="734" class="Symbol"
+      >as</a
+      ><a name="736"
+      > </a
+      ><a name="737" href="paper.html#737" class="Module"
+      >LG</a
+      ><a name="739"
+      >
+</a
+      ><a name="740" class="Keyword"
+      >open</a
+      ><a name="744"
+      > </a
+      ><a name="745" href="paper.html#640" class="Module"
+      >IL.</a
+      ><a name="748" href="IntuitionisticLogic.html#2292" class="Module"
+      >Explicit.</a
+      ><a name="757" href="IntuitionisticLogic.html#3055" class="Module"
+      >Reify</a
+      ><a name="762"
+      > </a
+      ><a name="763" href="LambekGrishinCalculus.html#5644" class="Function"
+      >TypeReify</a
+      ><a name="772"
+      >
+
+</a
+      ><a name="774" href="paper.html#774" class="Function"
+      >everyone</a
+      ><a name="782"
+      >  </a
+      ><a name="784" class="Symbol"
+      >:</a
+      ><a name="785"
+      > </a
+      ><a name="786" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10214;</a
+      ><a name="787"
+      > </a
+      ><a name="788" class="Symbol"
+      >(</a
+      ><a name="789" href="LambekGrishinCalculus.html#754" class="InductiveConstructor"
+      >el</a
+      ><a name="791"
+      > </a
+      ><a name="792" href="paper.html#520" class="InductiveConstructor"
+      >NP</a
+      ><a name="794"
+      > </a
+      ><a name="795" href="LambekGrishinCalculus.html#588" class="InductiveConstructor"
+      >+</a
+      ><a name="796"
+      > </a
+      ><a name="797" href="LambekGrishinCalculus.html#851" class="InductiveConstructor Operator"
+      >&#8656;</a
+      ><a name="798"
+      > </a
+      ><a name="799" href="LambekGrishinCalculus.html#754" class="InductiveConstructor"
+      >el</a
+      ><a name="801"
+      > </a
+      ><a name="802" href="paper.html#518" class="InductiveConstructor"
+      >N</a
+      ><a name="803"
+      > </a
+      ><a name="804" href="LambekGrishinCalculus.html#588" class="InductiveConstructor"
+      >+</a
+      ><a name="805" class="Symbol"
+      >)</a
+      ><a name="806"
+      > </a
+      ><a name="807" href="LambekGrishinCalculus.html#795" class="InductiveConstructor Operator"
+      >&#8855;</a
+      ><a name="808"
+      > </a
+      ><a name="809" href="LambekGrishinCalculus.html#754" class="InductiveConstructor"
+      >el</a
+      ><a name="811"
+      > </a
+      ><a name="812" href="paper.html#518" class="InductiveConstructor"
+      >N</a
+      ><a name="813"
+      > </a
+      ><a name="814" href="LambekGrishinCalculus.html#588" class="InductiveConstructor"
+      >+</a
+      ><a name="815"
+      > </a
+      ><a name="816" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10215;</a
+      ><a name="817"
+      >
+</a
+      ><a name="818" href="paper.html#774" class="Function"
+      >everyone</a
+      ><a name="826"
+      >  </a
+      ><a name="828" class="Symbol"
+      >=</a
+      ><a name="829"
+      > </a
+      ><a name="830" class="Symbol"
+      >(</a
+      ><a name="831"
+      > </a
+      ><a name="832" class="Symbol"
+      >(&#955;{</a
+      ><a name="835"
+      > </a
+      ><a name="836" class="Symbol"
+      >(</a
+      ><a name="837" href="paper.html#837" class="Bound"
+      >A</a
+      ><a name="838"
+      > </a
+      ><a name="839" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="840"
+      > </a
+      ><a name="841" href="paper.html#841" class="Bound"
+      >B</a
+      ><a name="842" class="Symbol"
+      >)</a
+      ><a name="843"
+      > </a
+      ><a name="844" class="Symbol"
+      >&#8594;</a
+      ><a name="845"
+      > </a
+      ><a name="846" href="paper.html#336" class="Postulate"
+      >FORALL</a
+      ><a name="852"
+      > </a
+      ><a name="853" class="Symbol"
+      >(&#955;</a
+      ><a name="855"
+      > </a
+      ><a name="856" href="paper.html#856" class="Bound"
+      >x</a
+      ><a name="857"
+      > </a
+      ><a name="858" class="Symbol"
+      >&#8594;</a
+      ><a name="859"
+      > </a
+      ><a name="860" href="paper.html#841" class="Bound"
+      >B</a
+      ><a name="861"
+      > </a
+      ><a name="862" href="paper.html#856" class="Bound"
+      >x</a
+      ><a name="863"
+      > </a
+      ><a name="864" href="paper.html#261" class="Function Operator"
+      >&#8835;</a
+      ><a name="865"
+      > </a
+      ><a name="866" href="paper.html#837" class="Bound"
+      >A</a
+      ><a name="867"
+      > </a
+      ><a name="868" href="paper.html#856" class="Bound"
+      >x</a
+      ><a name="869" class="Symbol"
+      >)</a
+      ><a name="870"
+      > </a
+      ><a name="871" class="Symbol"
+      >})</a
+      ><a name="873"
+      > </a
+      ><a name="874" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="875"
+      > </a
+      ><a name="876" href="paper.html#408" class="Postulate"
+      >PERSON</a
+      ><a name="882"
+      > </a
+      ><a name="883" class="Symbol"
+      >)</a
+      ><a name="884"
+      >
+</a
+      ><a name="885" href="paper.html#885" class="Function"
+      >finds</a
+      ><a name="890"
+      >     </a
+      ><a name="895" class="Symbol"
+      >:</a
+      ><a name="896"
+      > </a
+      ><a name="897" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10214;</a
+      ><a name="898"
+      > </a
+      ><a name="899" class="Symbol"
+      >(</a
+      ><a name="900" href="LambekGrishinCalculus.html#754" class="InductiveConstructor"
+      >el</a
+      ><a name="902"
+      > </a
+      ><a name="903" href="paper.html#520" class="InductiveConstructor"
+      >NP</a
+      ><a name="905"
+      > </a
+      ><a name="906" href="LambekGrishinCalculus.html#588" class="InductiveConstructor"
+      >+</a
+      ><a name="907"
+      > </a
+      ><a name="908" href="LambekGrishinCalculus.html#823" class="InductiveConstructor Operator"
+      >&#8658;</a
+      ><a name="909"
+      > </a
+      ><a name="910" href="LambekGrishinCalculus.html#754" class="InductiveConstructor"
+      >el</a
+      ><a name="912"
+      > </a
+      ><a name="913" href="paper.html#516" class="InductiveConstructor"
+      >S</a
+      ><a name="914"
+      > </a
+      ><a name="915" href="LambekGrishinCalculus.html#603" class="InductiveConstructor"
+      >-</a
+      ><a name="916" class="Symbol"
+      >)</a
+      ><a name="917"
+      > </a
+      ><a name="918" href="LambekGrishinCalculus.html#851" class="InductiveConstructor Operator"
+      >&#8656;</a
+      ><a name="919"
+      > </a
+      ><a name="920" href="LambekGrishinCalculus.html#754" class="InductiveConstructor"
+      >el</a
+      ><a name="922"
+      > </a
+      ><a name="923" href="paper.html#520" class="InductiveConstructor"
+      >NP</a
+      ><a name="925"
+      > </a
+      ><a name="926" href="LambekGrishinCalculus.html#588" class="InductiveConstructor"
+      >+</a
+      ><a name="927"
+      > </a
+      ><a name="928" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10215;</a
+      ><a name="929"
+      >
+</a
+      ><a name="930" href="paper.html#885" class="Function"
+      >finds</a
+      ><a name="935"
+      >     </a
+      ><a name="940" class="Symbol"
+      >=</a
+      ><a name="941"
+      > </a
+      ><a name="942" class="Symbol"
+      >&#955;{</a
+      ><a name="944"
+      > </a
+      ><a name="945" class="Symbol"
+      >((</a
+      ><a name="947" href="paper.html#947" class="Bound"
+      >x</a
+      ><a name="948"
+      > </a
+      ><a name="949" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="950"
+      > </a
+      ><a name="951" href="paper.html#951" class="Bound"
+      >k</a
+      ><a name="952" class="Symbol"
+      >)</a
+      ><a name="953"
+      > </a
+      ><a name="954" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="955"
+      > </a
+      ><a name="956" href="paper.html#956" class="Bound"
+      >y</a
+      ><a name="957" class="Symbol"
+      >)</a
+      ><a name="958"
+      > </a
+      ><a name="959" class="Symbol"
+      >&#8594;</a
+      ><a name="960"
+      > </a
+      ><a name="961" href="paper.html#951" class="Bound"
+      >k</a
+      ><a name="962"
+      > </a
+      ><a name="963" class="Symbol"
+      >(</a
+      ><a name="964" href="paper.html#435" class="Postulate"
+      >FIND</a
+      ><a name="968"
+      > </a
+      ><a name="969" href="paper.html#956" class="Bound"
+      >y</a
+      ><a name="970"
+      > </a
+      ><a name="971" href="paper.html#947" class="Bound"
+      >x</a
+      ><a name="972" class="Symbol"
+      >)</a
+      ><a name="973"
+      > </a
+      ><a name="974" class="Symbol"
+      >}</a
+      ><a name="975"
+      >
+</a
+      ><a name="976" href="paper.html#976" class="Function"
+      >some</a
+      ><a name="980"
+      >      </a
+      ><a name="986" class="Symbol"
+      >:</a
+      ><a name="987"
+      > </a
+      ><a name="988" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10214;</a
+      ><a name="989"
+      > </a
+      ><a name="990" href="LambekGrishinCalculus.html#754" class="InductiveConstructor"
+      >el</a
+      ><a name="992"
+      > </a
+      ><a name="993" href="paper.html#520" class="InductiveConstructor"
+      >NP</a
+      ><a name="995"
+      > </a
+      ><a name="996" href="LambekGrishinCalculus.html#588" class="InductiveConstructor"
+      >+</a
+      ><a name="997"
+      > </a
+      ><a name="998" href="LambekGrishinCalculus.html#851" class="InductiveConstructor Operator"
+      >&#8656;</a
+      ><a name="999"
+      > </a
+      ><a name="1000" href="LambekGrishinCalculus.html#754" class="InductiveConstructor"
+      >el</a
+      ><a name="1002"
+      > </a
+      ><a name="1003" href="paper.html#518" class="InductiveConstructor"
+      >N</a
+      ><a name="1004"
+      > </a
+      ><a name="1005" href="LambekGrishinCalculus.html#588" class="InductiveConstructor"
+      >+</a
+      ><a name="1006"
+      > </a
+      ><a name="1007" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10215;</a
+      ><a name="1008"
+      >
+</a
+      ><a name="1009" href="paper.html#976" class="Function"
+      >some</a
+      ><a name="1013"
+      >      </a
+      ><a name="1019" class="Symbol"
+      >=</a
+      ><a name="1020"
+      > </a
+      ><a name="1021" class="Symbol"
+      >&#955;{</a
+      ><a name="1023"
+      > </a
+      ><a name="1024" class="Symbol"
+      >(</a
+      ><a name="1025" href="paper.html#1025" class="Bound"
+      >A</a
+      ><a name="1026"
+      > </a
+      ><a name="1027" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1028"
+      > </a
+      ><a name="1029" href="paper.html#1029" class="Bound"
+      >B</a
+      ><a name="1030" class="Symbol"
+      >)</a
+      ><a name="1031"
+      > </a
+      ><a name="1032" class="Symbol"
+      >&#8594;</a
+      ><a name="1033"
+      > </a
+      ><a name="1034" href="paper.html#372" class="Postulate"
+      >EXISTS</a
+      ><a name="1040"
+      > </a
+      ><a name="1041" class="Symbol"
+      >(&#955;</a
+      ><a name="1043"
+      > </a
+      ><a name="1044" href="paper.html#1044" class="Bound"
+      >x</a
+      ><a name="1045"
+      > </a
+      ><a name="1046" class="Symbol"
+      >&#8594;</a
+      ><a name="1047"
+      > </a
+      ><a name="1048" href="paper.html#1025" class="Bound"
+      >A</a
+      ><a name="1049"
+      > </a
+      ><a name="1050" href="paper.html#1044" class="Bound"
+      >x</a
+      ><a name="1051"
+      > </a
+      ><a name="1052" href="Data.Bool.html#1155" class="Function Operator"
+      >&#8743;</a
+      ><a name="1053"
+      > </a
+      ><a name="1054" href="paper.html#1029" class="Bound"
+      >B</a
+      ><a name="1055"
+      > </a
+      ><a name="1056" href="paper.html#1044" class="Bound"
+      >x</a
+      ><a name="1057" class="Symbol"
+      >)</a
+      ><a name="1058"
+      > </a
+      ><a name="1059" class="Symbol"
+      >}</a
+      ><a name="1060"
+      >
+</a
+      ><a name="1061" href="paper.html#1061" class="Function"
+      >unicorn</a
+      ><a name="1068"
+      >   </a
+      ><a name="1071" class="Symbol"
+      >:</a
+      ><a name="1072"
+      > </a
+      ><a name="1073" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10214;</a
+      ><a name="1074"
+      > </a
+      ><a name="1075" href="LambekGrishinCalculus.html#754" class="InductiveConstructor"
+      >el</a
+      ><a name="1077"
+      > </a
+      ><a name="1078" href="paper.html#518" class="InductiveConstructor"
+      >N</a
+      ><a name="1079"
+      > </a
+      ><a name="1080" href="LambekGrishinCalculus.html#588" class="InductiveConstructor"
+      >+</a
+      ><a name="1081"
+      > </a
+      ><a name="1082" href="IntuitionisticLogic.html#3135" class="Function Operator"
+      >&#10215;</a
+      ><a name="1083"
+      >
+</a
+      ><a name="1084" href="paper.html#1061" class="Function"
+      >unicorn</a
+      ><a name="1091"
+      >   </a
+      ><a name="1094" class="Symbol"
+      >=</a
+      ><a name="1095"
+      > </a
+      ><a name="1096" href="paper.html#471" class="Postulate"
+      >UNICORN</a
+      ><a name="1103"
+      >
+
+</a
+      ><a name="1105" href="paper.html#1105" class="Function"
+      >sent</a
+      ><a name="1109"
+      > </a
+      ><a name="1110" class="Symbol"
+      >:</a
+      ><a name="1111"
+      >
+  </a
+      ><a name="1114" href="LambekGrishinCalculus.html#2010" class="InductiveConstructor Operator"
+      >&#183;</a
+      ><a name="1115"
+      > </a
+      ><a name="1116" class="Symbol"
+      >(</a
+      ><a name="1117" href="LambekGrishinCalculus.html#754" class="InductiveConstructor"
+      >el</a
+      ><a name="1119"
+      > </a
+      ><a name="1120" href="paper.html#520" class="InductiveConstructor"
+      >NP</a
+      ><a name="1122"
+      > </a
+      ><a name="1123" href="LambekGrishinCalculus.html#588" class="InductiveConstructor"
+      >+</a
+      ><a name="1124"
+      > </a
+      ><a name="1125" href="LambekGrishinCalculus.html#851" class="InductiveConstructor Operator"
+      >&#8656;</a
+      ><a name="1126"
+      > </a
+      ><a name="1127" href="LambekGrishinCalculus.html#754" class="InductiveConstructor"
+      >el</a
+      ><a name="1129"
+      > </a
+      ><a name="1130" href="paper.html#518" class="InductiveConstructor"
+      >N</a
+      ><a name="1131"
+      > </a
+      ><a name="1132" href="LambekGrishinCalculus.html#588" class="InductiveConstructor"
+      >+</a
+      ><a name="1133" class="Symbol"
+      >)</a
+      ><a name="1134"
+      > </a
+      ><a name="1135" href="LambekGrishinCalculus.html#795" class="InductiveConstructor Operator"
+      >&#8855;</a
+      ><a name="1136"
+      > </a
+      ><a name="1137" href="LambekGrishinCalculus.html#754" class="InductiveConstructor"
+      >el</a
+      ><a name="1139"
+      > </a
+      ><a name="1140" href="paper.html#518" class="InductiveConstructor"
+      >N</a
+      ><a name="1141"
+      > </a
+      ><a name="1142" href="LambekGrishinCalculus.html#588" class="InductiveConstructor"
+      >+</a
+      ><a name="1143"
+      >         </a
+      ><a name="1152" class="Comment"
+      >-- everyone</a
+      ><a name="1163"
+      >
+  </a
+      ><a name="1166" href="LambekGrishinCalculus.html#2010" class="InductiveConstructor Operator"
+      >&#183;</a
+      ><a name="1167"
+      > </a
+      ><a name="1168" href="LambekGrishinCalculus.html#2036" class="InductiveConstructor Operator"
+      >&#8855;</a
+      ><a name="1169"
+      > </a
+      ><a name="1170" class="Symbol"
+      >(</a
+      ><a name="1171" href="LambekGrishinCalculus.html#2010" class="InductiveConstructor Operator"
+      >&#183;</a
+      ><a name="1172"
+      > </a
+      ><a name="1173" class="Symbol"
+      >(</a
+      ><a name="1174" href="LambekGrishinCalculus.html#754" class="InductiveConstructor"
+      >el</a
+      ><a name="1176"
+      > </a
+      ><a name="1177" href="paper.html#520" class="InductiveConstructor"
+      >NP</a
+      ><a name="1179"
+      > </a
+      ><a name="1180" href="LambekGrishinCalculus.html#588" class="InductiveConstructor"
+      >+</a
+      ><a name="1181"
+      > </a
+      ><a name="1182" href="LambekGrishinCalculus.html#823" class="InductiveConstructor Operator"
+      >&#8658;</a
+      ><a name="1183"
+      > </a
+      ><a name="1184" href="LambekGrishinCalculus.html#754" class="InductiveConstructor"
+      >el</a
+      ><a name="1186"
+      > </a
+      ><a name="1187" href="paper.html#516" class="InductiveConstructor"
+      >S</a
+      ><a name="1188"
+      > </a
+      ><a name="1189" href="LambekGrishinCalculus.html#603" class="InductiveConstructor"
+      >-</a
+      ><a name="1190" class="Symbol"
+      >)</a
+      ><a name="1191"
+      > </a
+      ><a name="1192" href="LambekGrishinCalculus.html#851" class="InductiveConstructor Operator"
+      >&#8656;</a
+      ><a name="1193"
+      > </a
+      ><a name="1194" href="LambekGrishinCalculus.html#754" class="InductiveConstructor"
+      >el</a
+      ><a name="1196"
+      > </a
+      ><a name="1197" href="paper.html#520" class="InductiveConstructor"
+      >NP</a
+      ><a name="1199"
+      > </a
+      ><a name="1200" href="LambekGrishinCalculus.html#588" class="InductiveConstructor"
+      >+</a
+      ><a name="1201"
+      >  </a
+      ><a name="1203" class="Comment"
+      >-- finds</a
+      ><a name="1211"
+      >
+  </a
+      ><a name="1214" href="LambekGrishinCalculus.html#2010" class="InductiveConstructor Operator"
+      >&#183;</a
+      ><a name="1215"
+      > </a
+      ><a name="1216" href="LambekGrishinCalculus.html#2036" class="InductiveConstructor Operator"
+      >&#8855;</a
+      ><a name="1217"
+      > </a
+      ><a name="1218" class="Symbol"
+      >(</a
+      ><a name="1219" href="LambekGrishinCalculus.html#2010" class="InductiveConstructor Operator"
+      >&#183;</a
+      ><a name="1220"
+      > </a
+      ><a name="1221" href="LambekGrishinCalculus.html#754" class="InductiveConstructor"
+      >el</a
+      ><a name="1223"
+      > </a
+      ><a name="1224" href="paper.html#520" class="InductiveConstructor"
+      >NP</a
+      ><a name="1226"
+      > </a
+      ><a name="1227" href="LambekGrishinCalculus.html#588" class="InductiveConstructor"
+      >+</a
+      ><a name="1228"
+      > </a
+      ><a name="1229" href="LambekGrishinCalculus.html#851" class="InductiveConstructor Operator"
+      >&#8656;</a
+      ><a name="1230"
+      > </a
+      ><a name="1231" href="LambekGrishinCalculus.html#754" class="InductiveConstructor"
+      >el</a
+      ><a name="1233"
+      > </a
+      ><a name="1234" href="paper.html#518" class="InductiveConstructor"
+      >N</a
+      ><a name="1235"
+      > </a
+      ><a name="1236" href="LambekGrishinCalculus.html#588" class="InductiveConstructor"
+      >+</a
+      ><a name="1237"
+      >               </a
+      ><a name="1252" class="Comment"
+      >-- some</a
+      ><a name="1259"
+      >
+  </a
+      ><a name="1262" href="LambekGrishinCalculus.html#2010" class="InductiveConstructor Operator"
+      >&#183;</a
+      ><a name="1263"
+      > </a
+      ><a name="1264" href="LambekGrishinCalculus.html#2036" class="InductiveConstructor Operator"
+      >&#8855;</a
+      ><a name="1265"
+      > </a
+      ><a name="1266" href="LambekGrishinCalculus.html#2010" class="InductiveConstructor Operator"
+      >&#183;</a
+      ><a name="1267"
+      > </a
+      ><a name="1268" href="LambekGrishinCalculus.html#754" class="InductiveConstructor"
+      >el</a
+      ><a name="1270"
+      > </a
+      ><a name="1271" href="paper.html#518" class="InductiveConstructor"
+      >N</a
+      ><a name="1272"
+      > </a
+      ><a name="1273" href="LambekGrishinCalculus.html#588" class="InductiveConstructor"
+      >+</a
+      ><a name="1274"
+      > </a
+      ><a name="1275" href="LambekGrishinCalculus.html#2010" class="InductiveConstructor Operator"
+      >&#183;</a
+      ><a name="1276"
+      >                         </a
+      ><a name="1301" class="Comment"
+      >-- unicorn</a
+      ><a name="1311"
+      >
+  </a
+      ><a name="1314" class="Symbol"
+      >))</a
+      ><a name="1316"
+      > </a
+      ><a name="1317" href="LambekGrishinCalculus.html#2335" class="Datatype Operator"
+      >&#8866;[</a
+      ><a name="1319"
+      > </a
+      ><a name="1320" href="LambekGrishinCalculus.html#754" class="InductiveConstructor"
+      >el</a
+      ><a name="1322"
+      > </a
+      ><a name="1323" href="paper.html#516" class="InductiveConstructor"
+      >S</a
+      ><a name="1324"
+      > </a
+      ><a name="1325" href="LambekGrishinCalculus.html#603" class="InductiveConstructor"
+      >-</a
+      ><a name="1326"
+      > </a
+      ><a name="1327" href="LambekGrishinCalculus.html#2335" class="Datatype Operator"
+      >]</a
+      ><a name="1328"
+      >
+</a
+      ><a name="1329" href="paper.html#1105" class="Function"
+      >sent</a
+      ><a name="1333"
+      > </a
+      ><a name="1334" class="Symbol"
+      >=</a
+      ><a name="1335"
+      >
+  </a
+      ><a name="1338" href="LambekGrishinCalculus.html#2408" class="InductiveConstructor"
+      >&#956;</a
+      ><a name="1339"
+      > </a
+      ><a name="1340" class="Symbol"
+      >(</a
+      ><a name="1341" href="LambekGrishinCalculus.html#3622" class="InductiveConstructor"
+      >res&#8323;</a
+      ><a name="1345"
+      > </a
+      ><a name="1346" class="Symbol"
+      >(</a
+      ><a name="1347" href="LambekGrishinCalculus.html#3178" class="InductiveConstructor"
+      >&#8855;L</a
+      ><a name="1349"
+      > </a
+      ><a name="1350" class="Symbol"
+      >(</a
+      ><a name="1351" href="LambekGrishinCalculus.html#3622" class="InductiveConstructor"
+      >res&#8323;</a
+      ><a name="1355"
+      > </a
+      ><a name="1356" class="Symbol"
+      >(</a
+      ><a name="1357" href="LambekGrishinCalculus.html#3114" class="InductiveConstructor"
+      >&#956;&#771;*</a
+      ><a name="1360"
+      > </a
+      ><a name="1361" class="Symbol"
+      >(</a
+      ><a name="1362" href="LambekGrishinCalculus.html#2941" class="InductiveConstructor"
+      >&#8656;L</a
+      ><a name="1364"
+      > </a
+      ><a name="1365" class="Symbol"
+      >(</a
+      ><a name="1366"
+      >
+    </a
+      ><a name="1371" href="LambekGrishinCalculus.html#2745" class="InductiveConstructor"
+      >&#956;&#771;</a
+      ><a name="1373"
+      > </a
+      ><a name="1374" class="Symbol"
+      >(</a
+      ><a name="1375" href="LambekGrishinCalculus.html#3669" class="InductiveConstructor"
+      >res&#8324;</a
+      ><a name="1379"
+      > </a
+      ><a name="1380" class="Symbol"
+      >(</a
+      ><a name="1381" href="LambekGrishinCalculus.html#3528" class="InductiveConstructor"
+      >res&#8321;</a
+      ><a name="1385"
+      > </a
+      ><a name="1386" class="Symbol"
+      >(</a
+      ><a name="1387" href="LambekGrishinCalculus.html#3528" class="InductiveConstructor"
+      >res&#8321;</a
+      ><a name="1391"
+      > </a
+      ><a name="1392" class="Symbol"
+      >(</a
+      ><a name="1393" href="LambekGrishinCalculus.html#3622" class="InductiveConstructor"
+      >res&#8323;</a
+      ><a name="1397"
+      > </a
+      ><a name="1398" class="Symbol"
+      >(</a
+      ><a name="1399" href="LambekGrishinCalculus.html#3114" class="InductiveConstructor"
+      >&#956;&#771;*</a
+      ><a name="1402"
+      > </a
+      ><a name="1403" class="Symbol"
+      >(</a
+      ><a name="1404" href="LambekGrishinCalculus.html#2941" class="InductiveConstructor"
+      >&#8656;L</a
+      ><a name="1406"
+      > </a
+      ><a name="1407" class="Symbol"
+      >(</a
+      ><a name="1408"
+      >
+      </a
+      ><a name="1415" href="LambekGrishinCalculus.html#2745" class="InductiveConstructor"
+      >&#956;&#771;</a
+      ><a name="1417"
+      > </a
+      ><a name="1418" class="Symbol"
+      >(</a
+      ><a name="1419" href="LambekGrishinCalculus.html#3575" class="InductiveConstructor"
+      >res&#8322;</a
+      ><a name="1423"
+      > </a
+      ><a name="1424" class="Symbol"
+      >(</a
+      ><a name="1425" href="LambekGrishinCalculus.html#3622" class="InductiveConstructor"
+      >res&#8323;</a
+      ><a name="1429"
+      > </a
+      ><a name="1430" class="Symbol"
+      >(</a
+      ><a name="1431" href="LambekGrishinCalculus.html#3114" class="InductiveConstructor"
+      >&#956;&#771;*</a
+      ><a name="1434"
+      > </a
+      ><a name="1435" class="Symbol"
+      >(</a
+      ><a name="1436" href="LambekGrishinCalculus.html#2941" class="InductiveConstructor"
+      >&#8656;L</a
+      ><a name="1438"
+      > </a
+      ><a name="1439" class="Symbol"
+      >(</a
+      ><a name="1440" href="LambekGrishinCalculus.html#2876" class="InductiveConstructor"
+      >&#8658;L</a
+      ><a name="1442"
+      > </a
+      ><a name="1443" href="LambekGrishinCalculus.html#2374" class="InductiveConstructor"
+      >var</a
+      ><a name="1446"
+      > </a
+      ><a name="1447" href="LambekGrishinCalculus.html#2711" class="InductiveConstructor"
+      >covar</a
+      ><a name="1452" class="Symbol"
+      >)</a
+      ><a name="1453"
+      > </a
+      ><a name="1454" href="LambekGrishinCalculus.html#2374" class="InductiveConstructor"
+      >var</a
+      ><a name="1457" class="Symbol"
+      >)))))</a
+      ><a name="1462"
+      > </a
+      ><a name="1463" href="LambekGrishinCalculus.html#2374" class="InductiveConstructor"
+      >var</a
+      ><a name="1466" class="Symbol"
+      >)))))))</a
+      ><a name="1473"
+      > </a
+      ><a name="1474" href="LambekGrishinCalculus.html#2374" class="InductiveConstructor"
+      >var</a
+      ><a name="1477" class="Symbol"
+      >)))))</a
+      ><a name="1482"
+      >
+
+</a
+      ></pre
+    ></body
+  ></html
+>
