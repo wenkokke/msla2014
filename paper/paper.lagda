@@ -199,9 +199,6 @@ open import Data.Nat using (ℕ)
 open import Data.Fin using (Fin; suc; zero)
 open import Data.List using (List; _++_) renaming (_∷_ to _,_; [] to ∅)
 open import Data.Product using (_×_; _,_)
-
-_⊃_ : Bool → Bool → Bool
-x ⊃ y = (not x) ∨ y
 \end{code}
 }
 
@@ -222,6 +219,7 @@ trivially define this ourselves.
 \begin{code}
 postulate
   Entity   : Set
+  _⊃_      : Bool → Bool → Bool
   FORALL   : (Entity → Bool) → Bool
   EXISTS   : (Entity → Bool) → Bool
   PERSON   : Entity → Bool
@@ -245,8 +243,9 @@ data U : Set where S N NP : U
 \hidden{
 \begin{code}
 import IntuitionisticLogic U ⟦_⟧ᵁ as IL
-open import LinearLogic U S ⟦_⟧ᵁ as LP using ()
+import LinearLogic U S ⟦_⟧ᵁ as LP
 open import LambekGrishinCalculus U S ⟦_⟧ᵁ as LG
+open IL.Explicit using (Ctxt; _,_; ∅)
 open IL.Explicit.Reify TypeReify
 \end{code}
 }
@@ -289,7 +288,7 @@ sentence, leaving our meaning postulates unevaluated as usual.
 
 \begin{spec}
   [ sent ] (everyone , finds , some , unicorn , ∅) ↝β
-    λ k → FORALL (λ x → PERSON x ⊃ (EXISTS (λ y → k (FINDS y x) ∧ UNICORN y)))
+    λ k → FORALL (λ x₁ → PERSON x₁ ⊃ EXISTS (λ x₂ → k (FIND x₂ x₁) ∧ UNICORN x₂))
 \end{spec}
 
 
