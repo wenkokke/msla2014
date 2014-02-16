@@ -1,5 +1,6 @@
 #encoding: utf-8
 require 'rake/clean'
+require 'tmpdir'
 
 LitDir = 'paper'
 LitFile = /#{LitDir}\/.*\.lagda/
@@ -8,14 +9,86 @@ LitFiles = FileList[
   'paper/LinearLogic.lagda'           ,
   'paper/LambekGrishinCalculus.lagda' ]
 
-CodeDir = 'code'
-CodeFile = /#{CodeDir}\/.*\.agda/
+CodeDir   = 'code'
+CodeFile  = /#{CodeDir}\/.*\.agda/
 CodeFiles = LitFiles.pathmap("#{CodeDir}/%n.agda")
+
+HtmlDir   = 'html'
+HtmlFile  = /#{HtmlDir}\/.*\.html/
+HtmlFiles = CodeFiles.pathmap("#{HtmlDir}/%n.html")
 
 PaperFiles = FileList[
   'paper/paper.tex'    ,
   'paper/paper.bib'    ,
   'paper/preamble.tex' ]
+
+### HTML ###
+
+task :publish => HtmlFiles do
+  f_html = File.absolute_path( HtmlDir )
+
+  Dir.mktmpdir do |tmp|
+    Dir.chdir(tmp) do
+
+      # get clean repository
+      cmd = "git clone git@github.com:pepijnkokke/SubstructuralLogicsInAgda.git pages"
+      puts cmd
+      system cmd
+      fail cmd unless $?.success?
+
+      # move into the repository
+      Dir.chdir('pages') do
+        cmd = "git checkout gh-pages"
+        puts cmd
+        system cmd
+        fail cmd unless $?.success?
+
+        cmd = "mv #{ f_html } ."
+        puts cmd
+        system cmd
+        fail cmd unless $?.success?
+
+        cmd = "git add html"
+        puts cmd
+        system cmd
+        fail cmd unless $?.success?
+
+        cmd = "git commit -m 'automatically generated gh-pages branch'"
+        puts cmd
+        system cmd
+        fail cmd unless $?.success?
+
+        cmd = "git push origin gh-pages"
+        puts cmd
+        system cmd
+        fail cmd unless $?.success?
+      end
+    end
+  end
+end
+
+desc "Publish the HTML documentation to GitHub pages"
+task :html => HtmlFiles
+
+def code2html(task_name)
+  task_name.sub("#{CodeDir}/","#{HtmlDir}/").sub('.agda','.html')
+end
+
+def html2code(task_name)
+  task_name.sub("#{HtmlDir}/","#{CodeDir}/").sub('.html','.agda')
+end
+
+desc "Extract HTML documentation from Agda files"
+rule HtmlFile => [ proc { |fn| html2code(fn) } ] do |t|
+
+  f_html = File.absolute_path(t.name)
+  f_agda = html2code(f_html)
+
+  cmd = "agda -i $AGDA_HOME -i code --html #{ f_agda } --html-dir=#{ HtmlDir }"
+  puts cmd
+  system cmd
+
+end
 
 ### Code ###
 
@@ -119,7 +192,7 @@ TempPats  = ['*.lhs','*.log','*.ptb','*.blg','*.bbl','*.aux','*.snm','*.toc',
 TempFiles = FileList.new(TempPats.map {|fn| File.join(LitDir,fn) })
 
 CLEAN.include(LitFiles.ext('.tex'),TempFiles)
-CLOBBER.include('paper/paper.pdf',CodeFiles)
+CLOBBER.include(HtmlDir,'paper/paper.pdf',CodeFiles)
 
 
 

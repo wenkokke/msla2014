@@ -1,0 +1,9 @@
+language : haskell
+install  :
+  - cabal install Agda
+  - apt-get install agda-stdlib
+  - apt-get install rake
+script   :
+  - rake paper
+  - rake code
+  - rake html

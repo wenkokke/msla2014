@@ -110,17 +110,17 @@ module Explicit where
   ... | Eˣ , Eʸ = ((A′ , Eˣ) , Eʸ)
 
   reify : {A : Type} {X : List Type} → X ⊢ A → (Ctxt ⟦ X ⟧ → ⟦ A ⟧)
-  reify var         (A′ , ∅)  = A′
-  reify (abs t)     E         = λ A′ → reify t (A′ , E)
+  reify var         (x , ∅)   = x
+  reify (abs t)     E         = λ x → reify t (x , E)
   reify (app s t)   E         with Ctxt-split E
   ... | Eˢ , Eᵗ               = (reify s Eˢ) (reify t Eᵗ)
   reify (pair s t)  E         with Ctxt-split E
   ... | Eˢ , Eᵗ               = (reify s Eˢ , reify t Eᵗ)
   reify (case s t)  E         with Ctxt-split E
-  ... | Eˢ , Eᵗ               = case reify s Eˢ of λ{ (A′ , B′) → reify t (A′ , B′ , Eᵗ)}
+  ... | Eˢ , Eᵗ               = case reify s Eˢ of λ{ (x , y) → reify t (x , y , Eᵗ)}
   reify (weak {X} s)    E         with Ctxt-split {X} E
   ... | Eˢ , Eᵗ               = reify s Eˢ
-  reify (cont t)    (A′ , E)  = reify t (A′ , A′ , E)
+  reify (cont t)    (x , E)   = reify t (x , x , E)
   reify (exch {X} {Y} {Z} {W} t)    E         = reify t (Ctxt-exch {X} {Y} {Z} {W} E)
 
   [_] : {A : Type} {X : List Type} → X ⊢ A → (Ctxt ⟦ X ⟧ → ⟦ A ⟧)
