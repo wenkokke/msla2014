@@ -1,8 +1,8 @@
 language : haskell
 install  :
-  - apt-get install agda
-  - apt-get install agda-stdlib
-  - apt-get install rake
+  - sudo apt-get install agda
+  - sudo apt-get install agda-stdlib
+  - sudo apt-get install rake
 script   :
   - rake paper
   - rake code
