@@ -1,6 +1,8 @@
 language : haskell
 install  :
-  - sudo apt-get install texlive texlive-math-extra texlive-latex-extra
+  - git clone https://github.com/scottkosty/install-tl-ubuntu
+  - sudo ./install-tl-ubuntu/install-tl-ubuntu
+  - sudo tlmgr install stmaryrd mdframed
   - sudo apt-get install agda agda-stdlib
   - sudo apt-get install rake
   - sudo cabal install lhs2TeX
