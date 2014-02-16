@@ -1,5 +1,6 @@
 language : haskell
 install  :
+  - sudo apt-get install texlive
   - sudo cabal install lhs2TeX
   - sudo apt-get install agda
   - sudo apt-get install agda-stdlib
