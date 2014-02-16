@@ -1,8 +1,10 @@
 language : haskell
 install  :
+  - sudo cabal install lhs2TeX
   - sudo apt-get install agda
   - sudo apt-get install agda-stdlib
   - sudo apt-get install rake
+  - export AGDA_HOME=/usr/local/share/agda-stdlib/src
 script   :
   - rake paper
   - rake code
