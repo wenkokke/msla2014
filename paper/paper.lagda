@@ -96,7 +96,7 @@ First of all, creating a formal model of a logical system forces you
 to make every detail of the system explicit. Not only may this help you
 by revealing small errors that would otherwise have gone unnoticed,
 but it also forces you to scrutinise the precise formulation of your
-axiomas.\footnote{
+axioms.\footnote{
   An example: a common formulation of the exchange principle is
   $\Gamma , B , A , \Delta \vdash C \to \Gamma A, B , \Delta \vdash
   C$. However, using this principle to define, for instance, the
