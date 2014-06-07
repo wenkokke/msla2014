@@ -276,8 +276,7 @@ bottom in the translation of our types.
 
 \hidden{
 \begin{code}
-private
-  open Reify {{...}} using (⟦_⟧)
+open Reify {{...}} using (⟦_⟧)
 \end{code}
 }
 
@@ -368,8 +367,3 @@ And again, we can reify our (now linear) |swap| function back into Agda.
 swap′ : {A B : Type} → ⟦ ⟦ A ⟧ ⟧ x' ⟦ ⟦ B ⟧ ⟧ → ⟦ ⟦ B ⟧ ⟧ x' ⟦ ⟦ A ⟧ ⟧
 swap′ {A} {B} = [ swap {A} {B} ] ∅
 \end{code}
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:

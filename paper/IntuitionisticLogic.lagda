@@ -1,4 +1,4 @@
-%include paper.fmt
+y%include paper.fmt
 %include IntuitionisticLogic.fmt
 
 \hidden{
@@ -495,8 +495,7 @@ into Agda.
 
 \hidden{
 \begin{code}
-  private
-    open Reify {{...}} using (⟦_⟧)
+  open Reify {{...}} using (⟦_⟧)
 \end{code}
 
 \begin{code}
@@ -566,8 +565,3 @@ insert the empty context, as our example is a closed term.
   swap′ : ∀ {A B} → ⟦ A ⟧ × ⟦ B ⟧ → ⟦ B ⟧ × ⟦ A ⟧
   swap′ {A} {B} = [ swap {∅} {A} {B} ] ∅
 \end{code}
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:

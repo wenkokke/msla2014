@@ -359,8 +359,3 @@ taken from formal linguistics.
 \bibliography{paper}
 
 \end{document}
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:
