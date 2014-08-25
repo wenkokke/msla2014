@@ -2,8 +2,8 @@
 
 #### Abstract
 
-> In this paper, we will examine models of substructural logics in
-> Agda. The reason for this is that most existing models formalise
+> In this paper, we will examine axiomatisations of substructural logics
+> in Agda. The reason for this is that most existing models in Agda formalise
 > intuitionistic logic and are entirely unsuitable to modelling
 > substructural logics. In recent years, however, substructural logics
 > have seen a surge in usage.
