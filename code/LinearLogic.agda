@@ -164,21 +164,22 @@ open IL.Explicit
   hiding (swap; swap′)
   renaming (_⊢_ to _⊢IL_; ReifyType to ReifyTypeIL; ReifyCtxt to ReiftCtxtIL; [_] to reifyIL)
 
-ReifyType : Reify Type TypeIL
-ReifyType = record { ⟦_⟧ = ⟦_⟧ }
-  where
+instance
+  ReifyType : Reify Type TypeIL
+  ReifyType = record { ⟦_⟧ = ⟦_⟧ }
+    where
 
-    ⟦_⟧ : Type → TypeIL
-    ⟦ ⊥      ⟧ = el R
-    ⟦ el A   ⟧ = el A
-    ⟦ A ⊗ B  ⟧ = ⟦ A ⟧ × ⟦ B ⟧
-    ⟦ A ⊸ B  ⟧ = ⟦ A ⟧ ⇒ ⟦ B ⟧
+      ⟦_⟧ : Type → TypeIL
+      ⟦ ⊥      ⟧ = el R
+      ⟦ el A   ⟧ = el A
+      ⟦ A ⊗ B  ⟧ = ⟦ A ⟧ × ⟦ B ⟧
+      ⟦ A ⊸ B  ⟧ = ⟦ A ⟧ ⇒ ⟦ B ⟧
 
-private
-  open Reify {{...}} using (⟦_⟧)
+open Reify {{...}} using (⟦_⟧)
 
-ReifyCtxt : Reify (List Type) (List TypeIL)
-ReifyCtxt = record { ⟦_⟧ = map ⟦_⟧ }
+instance
+  ReifyCtxt : Reify (List Type) (List TypeIL)
+  ReifyCtxt = record { ⟦_⟧ = map ⟦_⟧ }
 
 ⟦X++Y⟧=⟦X⟧++⟦Y⟧ : (X Y : List Type) → ⟦ X ++ Y ⟧ ≡ ⟦ X ⟧ ++ ⟦ Y ⟧
 ⟦X++Y⟧=⟦X⟧++⟦Y⟧ X Y = map-++-commute ⟦_⟧ X Y

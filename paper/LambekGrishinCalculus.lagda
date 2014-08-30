@@ -389,17 +389,21 @@ mutual
 
 open Reify {{...}} using (⟦_⟧)
 
-Struct+Reify : Reify Struct+ (List TypeLP)
-Struct+Reify = record { ⟦_⟧ = str+ }
+instance
+  Struct+Reify : Reify Struct+ (List TypeLP)
+  Struct+Reify = record { ⟦_⟧ = str+ }
 
-Struct-Reify : Reify Struct- (List TypeLP)
-Struct-Reify = record { ⟦_⟧ = str- }
+instance
+  Struct-Reify : Reify Struct- (List TypeLP)
+  Struct-Reify = record { ⟦_⟧ = str- }
 
-TypeReify : Reify Type Set
-TypeReify = record { ⟦_⟧ = λ A → ⟦ ⟦ ⟦ A ⟧+ ⟧ ⟧ }
+instance
+  TypeReify : Reify Type Set
+  TypeReify = record { ⟦_⟧ = λ A → ⟦ ⟦ ⟦ A ⟧+ ⟧ ⟧ }
 
-StructReify : Reify Struct+ (List Set)
-StructReify = record { ⟦_⟧ = λ X → ⟦ ⟦ ⟦ X ⟧ ⟧ ⟧ }
+instance
+  StructReify : Reify Struct+ (List Set)
+  StructReify = record { ⟦_⟧ = λ X → ⟦ ⟦ ⟦ X ⟧ ⟧ ⟧ }
 \end{code}
 }
 

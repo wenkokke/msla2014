@@ -441,17 +441,18 @@ With this function, the full translation is trivial.
 
 \hidden{
 \begin{code}
-  ReifyType : Reify Type Set
-  ReifyType = record { ⟦_⟧ = ⟦_⟧ }
-    where
+  instance
+    ReifyType : Reify Type Set
+    ReifyType = record { ⟦_⟧ = ⟦_⟧ }
+      where
 \end{code}
 }
 
 \begin{code}
-    ⟦_⟧ : Type → Set
-    ⟦ el A    ⟧ = ⟦ A ⟧ᵁ
-    ⟦ A ⊗ B   ⟧ = ⟦ A ⟧ × ⟦ B ⟧
-    ⟦ A ⇒ B  ⟧ = ⟦ A ⟧ → ⟦ B ⟧
+      ⟦_⟧ : Type → Set
+      ⟦ el A    ⟧ = ⟦ A ⟧ᵁ
+      ⟦ A ⊗ B   ⟧ = ⟦ A ⟧ × ⟦ B ⟧
+      ⟦ A ⇒ B  ⟧ = ⟦ A ⟧ → ⟦ B ⟧
 \end{code}
 
 \noindent
@@ -499,8 +500,9 @@ into Agda.
 \end{code}
 
 \begin{code}
-  ReifyCtxt : Reify (List Type) (List Set)
-  ReifyCtxt = record { ⟦_⟧ = List.map ⟦_⟧ }
+  instance
+    ReifyCtxt : Reify (List Type) (List Set)
+    ReifyCtxt = record { ⟦_⟧ = List.map ⟦_⟧ }
 \end{code}
 }
 

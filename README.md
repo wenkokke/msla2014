@@ -25,8 +25,8 @@ The `code` sub-directory contains the extracted Agda source code.
 
 Some notes:
 
-  - the code was written for use with [version 0.8 of the Agda standard library
-    ](https://github.com/agda/agda-stdlib/releases/tag/v0.8);
+  - the code was written for use with version 2.4.2 of Agda and
+    [version 0.8.1 of the Agda standard library](https://github.com/agda/agda-stdlib/releases/tag/v0.8);
 
   - the code is released under an [MIT license](code/LICENSE);
 

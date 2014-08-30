@@ -255,9 +255,10 @@ open IL.Explicit
 
 \hidden{
 \begin{code}
-ReifyType : Reify Type TypeIL
-ReifyType = record { ⟦_⟧ = ⟦_⟧ }
-  where
+instance
+  ReifyType : Reify Type TypeIL
+  ReifyType = record { ⟦_⟧ = ⟦_⟧ }
+    where
 \end{code}
 }
 
@@ -267,11 +268,11 @@ user-provided type universe $U$---called $R$---to which we will map
 bottom in the translation of our types.
 
 \begin{code}
-    ⟦_⟧ : Type → TypeIL
-    ⟦ ⊥      ⟧ = el R
-    ⟦ el A   ⟧ = el A
-    ⟦ A ⊗ B  ⟧ = ⟦ A ⟧ × ⟦ B ⟧
-    ⟦ A ⊸ B  ⟧ = ⟦ A ⟧ ⇒ ⟦ B ⟧
+      ⟦_⟧ : Type → TypeIL
+      ⟦ ⊥      ⟧ = el R
+      ⟦ el A   ⟧ = el A
+      ⟦ A ⊗ B  ⟧ = ⟦ A ⟧ × ⟦ B ⟧
+      ⟦ A ⊸ B  ⟧ = ⟦ A ⟧ ⇒ ⟦ B ⟧
 \end{code}
 
 \hidden{
@@ -288,8 +289,9 @@ context.
 
 \hidden{
 \begin{code}
-ReifyCtxt : Reify (List Type) (List TypeIL)
-ReifyCtxt = record { ⟦_⟧ = map ⟦_⟧ }
+instance
+  ReifyCtxt : Reify (List Type) (List TypeIL)
+  ReifyCtxt = record { ⟦_⟧ = map ⟦_⟧ }
 \end{code}
 }
 

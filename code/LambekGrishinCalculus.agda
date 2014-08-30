@@ -170,20 +170,23 @@ mutual
   str- (A ⇐ B)  = str- A ++ str+ B
 
 
-private
-  open Reify {{...}} using (⟦_⟧)
+open Reify {{...}} using (⟦_⟧)
 
-Struct+Reify : Reify Struct+ (List TypeLP)
-Struct+Reify = record { ⟦_⟧ = str+ }
+instance
+  Struct+Reify : Reify Struct+ (List TypeLP)
+  Struct+Reify = record { ⟦_⟧ = str+ }
 
-Struct-Reify : Reify Struct- (List TypeLP)
-Struct-Reify = record { ⟦_⟧ = str- }
+instance
+  Struct-Reify : Reify Struct- (List TypeLP)
+  Struct-Reify = record { ⟦_⟧ = str- }
 
-TypeReify : Reify Type Set
-TypeReify = record { ⟦_⟧ = λ A → ⟦ ⟦ ⟦ A ⟧+ ⟧ ⟧ }
+instance
+  TypeReify : Reify Type Set
+  TypeReify = record { ⟦_⟧ = λ A → ⟦ ⟦ ⟦ A ⟧+ ⟧ ⟧ }
 
-StructReify : Reify Struct+ (List Set)
-StructReify = record { ⟦_⟧ = λ X → ⟦ ⟦ ⟦ X ⟧ ⟧ ⟧ }
+instance
+  StructReify : Reify Struct+ (List Set)
+  StructReify = record { ⟦_⟧ = λ X → ⟦ ⟦ ⟦ X ⟧ ⟧ ⟧ }
 
 Neg-≡ : ∀ {A} → Neg A → ⟦ A ⟧+ ≡ ⟦ A ⟧- ⊸ ⊥
 Neg-≡ {.(el A -)} (el A) = refl
@@ -218,9 +221,9 @@ mutual
   reify (⊗L {X} {A} {B} t) = pair-left (reify t)
   reify (⇚L {X} {A} {B} t) = pair-left (reify t)
   reify (⇛L {X} {A} {B} t) = pair-left (reify t)
-  reify (⊕R {X} {A} {B} t) = pair-left′ {⟦ X ⟧} {⟦ A ⟧-} {⟦ B ⟧-} (reify t)
-  reify (⇒R {X} {A} {B} t) = pair-left′ {⟦ X ⟧} {⟦ A ⟧+} {⟦ B ⟧-} (reify t)
-  reify (⇐R {X} {A} {B} t) = pair-left′ {⟦ X ⟧} {⟦ A ⟧-} {⟦ B ⟧+} (reify t)
+  reify (⊕R {X} {A} {B} t) = pair-left′ {⟦ X ⟧} {⟦ A ⟧- } {⟦ B ⟧- } (reify t)
+  reify (⇒R {X} {A} {B} t) = pair-left′ {⟦ X ⟧} {⟦ A ⟧+ } {⟦ B ⟧- } (reify t)
+  reify (⇐R {X} {A} {B} t) = pair-left′ {⟦ X ⟧} {⟦ A ⟧- } {⟦ B ⟧+ } (reify t)
   reify (res₁ {X} {Y} {Z} t) rewrite sym (++-assoc ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧) = Y[XZ]↝X[YZ] ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ (reify t)
   reify (res₂ {X} {Y} {Z} t) rewrite      ++-assoc ⟦ Y ⟧ ⟦ X ⟧ ⟦ Z ⟧  = [YX]Z↝[XY]Z ⟦ Y ⟧ ⟦ X ⟧ ⟦ Z ⟧ (reify t)
   reify (res₃ {X} {Y} {Z} t) rewrite sym (++-assoc ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧) = X[ZY]↝X[YZ] ⟦ X ⟧ ⟦ Y ⟧ ⟦ Z ⟧ (reify t)

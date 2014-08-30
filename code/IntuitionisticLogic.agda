@@ -76,24 +76,25 @@ module Explicit where
     field
       ⟦_⟧ : A → B
 
-  ReifyType : Reify Type Set
-  ReifyType = record { ⟦_⟧ = ⟦_⟧ }
-    where
+  instance
+    ReifyType : Reify Type Set
+    ReifyType = record { ⟦_⟧ = ⟦_⟧ }
+      where
 
-    ⟦_⟧ : Type → Set
-    ⟦ el A    ⟧ = ⟦ A ⟧ᵁ
-    ⟦ A ⊗ B   ⟧ = ⟦ A ⟧ × ⟦ B ⟧
-    ⟦ A ⇒ B  ⟧ = ⟦ A ⟧ → ⟦ B ⟧
+      ⟦_⟧ : Type → Set
+      ⟦ el A    ⟧ = ⟦ A ⟧ᵁ
+      ⟦ A ⊗ B   ⟧ = ⟦ A ⟧ × ⟦ B ⟧
+      ⟦ A ⇒ B  ⟧ = ⟦ A ⟧ → ⟦ B ⟧
 
   data Ctxt : ∀ (X : List Set) → Set₁ where
     ∅ : Ctxt ∅
     _,_ : ∀ {A X} → A → Ctxt X → Ctxt (A , X)
 
-  private
-    open Reify {{...}} using (⟦_⟧)
+  open Reify {{...}} using (⟦_⟧)
 
-  ReifyCtxt : Reify (List Type) (List Set)
-  ReifyCtxt = record { ⟦_⟧ = List.map ⟦_⟧ }
+  instance
+    ReifyCtxt : Reify (List Type) (List Set)
+    ReifyCtxt = record { ⟦_⟧ = List.map ⟦_⟧ }
 
   Ctxt-insert : {A : Type} {X Y : List Type} → ⟦ A ⟧ → Ctxt ⟦ X ++ Y ⟧ → Ctxt ⟦ X ++ (A , Y) ⟧
   Ctxt-insert {A} {∅} {Y} A′ E = A′ , E
