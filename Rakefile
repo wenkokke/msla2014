@@ -2,15 +2,15 @@
 require 'rake/clean'
 require 'tmpdir'
 
-LitDir = 'paper'
+LitDir = 'doc'
 LitFile = /#{LitDir}\/.*\.lagda/
 LitFiles = FileList[
-  'paper/paper.lagda'                 ,
-  'paper/IntuitionisticLogic.lagda'   ,
-  'paper/LinearLogic.lagda'           ,
-  'paper/LambekGrishinCalculus.lagda' ]
+  'doc/paper.lagda'                 ,
+  'doc/IntuitionisticLogic.lagda'   ,
+  'doc/LinearLogic.lagda'           ,
+  'doc/LambekGrishinCalculus.lagda' ]
 
-CodeDir   = 'code'
+CodeDir   = 'src'
 CodeFile  = /#{CodeDir}\/.*\.agda/
 CodeFiles = LitFiles.pathmap("#{CodeDir}/%n.agda")
 
@@ -19,9 +19,9 @@ HtmlFile  = /#{HtmlDir}\/.*\.html/
 HtmlFiles = CodeFiles.pathmap("#{HtmlDir}/%n.html")
 
 PaperFiles = FileList[
-  'paper/paper.tex'    ,
-  'paper/paper.bib'    ,
-  'paper/preamble.tex' ]
+  'doc/paper.tex'    ,
+  'doc/paper.bib'    ,
+  'doc/preamble.tex' ]
 
 
 
@@ -87,7 +87,7 @@ rule HtmlFile => [ proc { |fn| html2code(fn) } ] do |t|
   f_html = File.absolute_path(t.name)
   f_agda = html2code(f_html)
 
-  cmd = "agda -i $AGDA_HOME -i code --html #{ f_agda } --html-dir=#{ HtmlDir }"
+  cmd = "agda -i $AGDA_HOME -i #{ CodeDir } --html #{ f_agda } --html-dir=#{ HtmlDir }"
   puts cmd
   system cmd
 
