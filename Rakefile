@@ -139,15 +139,15 @@ end
 ### Paper ###
 
 desc "Compile and open the paper"
-task :default => 'paper/paper.pdf' do
-  system "open paper/paper.pdf"
+task :default => 'doc/paper.pdf' do
+  system "open doc/paper.pdf"
 end
 
 desc "Compile the paper"
-task :paper => 'paper/paper.pdf'
+task :paper => 'doc/paper.pdf'
 
 desc "Compile the paper"
-file 'paper/paper.pdf' => PaperFiles + LitFiles.ext('.tex') do
+file 'doc/paper.pdf' => PaperFiles + LitFiles.ext('.tex') do
   Dir.chdir(LitDir) do
 
     system "pdflatex paper.tex"

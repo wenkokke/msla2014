@@ -6,7 +6,7 @@
 \begin{document}
 
 \title{Modelling Substructural Logics in Agda}
-\author{Pepijn Kokke}
+\author{Wen Kokke}
 \date{\today}
 
 \maketitle
@@ -173,7 +173,7 @@ website.\footnote{
 Before we start off, it should be mentioned that (although we omit
 some of the more tedious parts) this paper is written in literate
 Agda, and the code has been made available on GitHub.\footnote{
-  See \url{https://github.com/pepijnkokke/SubstructuralLogicsInAgda}.
+  See \url{https://github.com/wenkokke/SubstructuralLogicsInAgda}.
 }
 
 \section{Intuitionistic Logic}
