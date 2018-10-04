@@ -7,7 +7,7 @@
 
 \title{Modelling Substructural Logics in Agda}
 \author{Wen Kokke}
-\date{\today}
+\date{February 18, 2014}
 
 \maketitle
 
